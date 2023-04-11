@@ -18,10 +18,10 @@ export default function Login() {
         </div>
         <div className="loginRight">
           <div className="loginBox">
-            <div className="emailInputGroup">
+            <div className="loginFormgroup">
               {errors.email &&
                 errors.email.map((err) => {
-                  return <span className="error-msg">{err}</span>;
+                  return <span className="errorMsg">{err}</span>;
                 })}
               <input
                 type="text"
@@ -30,10 +30,10 @@ export default function Login() {
                 className="loginInput"
               />
             </div>
-            <div className="passwordInputGroup">
+            <div className="loginFormgroup">
               {errors.email &&
                 errors.email.map((err) => {
-                  return <span className="error-msg">{err}</span>;
+                  return <span className="errorMsg">{err}</span>;
                 })}
               <input
                 type="password"
@@ -53,7 +53,7 @@ export default function Login() {
               <div className="orRight"></div>
             </div>
             <button className="loginGoogleButton">
-              <GoogleIcon color="disabled" />
+              <GoogleIcon color="action" />
               <span>Continue with Google</span>
             </button>
           </div>

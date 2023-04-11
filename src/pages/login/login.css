@@ -34,13 +34,13 @@
 }
 
 .loginBox{
-  height: 400px;
   padding: 20px;
   background-color: white;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 10px;
 }
 
 .loginInput{
@@ -85,10 +85,16 @@
   cursor: pointer;
 }
 
-.emailInputGroup, .passwordInputGroup {
+.loginFormgroup{
   display: flex;
   flex-direction: column;
   gap: 7px;
+}
+
+.errorMsg {
+  padding-left: 5px;
+  color: red;
+  font-size: 0.8rem;
 }
 
 .orContainer {

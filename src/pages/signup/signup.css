@@ -1,0 +1,138 @@
+.signup {
+  width: 100vw;
+  height: 100vh;
+  background-color: #f0f2f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signupWrapper {
+  width: 70%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.signupLeft,
+.signupRight {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.signupLogo {
+  font-size: 50px;
+  font-weight: 800;
+  color: #1775ee;
+  margin-bottom: 10px;
+}
+
+.signupDesc {
+  font-size: 24px; 
+}
+
+.signupBox{
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.signupNameGroup {
+  display: flex;
+  gap: 10px;
+}
+
+.signupInput{
+  height: 50px;
+  border-radius: 10px;
+  border: 1px solid gray;
+  font-size: 18px;
+  padding-left: 20px;
+}
+
+.signupInput:focus{
+  outline: none;
+}
+
+.signupButton{
+  height: 50px;
+  border-radius: 10px;
+  border: none;
+  background-color: #1775ee;
+  margin-top: 20px;
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.errorMsg {
+  padding-left: 5px;
+  color: red;
+  font-size: 0.8rem;
+}
+
+.signupRedirect {
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.anchorLike {
+  color: #1775ee;
+  cursor: pointer;
+}
+
+.signupRegisterButton{
+  width: 100%;
+  align-self: center;
+  height: 50px;
+  border-radius: 10px;
+  border: none;
+  background-color: #42b72a;
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.signupFormgroup {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.orContainer {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.orLeft, .orRight {
+  flex: 1;
+  border-top: thin solid rgb(201, 196, 196);
+}
+
+.signupGoogleButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  align-self: center;
+  height: 50px;
+  border-radius: 10px;
+  border: none;
+  background-color: #aa706f;
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+}
