@@ -1,0 +1,76 @@
+.postInput {
+  width: 100%;
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
+  box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
+}
+
+.postInputWrapper {
+  padding: 10px;
+}
+
+.postInputTop {
+  display: flex;
+}
+
+.postInputProfileImg {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.postInputWriteArea {
+  border: none;
+  width: 80%;
+  height: 100px;
+  resize: none;
+}
+
+.postInputWriteArea:focus {
+  outline: none;
+}
+
+.postInputHr {
+  margin: 20px;
+}
+
+.postInputBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.postInputOptions{
+    display: flex;
+    margin-left: 20px;
+}
+
+.postInputOption{
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.postInputIcon{
+    font-size: 18px;
+    margin-right: 3px;
+}
+
+.postInputOptionText{
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.postInputButton{
+    border: none;
+    padding: 7px;
+    border-radius: 5px;
+    background-color: green;
+    font-weight: 500;
+    margin-right: 20px;
+    cursor: pointer;
+    color: white;
+}

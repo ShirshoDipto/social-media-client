@@ -56,7 +56,7 @@ export default function Sidebar() {
         <ul className="sidebarFriendList">
           <li className="sidebarFriend">
             <img
-              src="/assets/person/3.jpeg"
+              src="/assets/person/shusme.jpg"
               alt=""
               className="sidebarFriendImg"
             />
@@ -64,7 +64,7 @@ export default function Sidebar() {
           </li>
           <li className="sidebarFriend">
             <img
-              src="/assets/person/3.jpeg"
+              src="/assets/person/shusme.jpg"
               alt=""
               className="sidebarFriendImg"
             />
@@ -72,7 +72,7 @@ export default function Sidebar() {
           </li>
           <li className="sidebarFriend">
             <img
-              src="/assets/person/3.jpeg"
+              src="/assets/person/shusme.jpg"
               alt=""
               className="sidebarFriendImg"
             />
@@ -80,7 +80,7 @@ export default function Sidebar() {
           </li>
           <li className="sidebarFriend">
             <img
-              src="/assets/person/3.jpeg"
+              src="/assets/person/shusme.jpg"
               alt=""
               className="sidebarFriendImg"
             />
@@ -88,7 +88,7 @@ export default function Sidebar() {
           </li>
           <li className="sidebarFriend">
             <img
-              src="/assets/person/3.jpeg"
+              src="/assets/person/shusme.jpg"
               alt=""
               className="sidebarFriendImg"
             />
@@ -96,7 +96,7 @@ export default function Sidebar() {
           </li>
           <li className="sidebarFriend">
             <img
-              src="/assets/person/3.jpeg"
+              src="/assets/person/shusme.jpg"
               alt=""
               className="sidebarFriendImg"
             />
@@ -104,7 +104,7 @@ export default function Sidebar() {
           </li>
           <li className="sidebarFriend">
             <img
-              src="/assets/person/3.jpeg"
+              src="/assets/person/shusme.jpg"
               alt=""
               className="sidebarFriendImg"
             />
@@ -112,7 +112,7 @@ export default function Sidebar() {
           </li>
           <li className="sidebarFriend">
             <img
-              src="/assets/person/3.jpeg"
+              src="/assets/person/shusme.jpg"
               alt=""
               className="sidebarFriendImg"
             />
@@ -120,7 +120,7 @@ export default function Sidebar() {
           </li>
           <li className="sidebarFriend">
             <img
-              src="/assets/person/3.jpeg"
+              src="/assets/person/shusme.jpg"
               alt=""
               className="sidebarFriendImg"
             />
@@ -128,7 +128,7 @@ export default function Sidebar() {
           </li>
           <li className="sidebarFriend">
             <img
-              src="/assets/person/3.jpeg"
+              src="/assets/person/shusme.jpg"
               alt=""
               className="sidebarFriendImg"
             />
@@ -136,7 +136,7 @@ export default function Sidebar() {
           </li>
           <li className="sidebarFriend">
             <img
-              src="/assets/person/3.jpeg"
+              src="/assets/person/shusme.jpg"
               alt=""
               className="sidebarFriendImg"
             />
