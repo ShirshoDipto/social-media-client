@@ -1,5 +1,23 @@
-.profile{
+.profileContainer {
+  width: 100%;
   display: flex;
+  justify-content: center;
+  background-color: var(--profileBackground);
+}
+
+.profile{
+  max-width: 1000px;
+}
+
+.profileTop {
+  background-color: var(--profileTop);
+  border-radius: 20px;
+}
+
+.profileBottom {
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-top: 50px;
 }
 
 .profileRight{
@@ -23,18 +41,62 @@
   border-radius: 50%;
   object-fit: cover;
   position: absolute;
-  left: 0;
+  left: 30px;
   right: 0;
-  margin: auto;
-  top: 150px;
+  top: 200px;
   border: 3px solid white;
 }
 
-.profileInfo{
+.profileSummary{
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 10px;
+  padding-left: 200px;
+  padding-right: 20px;
+}
+
+.profileNameDescContainer {
+  color: var(--primaryText);
+}
+
+.friendshipContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  font-size: 0.8rem;
+}
+
+.friendshipStatus, .messageContainer {
+  display: flex;
   align-items: center;
   justify-content: center;
+  gap: 7px;
+}
+
+.messageContainer {
+  background: var(--topbarBackground);
+  color: white;
+  padding-left: 7px;
+  padding-right: 7px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.friendshipStatus {
+  color: white;
+  background-color: gray;
+  padding-left: 7px;
+  padding-right: 7px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  border-radius: 5px;
+}
+
+.messageContainer:hover {
+  background-color: blue;
 }
 
 .profileInfoName{
@@ -45,6 +107,110 @@
   font-weight: 300;
 }
 
-.profileRightBottom{
+.profileBottom{
   display: flex;
+  gap: 20px;
+}
+
+.profileSidebar {
+  flex: 1.5;
+  position: sticky;
+  top: 0;
+  max-height: 1000px;
+}
+
+.profileSidebarTitle {
+  font-size: 1.3rem;
+  font-weight: 300;
+}
+
+.profileInfoWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  background-color: var(--profileTop);
+  border-radius: 10px;
+}
+
+.profileSidebarTitle {
+  color: var(--primaryText);
+}
+
+.profileSidebarWrapper{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profileInfoItemContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 10px;
+}
+
+.profileInfoItem {
+  display: flex;
+  gap: 10px;
+}
+
+.profileInfoIcon {
+  color: var(--profileInfoIcon);
+}
+
+.profileInfoItemDesc {
+  font-size: 0.9rem;
+  color: var(--primaryText);
+}
+
+/* Profile friend list */
+
+.profileFriendlist {
+  padding: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  height: 400px;
+  gap: 15px;
+  overflow-y: scroll;
+}
+
+.profileFriend {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 70px;
+}
+
+.profileFriendImg {
+  width: 100%;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.profileFriendName {
+  color: var(--primaryText);
+  font-weight: 500;
+  font-size: 0.7rem;
+  text-align: center;
+}
+
+.profilePosts {
+  flex: 3;
+}
+
+.profilePostsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profilePostsTitle {
+  font-size: 1.4rem;
+  background-color: var(--profileTop);
+  color: var(--primaryText);
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: 300;
 }

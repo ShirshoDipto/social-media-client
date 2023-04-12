@@ -3,7 +3,7 @@
   border-radius: 10px;
   -webkit-box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
   box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
-  margin: 30px 0;
+  background-color: var(--profileTop);
 }
 
 .postWrapper {
@@ -28,18 +28,30 @@
   object-fit: cover;
 }
 
+.postUserAndDate {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin: 0 10px;
+}
+
 .postUsername {
   font-size: 15px;
   font-weight: 500;
-  margin: 0 10px;
+  color: var(--primaryText);
 }
 
 .postDate{
     font-size: 12px;
+    color: var(--secondaryText);
 }
 
 .postCenter{
     margin: 20px 0;
+}
+
+.postText {
+  color: var(--primaryText);
 }
 
 .postImg{
@@ -47,6 +59,10 @@
     width: 100%;
     max-height: 500px;
     object-fit: contain;
+}
+
+.moreVert {
+  color: var(--secondaryText);
 }
 
 .postBottom{
@@ -68,11 +84,43 @@
 }
 
 .postLikeCounter{
-    font-size: 15px;
+    font-size: 0.8rem;
+    color: var(--secondaryText);
 }
 
 .postCommentText{
     cursor: pointer;
     border-bottom: 1px dashed gray;
-    font-size: 15px;
+    font-size: 0.8rem;
+    color: var(--secondaryText);
+}
+
+/* Post like and Comment box */
+
+.postHoriLine {
+  border-color: var(--secondaryBorderBackground);
+  border-width: 1px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.likeAndCommentContainer {
+  display: flex;
+}
+
+.postLike, .postComment {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 5px;
+  color: var(--secondaryText);
+  font-size: 0.8rem;
+}
+
+.postLike:hover, .postComment:hover {
+  background-color: var(--searchBar);
 }

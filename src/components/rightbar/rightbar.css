@@ -20,6 +20,7 @@
 .birthdayText {
   font-weight: 300;
   font-size: 15px;
+  color: var(--primaryText);
 }
 
 .rightbarAd {
@@ -29,7 +30,8 @@
 }
 
 .rightbarTitle{
-    margin-bottom: 20px;
+  margin-bottom: 20px;
+  color: var(--primaryText);
 }
 
 .rightbarFriend {
@@ -67,4 +69,5 @@
 
 .rightbarUsername {
   font-weight: 500;
+  color: var(--primaryText);
 }

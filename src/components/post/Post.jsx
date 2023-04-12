@@ -1,5 +1,7 @@
 import "./post.css";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
 
 export default function Post({ post }) {
   return (
@@ -12,11 +14,13 @@ export default function Post({ post }) {
               alt=""
               className="postProfileImg"
             />
-            <span className="postUsername">{post.username}</span>
-            <span className="postDate">{post.date}</span>
+            <div className="postUserAndDate">
+              <span className="postUsername">{post.user}</span>
+              <span className="postDate">{post.date}</span>
+            </div>
           </div>
           <div className="postTopRight">
-            <MoreVertIcon />
+            <MoreVertIcon className="moreVert" />
           </div>
         </div>
         <div className="postCenter">
@@ -31,6 +35,17 @@ export default function Post({ post }) {
           </div>
           <div className="postBottomRight">
             <div className="postCommentText">{post.comment} comments</div>
+          </div>
+        </div>
+        <hr className="postHoriLine" />
+        <div className="likeAndCommentContainer">
+          <div className="postLike">
+            <ThumbUpOffAltIcon className="postLikeCommentIcon" />
+            <span className="postLikeCommentText">Like</span>
+          </div>
+          <div className="postComment">
+            <ModeCommentOutlinedIcon className="postLikeCommentIcon" />
+            <span className="postLikeCommentText">Comment</span>
           </div>
         </div>
       </div>

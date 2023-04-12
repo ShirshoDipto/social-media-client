@@ -6,7 +6,7 @@ import Rightbar from "../../components/rightbar/Rightbar";
 
 export default function Homepage() {
   return (
-    <div>
+    <div className="home">
       <Topbar />
       <div className="homepageContainer">
         <Sidebar />

@@ -1,7 +1,7 @@
 .topbarContainer{
   height: 50px;
   width: 100%;
-  background-color: var(--topbarBackground);
+  background-color: var(--profileTop);
   position: sticky;
   top: 0;
   display: flex;
@@ -32,6 +32,8 @@
   border-radius: 30px;
   display: flex;
   align-items: center;
+  color: var(--secondaryText);
+  background-color: var(--searchBar);
 }
 
 .searchIcon {
@@ -42,6 +44,8 @@
 .searchInput {
   border: none;
   width: 70%;
+  background: none;
+  color: var(--secondaryText);
 }
 
 .searchInput:focus {
