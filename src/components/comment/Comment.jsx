@@ -6,7 +6,7 @@ export default function Comment({ comment }) {
   return (
     <div className="comment">
       <CommentContent comment={comment} />
-      {/* <ReplyContainer /> */}
+      <ReplyContainer />
     </div>
   );
 }

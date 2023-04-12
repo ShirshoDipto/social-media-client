@@ -43,7 +43,7 @@
 
 .commentLikeAndReplies {
   display: flex;
-  gap: 10px;
+  gap: 15px;
   font-size: 0.7rem;
   color: var(--primaryText);
   padding-left: 10px;
