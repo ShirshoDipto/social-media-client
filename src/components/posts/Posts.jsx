@@ -6,5 +6,5 @@ export default function Posts({ posts }) {
     return <Post key={post.id} post={post} />;
   });
 
-  return <div className="postsContainer">{allPosts}</div>;
+  return <div className="allPosts">{allPosts}</div>;
 }

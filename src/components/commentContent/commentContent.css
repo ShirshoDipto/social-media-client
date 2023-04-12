@@ -1,0 +1,55 @@
+.commentWrapper {
+  display: flex;
+  gap: 10px;
+}
+
+.commentUserImg {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.commentUsername {
+  color: var(--primaryText);
+  font-size: 0.9rem;
+}
+
+.commentUsername:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.commentRightContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.commentRightContent {
+  color: var(--secondaryText);
+  font-size: 0.8rem;
+}
+
+.commentUserNameAndComment {
+  background-color: var(--searchBar);
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.commentLikeAndReplies {
+  display: flex;
+  gap: 10px;
+  font-size: 0.7rem;
+  color: var(--primaryText);
+  padding-left: 10px;
+}
+
+.commentLike:hover, .commentReplies:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}

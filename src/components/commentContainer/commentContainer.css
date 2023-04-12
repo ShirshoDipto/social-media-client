@@ -1,0 +1,6 @@
+.commentContainer {
+  margin: 0 10px 0 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

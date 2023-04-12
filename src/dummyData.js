@@ -137,3 +137,113 @@ export const posts = [
     comment: 12,
   },
 ];
+
+export const comments = [
+  {
+    id: 1,
+    desc: "Love For All, Hatred For None.",
+    date: "5 mins ago",
+    user: "Shusme Islam",
+    like: 32,
+    replies: 9,
+  },
+  {
+    id: 2,
+    desc: "Every moment is a fresh beginning.",
+    date: "15 mins ago",
+    user: "Shiropa Dipto",
+    like: 2,
+    replies: 1,
+  },
+  {
+    id: 3,
+    desc: "Every moment is a fresh beginning.",
+    date: "1 hour ago",
+    user: "Shirsho Dipto",
+    like: 61,
+    replies: 2,
+  },
+  {
+    id: 4,
+    desc: "Every moment is a fresh beginning.",
+    date: "4 hours ago",
+    user: "Muhammad Adhi",
+    like: 7,
+    replies: 3,
+  },
+  {
+    id: 5,
+    desc: "Every moment is a fresh beginning.",
+    date: "5 hours ago",
+    user: "Muhammad Shirho Dipto",
+    like: 23,
+    replies: 5,
+  },
+  {
+    id: 6,
+    desc: "Every moment is a fresh beginning.",
+    date: "1 day ago",
+    user: "Shitli Islam",
+    like: 44,
+    replies: 6,
+  },
+  {
+    id: 7,
+    desc: "Never regret anything that made you smile.",
+    date: "2 days ago",
+    user: "Umme Saleha",
+    like: 52,
+    replies: 3,
+  },
+  {
+    id: 8,
+    desc: "Every moment is a fresh beginning.",
+    date: "3 days ago",
+    user: 8,
+    like: 15,
+    replies: 1,
+  },
+  {
+    id: 9,
+    desc: "Change the world by being yourself.",
+    date: "5 days ago",
+    user: "Shirsho Dipto",
+    like: 11,
+    replies: 2,
+  },
+  {
+    id: 10,
+    desc: "Every moment is a fresh beginning.",
+    date: "1 week ago",
+    user: "Shusme Islam",
+    like: 104,
+    replies: 12,
+  },
+];
+
+export const replies = [
+  {
+    id: 1,
+    desc: "Love For All, Hatred For None.",
+    date: "5 mins ago",
+    user: "Shusme Islam",
+  },
+  {
+    id: 6,
+    desc: "Every moment is a fresh beginning.",
+    date: "1 day ago",
+    user: "Shitli Islam",
+  },
+  {
+    id: 7,
+    desc: "Never regret anything that made you smile.",
+    date: "2 days ago",
+    user: "Umme Saleha",
+  },
+  {
+    id: 9,
+    desc: "Change the world by being yourself.",
+    date: "5 days ago",
+    user: "Shirsho Dipto",
+  },
+];

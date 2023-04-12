@@ -1,0 +1,45 @@
+.commentInputWrapper {
+  display: flex;
+  gap: 10px;
+}
+
+.commentInputUserImg {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.commentInputForm {
+  flex: 1;
+}
+
+.commentInputTextarea {
+  width: 100%;
+  resize: none;
+  background-color: var(--searchBar);
+  color: var(--secondaryText);
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+}
+
+.commentInputTextarea:focus {
+  outline: none;
+}
+
+.commentInputButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 5px;
+}
+
+.commentInputSubmit {
+  width: 100px;
+  border: none;
+  padding: 7px;
+  border-radius: 7px;
+  cursor: pointer;
+  background-color: var(--topbarBackground);
+  color: var(--primaryText);
+}
