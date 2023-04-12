@@ -25,7 +25,6 @@ export default function Signup() {
                   errors.firstName.map((err) => {
                     return <span className="errorMsg">{err}</span>;
                   })}
-
                 <input
                   className="signupInput"
                   type="text"
@@ -38,7 +37,6 @@ export default function Signup() {
                   errors.lastName.map((err) => {
                     return <span className="errorMsg">{err}</span>;
                   })}
-
                 <input
                   className="signupInput"
                   type="text"

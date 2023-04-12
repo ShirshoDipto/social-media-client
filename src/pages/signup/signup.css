@@ -1,7 +1,7 @@
 .signup {
   width: 100vw;
   height: 100vh;
-  background-color: #f0f2f5;
+  background-color: var(--profileBackground);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -31,16 +31,17 @@
 
 .signupDesc {
   font-size: 24px; 
+  color: var(--primaryText);
 }
 
 .signupBox{
   padding: 20px;
-  background-color: white;
+  background-color: var(--profileTop);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 10px;
+  gap: 15px;
 }
 
 .signupNameGroup {
@@ -51,7 +52,9 @@
 .signupInput{
   height: 50px;
   border-radius: 10px;
-  border: 1px solid gray;
+  border: none;
+  background: var(--searchBar);
+  color: var(--secondaryText);
   font-size: 18px;
   padding-left: 20px;
 }
@@ -81,6 +84,7 @@
 .signupRedirect {
   font-size: 0.9rem;
   text-align: center;
+  color: var(--secondaryText);
 }
 
 .anchorLike {
@@ -104,7 +108,7 @@
 .signupFormgroup {
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 2px;
 }
 
 .orContainer {

@@ -6,10 +6,10 @@ import Signup from "./pages/signup/Signup";
 function App() {
   return (
     <div className="App">
-      <Homepage />
+      {/* <Homepage /> */}
       {/* <Profile /> */}
       {/* <Login /> */}
-      {/* <Signup /> */}
+      <Signup />
     </div>
   );
 }
