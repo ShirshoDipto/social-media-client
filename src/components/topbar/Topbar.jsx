@@ -5,7 +5,7 @@ import ChatIcon from "@mui/icons-material/Chat";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Link } from "react-router-dom";
 
-export default function Topbar() {
+export default function Topbar({ user }) {
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">
@@ -24,25 +24,42 @@ export default function Topbar() {
         </div>
       </div>
       <div className="topbarRight">
-        <div className="topbarLinks">
-          <span className="topbarLink">Homepage</span>
-          <span className="topbarLink">Timeline</span>
-        </div>
-        <div className="topbarIcons">
-          <div className="topbarIconItem">
-            <PersonIcon />
-            <span className="topbarIconBadge">1</span>
+        {user ? (
+          <div className="topbarRightWrapper">
+            <div className="topbarLinks">
+              <span className="topbarLink">Homepage</span>
+              <span className="topbarLink">Timeline</span>
+            </div>
+            <div className="topbarIcons">
+              <div className="topbarIconItem">
+                <PersonIcon />
+                <span className="topbarIconBadge">1</span>
+              </div>
+              <div className="topbarIconItem">
+                <ChatIcon />
+                <span className="topbarIconBadge">2</span>
+              </div>
+              <div className="topbarIconItem">
+                <NotificationsIcon />
+                <span className="topbarIconBadge">1</span>
+              </div>
+            </div>
+            <img src="/assets/person/shusme.jpg" alt="" className="topbarImg" />
           </div>
-          <div className="topbarIconItem">
-            <ChatIcon />
-            <span className="topbarIconBadge">2</span>
-          </div>
-          <div className="topbarIconItem">
-            <NotificationsIcon />
-            <span className="topbarIconBadge">1</span>
-          </div>
-        </div>
-        <img src="/assets/person/2.jpeg" alt="" className="topbarImg" />
+        ) : (
+          <ul className="topbarRightList">
+            <li className="topbarRightListItem">
+              <Link to={"/login"} className="routerLink">
+                <span className="topbarRightLogin">Log In</span>
+              </Link>
+            </li>
+            <li className="topbarRightListItem">
+              <Link to={"/signup"}>
+                <button className="topbarRightSignup">Sign Up</button>
+              </Link>
+            </li>
+          </ul>
+        )}
       </div>
     </div>
   );

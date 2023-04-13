@@ -6,14 +6,10 @@ export default function Posts({ posts }) {
     return <Post key={post._id} post={post} />;
   });
 
-  console.log(posts);
-
   if (posts.length === 0) {
     return (
       <div className="allPosts">
-        <span className="noPostsText">
-          This user hasn't uploaded any post yet.
-        </span>
+        <span className="noPostsText">No posts available.</span>
       </div>
     );
   }

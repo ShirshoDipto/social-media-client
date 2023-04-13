@@ -10,7 +10,7 @@
 }
 
 .topbarLeft{
-  flex: 3;
+  flex: 3.5;
 }
 
 .topbarLogo{
@@ -52,12 +52,40 @@
   outline: none;
 }
 
-.topbarRight{
-  flex: 4;
+.topbarRightWrapper {
   display: flex;
   align-items: center;
   justify-content: space-around;
   color: white;
+}
+
+.topbarRight{
+  flex: 4.2;
+}
+
+.topbarRightList {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.topbarRightLogin {
+  font-size: 0.8rem;
+  font-weight: 300;
+  color: var(--primaryText);
+  cursor: pointer;
+}
+
+.topbarRightSignup {
+  width: 80px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--topbarBackground);
+  cursor: pointer;
+  color: var(--primaryText);
 }
 
 .topbarLink {

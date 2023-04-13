@@ -5,6 +5,7 @@ import ProfileContainer from "./components/profileContainer/ProfileContainer";
 import ScrollToTop from "./ScrollToTop.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
+import GoogleLogin from "./pages/GoogleLogin";
 
 function App() {
   const user = localStorage.getItem("nosebookUser");
@@ -28,6 +29,7 @@ function App() {
             path="/users/:userId"
             element={<ProfileContainer user={currentUser} />}
           />
+          <Route path="/login/google/confirm" element={<GoogleLogin />} />
         </Routes>
       </div>
     </BrowserRouter>

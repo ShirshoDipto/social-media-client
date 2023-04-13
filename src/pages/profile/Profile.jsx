@@ -120,7 +120,7 @@ export default function Profile({ user }) {
                   <div className="profileInfoItem">
                     <FavoriteIcon className="profileInfoIcon" />
                     <span className="profileInfoItemDesc">
-                      Relationship status, <b>In a relationship</b>
+                      Relationship status, <b>Married</b>
                     </span>
                   </div>
                 </div>

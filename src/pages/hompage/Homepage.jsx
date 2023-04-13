@@ -4,13 +4,13 @@ import Sidebar from "../../components/sidebar/Sidebar";
 import Feed from "../../components/feed/Feed";
 import Rightbar from "../../components/rightbar/Rightbar";
 
-export default function Homepage() {
+export default function Homepage({ user }) {
   return (
     <div className="home">
-      <Topbar />
+      <Topbar user={user} />
       <div className="homepageContainer">
         <Sidebar />
-        <Feed />
+        <Feed user={user} />
         <Rightbar />
       </div>
     </div>

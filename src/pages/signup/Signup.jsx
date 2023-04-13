@@ -84,9 +84,11 @@ export default function Signup() {
             <button className="signupButton">Sign Up</button>
             <div className="signupRedirect">
               Already have an account?{" "}
-              <span className="anchorLike" to="/login">
-                Log In
-              </span>
+              <Link to={"/login"}>
+                <span className="anchorLike" to="/login">
+                  Log In
+                </span>
+              </Link>
             </div>
             <div className="orContainer">
               <div className="orLeft"></div>
