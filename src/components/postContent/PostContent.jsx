@@ -2,6 +2,8 @@ import "./postContent.css";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
+import { format } from "timeago.js";
+import { Link } from "react-router-dom";
 
 export default function PostContent({ post }) {
   return (
@@ -14,8 +16,10 @@ export default function PostContent({ post }) {
             className="postProfileImg"
           />
           <div className="postUserAndDate">
-            <span className="postUsername">{post.user}</span>
-            <span className="postDate">{post.date}</span>
+            <Link to={`users/${post.author._id}`} className="routerLink">
+              <span className="postUsername">{`${post.author.firstName} ${post.author.lastName}`}</span>
+            </Link>
+            <span className="postDate">{format(post.createdAt)}</span>
           </div>
         </div>
         <div className="postTopRight">
@@ -23,17 +27,19 @@ export default function PostContent({ post }) {
         </div>
       </div>
       <div className="postCenter">
-        <span className="postText">{post.desc && post.desc}</span>
+        <span className="postText">{post.content}</span>
         <img src={post.photo} alt="" className="postImg" />
       </div>
       <div className="postBottom">
         <div className="postBottomLeft">
           <img src="/assets/like.png" alt="" className="likeIcon" />
           <img src="/assets/heart.png" alt="" className="likeIcon" />
-          <span className="postLikeCounter">{post.like} people like it</span>
+          <span className="postLikeCounter">
+            {post.numLikes} people like it
+          </span>
         </div>
         <div className="postBottomRight">
-          <div className="postCommentText">{post.comment} comments</div>
+          <div className="postCommentText">{post.numComments} comments</div>
         </div>
       </div>
       {/* <hr className="postHoriLine" /> */}

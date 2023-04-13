@@ -206,6 +206,10 @@
   gap: 20px;
 }
 
+.userPostsLoading {
+  align-self: center;
+}
+
 .profilePostsTitle {
   font-size: 1.4rem;
   background-color: var(--profileTop);

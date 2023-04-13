@@ -10,10 +10,53 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import HouseIcon from "@mui/icons-material/House";
 import SchoolIcon from "@mui/icons-material/School";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
+import CircularProgress from "@mui/material/CircularProgress";
 import Posts from "../../components/posts/Posts";
 import { posts } from "../../dummyData";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-export default function Profile() {
+export default function Profile({ user }) {
+  const serverRoot = process.env.REACT_APP_SERVERROOT;
+  const params = useParams();
+  const [profileState, setProfileState] = useState({
+    userPosts: [],
+    isLoading: true,
+    page: 0,
+  });
+
+  useEffect(() => {
+    async function fetchUserPost() {
+      const res = await fetch(
+        `${serverRoot}/api/users/${params.userId}/posts?page=${profileState.page}`
+      );
+      if (!res.ok) {
+        setProfileState({
+          userPosts: profileState.userPosts,
+          isLoading: false,
+          page: profileState.page,
+        });
+        return console.log(await res.json());
+      }
+      const resData = await res.json();
+      if (resData.error) {
+        return setProfileState({
+          userPosts: profileState.userPosts,
+          isLoading: false,
+          page: profileState.page,
+        });
+      }
+
+      return setProfileState({
+        userPosts: resData.posts,
+        isLoading: false,
+        page: profileState.page + 1,
+      });
+    }
+    fetchUserPost().catch((err) => {
+      console.log(err);
+    });
+  }, []);
   return (
     <div className="profileContainer">
       <div className="profile">
@@ -59,7 +102,7 @@ export default function Profile() {
                   <div className="profileInfoItem">
                     <SchoolIcon className="profileInfoIcon" />
                     <span className="profileInfoItemDesc">
-                      Studied at, <b>School of Bu @#$% t, International</b>
+                      Studied at, <b>School of Bull@#$%t, International</b>
                     </span>
                   </div>
                   <div className="profileInfoItem">
@@ -197,7 +240,11 @@ export default function Profile() {
           <div className="profilePosts">
             <div className="profilePostsWrapper">
               <div className="profilePostsTitle">Posts</div>
-              <Posts posts={posts} />
+              {profileState.isLoading ? (
+                <CircularProgress className="userPostsLoading" disableShrink />
+              ) : (
+                <Posts posts={profileState.userPosts} />
+              )}
             </div>
           </div>
         </div>

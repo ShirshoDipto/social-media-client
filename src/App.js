@@ -1,16 +1,36 @@
-import Homepage from "./pages/hompages/Homepage";
+import Homepage from "./pages/hompage/Homepage";
 import Login from "./pages/login/Login";
-import Profile from "./pages/profile/Profile";
 import Signup from "./pages/signup/Signup";
+import ProfileContainer from "./components/profileContainer/ProfileContainer";
+import ScrollToTop from "./ScrollToTop.jsx";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useState } from "react";
 
 function App() {
+  const user = localStorage.getItem("nosebookUser");
+  const [currentUser, setCurrentUser] = useState(JSON.parse(user));
+
   return (
-    <div className="App">
-      {/* <Homepage /> */}
-      {/* <Profile /> */}
-      {/* <Login /> */}
-      <Signup />
-    </div>
+    <BrowserRouter>
+      <ScrollToTop />
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Homepage user={currentUser} />} />
+          <Route
+            path="/signup"
+            element={currentUser ? <Homepage user={currentUser} /> : <Signup />}
+          />
+          <Route
+            path="/login"
+            element={currentUser ? <Homepage user={currentUser} /> : <Login />}
+          />
+          <Route
+            path="/users/:userId"
+            element={<ProfileContainer user={currentUser} />}
+          />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 

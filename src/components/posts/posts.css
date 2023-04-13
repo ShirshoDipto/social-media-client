@@ -3,3 +3,8 @@
   flex-direction: column;
   gap: 20px;
 }
+
+.noPostsText {
+  color: var(--primaryText);
+  align-self: center;
+}
