@@ -124,3 +124,7 @@
 .postLike:hover, .postComment:hover {
   background-color: var(--searchBar);
 }
+
+.postLiked {
+  color: var(--topbarBackground);
+}

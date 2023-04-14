@@ -1,3 +1,4 @@
+import ReactTimeAgo from "react-time-ago";
 import "./replyContent.css";
 
 export default function ReplyContent() {
@@ -10,7 +11,12 @@ export default function ReplyContent() {
       />
       <div className="replyRightContainer">
         <div className="replyUserNameAndReply">
-          <div className="replyUsername">Shirsho Dipto</div>
+          <div className="replyUserAndDate">
+            <div className="replyUsername">Shirsho Dipto</div>
+            <div className="replyDate">
+              {<ReactTimeAgo date={new Date()} />}
+            </div>
+          </div>
           <div className="replyRightContent">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto
             quod quisquam sequi eos, tempora laborum, dicta deleniti assumenda

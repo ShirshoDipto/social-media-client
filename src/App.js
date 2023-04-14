@@ -7,9 +7,19 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import GoogleLogin from "./pages/GoogleLogin";
 
+import TimeAgo from "javascript-time-ago";
+
+import en from "javascript-time-ago/locale/en.json";
+import ru from "javascript-time-ago/locale/ru.json";
+
+TimeAgo.addDefaultLocale(en);
+TimeAgo.addLocale(ru);
+
 function App() {
-  const user = localStorage.getItem("nosebookUser");
-  const [currentUser, setCurrentUser] = useState(JSON.parse(user));
+  const userFromLocalStorage = localStorage.getItem("nosebookUser");
+  const [currentUser, setCurrentUser] = useState(
+    JSON.parse(userFromLocalStorage)
+  );
 
   return (
     <BrowserRouter>

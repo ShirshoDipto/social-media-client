@@ -21,6 +21,12 @@
   text-decoration: underline;
 }
 
+.commentDate{
+    font-size: 0.6rem;
+    color: var(--secondaryText);
+    margin-top: 3px;
+}
+
 .commentRightContainer {
   display: flex;
   flex-direction: column;
@@ -38,7 +44,7 @@
   padding: 10px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 10px;
 }
 
 .commentLikeAndReplies {

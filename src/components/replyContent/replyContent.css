@@ -16,6 +16,12 @@
   font-size: 0.9rem;
 }
 
+.replyDate{
+    font-size: 0.6rem;
+    color: var(--secondaryText);
+    margin-top: 3px;
+}
+
 .replyUsername:hover {
   cursor: pointer;
   text-decoration: underline;
@@ -38,7 +44,7 @@
   padding: 10px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 10px;
 }
 
 /* .replyLikeAndReplies {

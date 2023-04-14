@@ -9,9 +9,9 @@ export default function Homepage({ user }) {
     <div className="home">
       <Topbar user={user} />
       <div className="homepageContainer">
-        <Sidebar />
+        <Sidebar user={user} />
         <Feed user={user} />
-        <Rightbar />
+        <Rightbar user={user} />
       </div>
     </div>
   );

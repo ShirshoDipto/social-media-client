@@ -51,11 +51,11 @@ export default function Feed({ user }) {
   return (
     <div className="feed">
       <div className="feedWrapper">
-        <PostInput />
+        <PostInput user={user} />
         {postsState.isLoading ? (
           <CircularProgress className="homePostsLoading" disableShrink />
         ) : (
-          <Posts posts={postsState.posts} />
+          <Posts user={user} posts={postsState.posts} />
         )}
       </div>
     </div>

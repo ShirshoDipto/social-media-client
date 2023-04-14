@@ -1,4 +1,5 @@
 import "./commentContent.css";
+import ReactTimeAgo from "react-time-ago";
 
 export default function CommentContent() {
   return (
@@ -10,7 +11,12 @@ export default function CommentContent() {
       />
       <div className="commentRightContainer">
         <div className="commentUserNameAndComment">
-          <div className="commentUsername">Shirsho Dipto</div>
+          <div className="commentUserAndDate">
+            <div className="commentUsername">Shirsho Dipto</div>
+            <div className="commentDate">
+              {<ReactTimeAgo date={new Date()} />}
+            </div>
+          </div>
           <div className="commentRightContent">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto
             quod quisquam sequi eos, tempora laborum, dicta deleniti assumenda
