@@ -35,6 +35,10 @@
   margin-bottom: 10px;
 }
 
+.loginLogo:hover {
+  color: #0a6beb;
+}
+
 .loginDesc {
   font-size: 24px; 
   color: var(--primaryText);
