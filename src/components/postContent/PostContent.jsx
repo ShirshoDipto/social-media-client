@@ -5,6 +5,7 @@ import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
 import { Link } from "react-router-dom";
 import ReactTimeAgo from "react-time-ago";
 import { useEffect, useState } from "react";
+import parse from "html-react-parser";
 
 export default function PostContent({ user, post, handleToggleComments }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
@@ -163,8 +164,14 @@ export default function PostContent({ user, post, handleToggleComments }) {
         </div>
       </div>
       <div className="postCenter">
-        <span className="postText">{postState.post.content}</span>
-        <img src={postState.post.photo} alt="" className="postImg" />
+        <span className="postText">{parse(postState.post.content)}</span>
+        {postState.post.image && (
+          <img
+            src={`${serverRoot}/images/${postState.post.image}`}
+            alt=""
+            className="postImg"
+          />
+        )}
       </div>
       <div className="postBottom">
         <div className="postBottomLeft">

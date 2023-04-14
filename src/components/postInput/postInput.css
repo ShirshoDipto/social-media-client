@@ -23,6 +23,7 @@
 }
 
 .postInputWriteArea {
+  white-space: pre;
   border: none;
   background: none;
   width: 80%;
@@ -38,6 +39,25 @@
 
 .postInputHr {
   margin: 20px;
+}
+
+.postInputImgContainer {
+  padding: 0 20px 10px 20px;
+  position: relative;
+}
+
+.postInputImg {
+  width: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.postInputCancelImg {
+  position: absolute;
+  top: 10px;
+  right: 30px;
+  cursor: pointer;
+  opacity: 0.7;
 }
 
 .postInputBottom {
@@ -64,12 +84,16 @@
 }
 
 .postInputOptionText{
+    display: flex;
+    align-items: center;
     font-size: 14px;
     font-weight: 500;
     color: var(--primaryText);
+    cursor: pointer;
 }
 
 .postInputButton{
+    width: 70px;
     border: none;
     padding: 7px;
     border-radius: 5px;

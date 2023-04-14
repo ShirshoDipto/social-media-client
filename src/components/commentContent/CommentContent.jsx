@@ -149,11 +149,7 @@ export default function CommentContent({ user, comment, handleToggleLike }) {
             </div>
           </div>
           <div className="commentRightContent">
-            {commentState.comment.content} Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Architecto quod quisquam sequi eos,
-            tempora laborum, dicta deleniti assumenda fugit reprehenderit
-            molestiae at accusamus cupiditate mollitia nemo voluptatum impedit,
-            ullam molestias.
+            {commentState.comment.content}
           </div>
         </div>
         <div className="commentLikeAndReplies">
