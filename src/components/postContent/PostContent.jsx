@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import ReactTimeAgo from "react-time-ago";
 import { useEffect, useState } from "react";
 
-export default function PostContent({ user, post }) {
+export default function PostContent({ user, post, handleToggleComments }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
 
   const [postState, setPostState] = useState({
@@ -192,7 +192,7 @@ export default function PostContent({ user, post }) {
             <span className="postLikeCommentText">Like</span>
           </div>
         )}
-        <div className="postComment">
+        <div className="postComment" onClick={handleToggleComments}>
           <ModeCommentOutlinedIcon className="postLikeCommentIcon" />
           <span className="postLikeCommentText">Comment</span>
         </div>

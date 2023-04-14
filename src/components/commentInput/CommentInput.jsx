@@ -11,6 +11,7 @@ export default function CommentInput() {
         />
         <form className="commentInputForm">
           <textarea
+            autoFocus={true}
             className="commentInputTextarea"
             name="commentCoontent"
             placeholder="Write a comment"

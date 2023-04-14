@@ -1,7 +1,138 @@
 import "./commentContent.css";
 import ReactTimeAgo from "react-time-ago";
+import { useEffect, useState } from "react";
 
-export default function CommentContent() {
+export default function CommentContent({ user, comment, handleToggleLike }) {
+  const serverRoot = process.env.REACT_APP_SERVERROOT;
+
+  const [commentState, setcommentState] = useState({
+    comment: comment,
+    isLiked: {},
+    isUpdating: false,
+    isLoading: false,
+  });
+
+  async function addLike() {
+    if (commentState.isLoading) {
+      return;
+    }
+
+    const res = await fetch(
+      `${serverRoot}/api/comments/${commentState.comment._id}/likes`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      }
+    );
+
+    if (!res.ok) {
+      return console.log(await res.json());
+    }
+
+    const resData = await res.json();
+    let newcomment = commentState.comment;
+    newcomment.numLikes += 1;
+    return setcommentState({
+      comment: newcomment,
+      isLiked: resData.commentLike,
+      isUpdating: commentState.isUpdating,
+      isLoading: false,
+    });
+  }
+
+  async function deleteLike() {
+    if (commentState.isLoading) {
+      return;
+    }
+
+    const res = await fetch(
+      `${serverRoot}/api/comments/${commentState.comment._id}/likes/${commentState.isLiked._id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      }
+    );
+
+    if (!res.ok) {
+      return console.log(await res.json());
+    }
+
+    let newcomment = commentState.comment;
+    newcomment.numLikes -= 1;
+    return setcommentState({
+      comment: newcomment,
+      isLiked: {},
+      isUpdating: commentState.isUpdating,
+      isLoading: commentState.isLoading,
+    });
+  }
+
+  async function handleToggleLike() {
+    if (!user) {
+      return alert("Log in to Like and Comment");
+    }
+
+    if (Object.keys(commentState.isLiked).length !== 0) {
+      setcommentState({
+        comment: commentState.comment,
+        isLiked: commentState.isLiked,
+        isUpdating: commentState.isUpdating,
+        isLoading: true,
+      });
+      return await deleteLike();
+    } else {
+      setcommentState({
+        comment: commentState.comment,
+        isLiked: commentState.isLiked,
+        isUpdating: commentState.isUpdating,
+        isLoading: true,
+      });
+      await addLike();
+    }
+  }
+
+  useEffect(() => {
+    async function fetchUserLike() {
+      if (!user) {
+        return;
+      }
+
+      const res = await fetch(
+        `${serverRoot}/api/comments/${commentState.comment._id}/likes`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      if (!res.ok) {
+        console.log(await res.json());
+      }
+
+      const resData = await res.json();
+
+      if (resData.error) {
+        return;
+      }
+
+      return setcommentState({
+        comment: commentState.comment,
+        isLiked: resData.commentLike,
+        isUpdating: commentState.isUpdating,
+        isLoading: commentState.isUpdating,
+      });
+    }
+
+    fetchUserLike().catch((err) => {
+      console.log(err);
+    });
+  }, []);
+
   return (
     <div className="commentWrapper">
       <img
@@ -12,21 +143,35 @@ export default function CommentContent() {
       <div className="commentRightContainer">
         <div className="commentUserNameAndComment">
           <div className="commentUserAndDate">
-            <div className="commentUsername">Shirsho Dipto</div>
+            <div className="commentUsername">{`${commentState.comment.author.firstName} ${commentState.comment.author.lastName}`}</div>
             <div className="commentDate">
-              {<ReactTimeAgo date={new Date()} />}
+              {<ReactTimeAgo date={new Date(commentState.comment.createdAt)} />}
             </div>
           </div>
           <div className="commentRightContent">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto
-            quod quisquam sequi eos, tempora laborum, dicta deleniti assumenda
-            fugit reprehenderit molestiae at accusamus cupiditate mollitia nemo
-            voluptatum impedit, ullam molestias.
+            {commentState.comment.content} Lorem ipsum dolor sit amet
+            consectetur adipisicing elit. Architecto quod quisquam sequi eos,
+            tempora laborum, dicta deleniti assumenda fugit reprehenderit
+            molestiae at accusamus cupiditate mollitia nemo voluptatum impedit,
+            ullam molestias.
           </div>
         </div>
         <div className="commentLikeAndReplies">
-          <span className="commentLike">Like(32)</span>
-          <span className="commentReplies">Replies(7)</span>
+          {Object.keys(commentState.isLiked).length !== 0 ? (
+            <span
+              className="commentLike commentLiked"
+              onClick={handleToggleLike}
+            >
+              Like({commentState.comment.numLikes})
+            </span>
+          ) : (
+            <span className="commentLike" onClick={handleToggleLike}>
+              Like({commentState.comment.numLikes})
+            </span>
+          )}
+          <span className="commentReplies">
+            Replies({commentState.comment.numReplies})
+          </span>
         </div>
       </div>
     </div>

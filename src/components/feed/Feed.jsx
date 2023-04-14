@@ -1,16 +1,14 @@
-import Post from "../post/Post";
 import PostInput from "../postInput/PostInput";
 import Posts from "../posts/Posts";
 import CircularProgress from "@mui/material/CircularProgress";
 import "./feed.css";
-import { posts } from "../../dummyData";
 import { useEffect, useState } from "react";
 
 export default function Feed({ user }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
   const [postsState, setPostsState] = useState({
     posts: [],
-    page: 1,
+    page: 0,
     isLoading: true,
   });
 
