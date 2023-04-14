@@ -29,9 +29,19 @@
   margin-bottom: 10px;
 }
 
+.signupLogo:hover {
+  color: #0a6beb;
+}
+
 .signupDesc {
   font-size: 24px; 
   color: var(--primaryText);
+}
+
+.userExistDiv {
+  text-align: center;
+  color: red;
+  margin-bottom: 20px;
 }
 
 .signupBox{

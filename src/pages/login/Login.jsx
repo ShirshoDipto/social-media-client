@@ -50,7 +50,9 @@ export default function Login() {
     <div className="login">
       <div className="loginWrapper">
         <div className="loginLeft">
-          <h3 className="loginLogo">NoseBook</h3>
+          <Link to={"/"} className="routerLink">
+            <h3 className="loginLogo">NoseBook</h3>
+          </Link>
           <span className="loginDesc">
             Connect with friends and the world around you on NoseBook.
           </span>

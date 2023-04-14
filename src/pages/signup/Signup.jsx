@@ -4,26 +4,71 @@ import "./signup.css";
 import GoogleIcon from "@mui/icons-material/Google";
 
 export default function Signup() {
-  const serverUri = process.env.REACT_APP_PROXY;
+  const serverRoot = process.env.REACT_APP_SERVERROOT;
   const [errors, setErrors] = useState([]);
   const [userExistError, setUserExistError] = useState("");
+
+  async function handleSignup(e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    const data = new URLSearchParams(formData);
+
+    const res = await fetch(`${serverRoot}/api/signup`, {
+      method: "POST",
+      body: data,
+    });
+
+    let resData;
+
+    if (!res.ok) {
+      setErrors([]);
+      setUserExistError("");
+
+      if (res.status === 401) {
+        return setUserExistError("Invalid User. Create a new account. ");
+      }
+
+      resData = await res.json();
+      if (resData.error) {
+        return setUserExistError(resData.error);
+      }
+
+      return setErrors(resData.errors);
+    } else {
+      resData = await res.json();
+      localStorage.setItem("nosebookUser", JSON.stringify(resData));
+      window.location.replace("/");
+    }
+  }
+
+  async function handleGoogleLogin() {
+    window.open("http://localhost:5000/api/login/google", "_self");
+  }
 
   return (
     <div className="signup">
       <div className="signupWrapper">
         <div className="signupLeft">
-          <h3 className="signupLogo">NoseBook</h3>
+          <Link to={"/"} className="routerLink">
+            <h3 className="signupLogo">NoseBook</h3>
+          </Link>
           <span className="signupDesc">
             Connect with friends and the world around you on NoseBook.
           </span>
         </div>
         <div className="signupRight">
-          <div className="signupBox">
+          <div className="userExistDiv">{userExistError}</div>
+          <form className="signupBox" onSubmit={handleSignup}>
             <div className="signupNameGroup">
               <div className="signupFormgroup">
                 {errors.firstName &&
-                  errors.firstName.map((err) => {
-                    return <span className="errorMsg">{err}</span>;
+                  errors.firstName.map((err, i) => {
+                    return (
+                      <span key={i} className="errorMsg">
+                        {err}
+                      </span>
+                    );
                   })}
                 <input
                   className="signupInput"
@@ -34,8 +79,12 @@ export default function Signup() {
               </div>
               <div className="signupFormgroup">
                 {errors.lastName &&
-                  errors.lastName.map((err) => {
-                    return <span className="errorMsg">{err}</span>;
+                  errors.lastName.map((err, i) => {
+                    return (
+                      <span key={i} className="errorMsg">
+                        {err}
+                      </span>
+                    );
                   })}
                 <input
                   className="signupInput"
@@ -47,8 +96,12 @@ export default function Signup() {
             </div>
             <div className="signupFormgroup">
               {errors.email &&
-                errors.email.map((err) => {
-                  return <span className="errorMsg">{err}</span>;
+                errors.email.map((err, i) => {
+                  return (
+                    <span key={i} className="errorMsg">
+                      {err}
+                    </span>
+                  );
                 })}
               <input
                 type="text"
@@ -58,9 +111,13 @@ export default function Signup() {
               />
             </div>
             <div className="signupFormgroup">
-              {errors.email &&
-                errors.email.map((err) => {
-                  return <span className="errorMsg">{err}</span>;
+              {errors.password &&
+                errors.password.map((err, i) => {
+                  return (
+                    <span key={i} className="errorMsg">
+                      {err}
+                    </span>
+                  );
                 })}
               <input
                 type="password"
@@ -70,21 +127,27 @@ export default function Signup() {
               />
             </div>
             <div className="signupFormgroup">
-              {errors.email &&
-                errors.email.map((err) => {
-                  return <span className="errorMsg">{err}</span>;
+              {errors.confirmPassword &&
+                errors.confirmPassword.map((err, i) => {
+                  return (
+                    <span key={i} className="errorMsg">
+                      {err}
+                    </span>
+                  );
                 })}
               <input
                 type="password"
                 placeholder="Confirm Password"
                 className="signupInput"
-                name="ConfirmPassword"
+                name="confirmPassword"
               />
             </div>
-            <button className="signupButton">Sign Up</button>
+            <button type="submit" className="signupButton">
+              Sign Up
+            </button>
             <div className="signupRedirect">
               Already have an account?{" "}
-              <Link to={"/login"}>
+              <Link to={"/login"} className="routerLink">
                 <span className="anchorLike" to="/login">
                   Log In
                 </span>
@@ -95,11 +158,15 @@ export default function Signup() {
               <span className="or">Or</span>
               <div className="orRight"></div>
             </div>
-            <button className="signupGoogleButton">
+            <button
+              type="button"
+              className="signupGoogleButton"
+              onClick={handleGoogleLogin}
+            >
               <GoogleIcon color="action" />
               <span>Continue with Google</span>
             </button>
-          </div>
+          </form>
         </div>
       </div>
     </div>
