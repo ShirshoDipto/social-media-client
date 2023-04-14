@@ -2,8 +2,15 @@ import "./postContent.css";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
-import { format } from "timeago.js";
 import { Link } from "react-router-dom";
+import TimeAgo from "javascript-time-ago";
+import ReactTimeAgo from "react-time-ago";
+
+import en from "javascript-time-ago/locale/en.json";
+import ru from "javascript-time-ago/locale/ru.json";
+
+TimeAgo.addDefaultLocale(en);
+TimeAgo.addLocale(ru);
 
 export default function PostContent({ post }) {
   return (
@@ -19,7 +26,9 @@ export default function PostContent({ post }) {
             <Link to={`users/${post.author._id}`} className="routerLink">
               <span className="postUsername">{`${post.author.firstName} ${post.author.lastName}`}</span>
             </Link>
-            <span className="postDate">{format(post.createdAt)}</span>
+            <span className="postDate">
+              <ReactTimeAgo date={post.createdAt} locale="en-US" />
+            </span>
           </div>
         </div>
         <div className="postTopRight">
@@ -42,7 +51,6 @@ export default function PostContent({ post }) {
           <div className="postCommentText">{post.numComments} comments</div>
         </div>
       </div>
-      {/* <hr className="postHoriLine" /> */}
       <div className="likeAndCommentContainer">
         <div className="postLike">
           <ThumbUpOffAltIcon className="postLikeCommentIcon" />
