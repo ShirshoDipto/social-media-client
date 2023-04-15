@@ -8,8 +8,11 @@ import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 
 export default function Topbar({ user }) {
+  const serverRoot = process.env.REACT_APP_SERVERROOT;
+  const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const dropdown = useRef();
+  const dropdownTrigger = useRef();
 
   function handleLogout() {
     localStorage.removeItem("nosebookUser");
@@ -18,15 +21,19 @@ export default function Topbar({ user }) {
 
   useEffect(() => {
     function handleClickOutside(e) {
-      if (dropdown.current && !dropdown.current.contains(e.target)) {
+      if (
+        dropdown.current &&
+        !dropdown.current.contains(e.target) &&
+        !dropdownTrigger.current.contains(e.target)
+      ) {
         setDropdownStatus(false);
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("click", handleClickOutside);
     };
   }, []);
 
@@ -69,22 +76,44 @@ export default function Topbar({ user }) {
               </div>
             </div>
             <div className="topbarDropdownContainer">
-              <img
-                src="/assets/person/shusme.jpg"
-                alt=""
-                className="topbarImg"
-                onClick={() => setDropdownStatus(!dropdownStatus)}
-              />
+              {user.user.profilePic ? (
+                <img
+                  src={`${serverRoot}/images/${user.user.profilePic}`}
+                  alt=""
+                  className="topbarImg"
+                  onClick={(e) => {
+                    setDropdownStatus(!dropdownStatus);
+                  }}
+                />
+              ) : (
+                <img
+                  src={`${clientRoot}/assets/person/noAvatar.png`}
+                  alt=""
+                  className="topbarImg"
+                  onClick={(e) => {
+                    setDropdownStatus(!dropdownStatus);
+                  }}
+                  ref={dropdownTrigger}
+                />
+              )}
 
               {dropdownStatus && (
                 <ul className="topbarDropdown" ref={dropdown}>
                   <Link to={`users/${user.user._id}`} className="routerLink">
                     <li className="topbarDropdownProfile">
-                      <img
-                        src="/assets/person/shusme.jpg"
-                        alt=""
-                        className="topbarImg"
-                      />
+                      {user.user.profilePic ? (
+                        <img
+                          src={`${serverRoot}/images/${user.user.profilePic}`}
+                          alt=""
+                          className="topbarImg"
+                        />
+                      ) : (
+                        <img
+                          src={`${clientRoot}/assets/person/noAvatar.png`}
+                          alt=""
+                          className="topbarImg"
+                        />
+                      )}
                       <span className="dropdownProfileName">{`${user.user.firstName} ${user.user.lastName}`}</span>
                     </li>
                   </Link>

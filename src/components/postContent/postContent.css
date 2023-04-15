@@ -64,6 +64,64 @@
   color: var(--secondaryText);
 }
 
+.moreVertContainer {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.moreVertContainer:hover {
+  background-color: var(--searchBar);
+  cursor: pointer;
+}
+
+/* Dropdown menu styles */
+
+.postDropdownContainer {
+  position: relative;
+}
+
+.postDropdown {
+  position: absolute;
+  top: calc(100% + 15px);
+  right: 0;
+  z-index: 2;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14);
+  list-style: none;
+  background-color: var(--profileBackground);
+  border-radius: 10px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+}
+
+.postDropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.postDropdownItem:hover {
+  background-color: var(--searchBar);
+}
+
+.postDropdownIcon {
+  color: var(--profileInfoIcon);
+}
+
+.postDropdownItemText {
+  color: var(--secondaryText);
+}
+
 .postBottom{
     display: flex;
     align-items: center;

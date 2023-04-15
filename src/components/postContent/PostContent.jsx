@@ -2,13 +2,18 @@ import "./postContent.css";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
 import ReactTimeAgo from "react-time-ago";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import parse from "html-react-parser";
 
 export default function PostContent({ user, post, handleToggleComments }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
+  const [dropdownStatus, setDropdownStatus] = useState(false);
+  const dropdown = useRef();
+  const dropdownTrigger = useRef();
 
   const [postState, setPostState] = useState({
     post: post,
@@ -135,6 +140,24 @@ export default function PostContent({ user, post, handleToggleComments }) {
     });
   }, []);
 
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (
+        dropdown.current &&
+        !dropdown.current.contains(e.target) &&
+        !dropdownTrigger.current.contains(e.target)
+      ) {
+        setDropdownStatus(false);
+      }
+    }
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="postWrapper">
       <div className="postTop">
@@ -160,7 +183,29 @@ export default function PostContent({ user, post, handleToggleComments }) {
           </div>
         </div>
         <div className="postTopRight">
-          <MoreVertIcon className="moreVert" />
+          {user && user.user._id === postState.post.author._id && (
+            <div className="postDropdownContainer">
+              <div
+                className="moreVertContainer"
+                ref={dropdownTrigger}
+                onClick={() => setDropdownStatus(!dropdownStatus)}
+              >
+                <MoreVertIcon className="moreVert" />
+              </div>
+              {dropdownStatus && (
+                <ul className="postDropdown" ref={dropdown}>
+                  <li className="postDropdownItem">
+                    <EditIcon className="postDropdownIcon" />
+                    <span className="postDropdownItemText">Update</span>
+                  </li>
+                  <li className="postDropdownItem">
+                    <DeleteIcon className="postDropdownIcon" />
+                    <span className="postDropdownItemText">Delete</span>
+                  </li>
+                </ul>
+              )}
+            </div>
+          )}
         </div>
       </div>
       <div className="postCenter">
