@@ -4,3 +4,9 @@
   gap: 15px;
   padding-bottom: 20px;
 }
+
+.noCommentsText {
+  color: var(--primaryText);
+  align-self: center;
+  font-size: 0.8rem;
+}

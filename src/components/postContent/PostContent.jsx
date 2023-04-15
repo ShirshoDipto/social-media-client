@@ -164,7 +164,7 @@ export default function PostContent({ user, post, handleToggleComments }) {
         </div>
       </div>
       <div className="postCenter">
-        <span className="postText">{parse(postState.post.content)}</span>
+        <div className="postText">{parse(postState.post.content)}</div>
         {postState.post.image && (
           <img
             src={`${serverRoot}/images/${postState.post.image}`}

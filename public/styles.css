@@ -32,4 +32,5 @@ input:-webkit-autofill{
 
 .routerLink{
   text-decoration: none;
+  color: inherit;
 }
