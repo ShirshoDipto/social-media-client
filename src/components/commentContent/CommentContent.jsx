@@ -1,9 +1,11 @@
 import "./commentContent.css";
 import ReactTimeAgo from "react-time-ago";
 import { useEffect, useState } from "react";
+import parse from "html-react-parser";
 
 export default function CommentContent({ user, comment, handleToggleLike }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
+  const clientRoot = process.env.REACT_APP_CLIENTROOT;
 
   const [commentState, setcommentState] = useState({
     comment: comment,
@@ -135,11 +137,20 @@ export default function CommentContent({ user, comment, handleToggleLike }) {
 
   return (
     <div className="commentWrapper">
-      <img
-        src="/assets/person/profilePic.jpeg"
-        alt=""
-        className="commentUserImg"
-      />
+      {comment.author.profilePic ? (
+        <img
+          src={`${serverRoot}/images/${comment.author.profilePic}`}
+          alt=""
+          className="commentUserImg"
+        />
+      ) : (
+        <img
+          src={`${clientRoot}/assets/person/noAvatar.png`}
+          alt=""
+          className="commentUserImg"
+        />
+      )}
+
       <div className="commentRightContainer">
         <div className="commentUserNameAndComment">
           <div className="commentUserAndDate">
@@ -149,7 +160,7 @@ export default function CommentContent({ user, comment, handleToggleLike }) {
             </div>
           </div>
           <div className="commentRightContent">
-            {commentState.comment.content}
+            {parse(commentState.comment.content)}
           </div>
         </div>
         <div className="commentLikeAndReplies">

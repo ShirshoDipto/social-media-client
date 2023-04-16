@@ -4,15 +4,37 @@ import PersonIcon from "@mui/icons-material/Person";
 import ChatIcon from "@mui/icons-material/Chat";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import LogoutIcon from "@mui/icons-material/Logout";
+import HomeIcon from "@mui/icons-material/Home";
+import TimelineIcon from "@mui/icons-material/Timeline";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 
-export default function Topbar({ user }) {
+export default function Topbar({ user, feedOption, setFeedOption }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const dropdown = useRef();
   const dropdownTrigger = useRef();
+  const home = useRef();
+  const timeline = useRef();
+
+  function handleToggleFeedOption(e) {
+    if (home.current.contains(e.target) && feedOption === "home") {
+      return;
+    }
+
+    if (timeline.current.contains(e.target) && feedOption === "timeline") {
+      return;
+    }
+
+    if (home.current.contains(e.target) && feedOption === "timeline") {
+      setFeedOption("home");
+    }
+
+    if (timeline.current.contains(e.target) && feedOption === "home") {
+      setFeedOption("timeline");
+    }
+  }
 
   function handleLogout() {
     localStorage.removeItem("nosebookUser");
@@ -43,8 +65,6 @@ export default function Topbar({ user }) {
         <Link to="/" className="routerLink">
           <span className="topbarLogo">NoseBook</span>
         </Link>
-      </div>
-      <div className="topbarCenter">
         <div className="searchbar">
           <SearchIcon className="searchIcon" />
           <input
@@ -54,13 +74,43 @@ export default function Topbar({ user }) {
           />
         </div>
       </div>
+      <div className="topbarCenter">
+        <div className="topbarLinks">
+          <div
+            ref={timeline}
+            className={
+              feedOption === "timeline"
+                ? "topbarLinkContainer topbarLinkSelected"
+                : "topbarLinkContainer"
+            }
+            onClick={handleToggleFeedOption}
+          >
+            <TimelineIcon
+              sx={{ fontSize: 30 }}
+              color="primary"
+              className="topbarLink"
+            />
+          </div>
+          <div
+            ref={home}
+            className={
+              feedOption === "home"
+                ? "topbarLinkContainer topbarLinkSelected"
+                : "topbarLinkContainer"
+            }
+            onClick={handleToggleFeedOption}
+          >
+            <HomeIcon
+              sx={{ fontSize: 30 }}
+              color="primary"
+              className="topbarLink"
+            />
+          </div>
+        </div>
+      </div>
       <div className="topbarRight">
         {user ? (
           <div className="topbarRightWrapper">
-            <div className="topbarLinks">
-              <span className="topbarLink">Homepage</span>
-              <span className="topbarLink">Timeline</span>
-            </div>
             <div className="topbarIcons">
               <div className="topbarIconItem">
                 <PersonIcon />

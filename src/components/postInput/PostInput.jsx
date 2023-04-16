@@ -6,6 +6,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 
 export default function PostInput({ user }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
+  const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const [image, setImage] = useState(null);
   const imgRef = useRef();
   const content = useRef();
@@ -19,8 +20,10 @@ export default function PostInput({ user }) {
       formData.append("imageName", fileName + image.name);
       formData.append("image", image);
     }
+
     const text = await content.current.value.replace(/\n\r?/g, "<br />");
     formData.append("content", text);
+
     try {
       const res = await fetch(`${serverRoot}/api/posts`, {
         method: "POST",
@@ -49,11 +52,19 @@ export default function PostInput({ user }) {
     <div className="postInput">
       <form className="postInputWrapper" onSubmit={handlePostSubmit}>
         <div className="postInputTop">
-          <img
-            className="postInputProfileImg"
-            src="/assets/person/2.jpeg"
-            alt=""
-          />
+          {user && user.user.profilePic ? (
+            <img
+              src={`${serverRoot}/images/${user.user.profilePic}`}
+              alt=""
+              className="postInputProfileImg"
+            />
+          ) : (
+            <img
+              src={`${clientRoot}/assets/person/noAvatar.png`}
+              alt=""
+              className="postInputProfileImg"
+            />
+          )}
           <textarea
             ref={content}
             placeholder="What's in your mind?"

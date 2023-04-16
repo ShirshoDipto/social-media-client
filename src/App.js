@@ -1,7 +1,7 @@
 import Homepage from "./pages/hompage/Homepage";
 import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
-import ProfileContainer from "./components/profileContainer/ProfileContainer";
+import ProfileContainer from "./pages/profileContainer/ProfileContainer";
 import ScrollToTop from "./ScrollToTop.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";

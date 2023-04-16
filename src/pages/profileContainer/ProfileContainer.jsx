@@ -1,6 +1,6 @@
 import React from "react";
-import Profile from "../../pages/profile/Profile";
-import Topbar from "../topbar/Topbar";
+import Profile from "../../components/profile/Profile";
+import Topbar from "../../components/topbar/Topbar";
 
 export default function ProfileContainer({ user }) {
   return (

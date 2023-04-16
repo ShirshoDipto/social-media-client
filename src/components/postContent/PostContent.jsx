@@ -9,7 +9,12 @@ import ReactTimeAgo from "react-time-ago";
 import { useEffect, useRef, useState } from "react";
 import parse from "html-react-parser";
 
-export default function PostContent({ user, post, handleToggleComments }) {
+export default function PostContent({
+  user,
+  post,
+  handleToggleComments,
+  numComments,
+}) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const dropdown = useRef();
@@ -227,9 +232,7 @@ export default function PostContent({ user, post, handleToggleComments }) {
           </span>
         </div>
         <div className="postBottomRight">
-          <div className="postCommentText">
-            {postState.post.numComments} comments
-          </div>
+          <div className="postCommentText">{numComments} comments</div>
         </div>
       </div>
       <div className="likeAndCommentContainer">

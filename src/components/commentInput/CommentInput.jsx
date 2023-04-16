@@ -1,17 +1,64 @@
 import "./commentInput.css";
+import { useRef } from "react";
 
-export default function CommentInput() {
+export default function CommentInput({
+  user,
+  post,
+  fetchComments,
+  setNumComments,
+}) {
+  const serverRoot = process.env.REACT_APP_SERVERROOT;
+  const clientRoot = process.env.REACT_APP_CLIENTROOT;
+  const content = useRef();
+
+  async function handleCommentSubmit(e) {
+    e.preventDefault();
+    const text = await content.current.value.replace(/\n\r?/g, "<br />");
+
+    try {
+      const res = await fetch(`${serverRoot}/api/posts/${post._id}/comments`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content: text }),
+      });
+
+      if (!res.ok) {
+        console.log(await res.json());
+      }
+
+      const resData = await res.json();
+
+      e.target.reset();
+      fetchComments();
+      setNumComments(resData.numComments);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <div className="commentInput">
       <div className="commentInputWrapper">
-        <img
-          src="/assets/person/shusme.jpg"
-          alt=""
-          className="commentInputUserImg"
-        />
-        <form className="commentInputForm">
+        {user && user.user.profilePic ? (
+          <img
+            src={`${serverRoot}/images/${user.user.profilePic}`}
+            alt=""
+            className="commentInputUserImg"
+          />
+        ) : (
+          <img
+            src={`${clientRoot}/assets/person/noAvatar.png`}
+            alt=""
+            className="commentInputUserImg"
+          />
+        )}
+        <form className="commentInputForm" onSubmit={handleCommentSubmit}>
           <textarea
             autoFocus={true}
+            ref={content}
             className="commentInputTextarea"
             name="commentCoontent"
             placeholder="Write a comment"
