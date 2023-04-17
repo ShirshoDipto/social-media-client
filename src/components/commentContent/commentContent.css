@@ -50,6 +50,7 @@
 
 .commentLikeAndReplies {
   display: flex;
+  align-items: center;
   gap: 15px;
   font-size: 0.7rem;
   color: var(--primaryText);

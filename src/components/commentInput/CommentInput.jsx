@@ -4,7 +4,7 @@ import { useRef } from "react";
 export default function CommentInput({
   user,
   post,
-  fetchComments,
+  addNewComment,
   setNumComments,
 }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
@@ -32,7 +32,7 @@ export default function CommentInput({
       const resData = await res.json();
 
       e.target.reset();
-      fetchComments();
+      addNewComment(resData.comment);
       setNumComments(resData.numComments);
     } catch (err) {
       console.log(err);

@@ -155,9 +155,6 @@ export default function CommentContent({ user, comment, handleToggleLike }) {
         <div className="commentUserNameAndComment">
           <div className="commentUserAndDate">
             <div className="commentUsername">{`${commentState.comment.author.firstName} ${commentState.comment.author.lastName}`}</div>
-            <div className="commentDate">
-              {<ReactTimeAgo date={new Date(commentState.comment.createdAt)} />}
-            </div>
           </div>
           <div className="commentRightContent">
             {parse(commentState.comment.content)}
@@ -176,8 +173,8 @@ export default function CommentContent({ user, comment, handleToggleLike }) {
               Like({commentState.comment.numLikes})
             </span>
           )}
-          <span className="commentReplies">
-            Replies({commentState.comment.numReplies})
+          <span className="commentDate">
+            {<ReactTimeAgo date={new Date(commentState.comment.createdAt)} />}
           </span>
         </div>
       </div>

@@ -11,30 +11,44 @@ export default function CommentContainer({ user, post, setNumComments }) {
     isLoading: true,
   });
 
-  async function fetchComments() {
-    const res = await fetch(`${serverRoot}/api/posts/${post._id}/comments`);
-    if (!res.ok) {
-      console.log(await res.json());
-      return setCommentsState({
-        comments: commentsState.comments,
-        isLoading: false,
-      });
-    }
-    const resData = await res.json();
-    if (resData.length !== 0) {
+  async function addNewComment(newComment) {
+    newComment.author = {
+      _id: newComment.author,
+      firstName: user.user.firstName,
+      lastName: user.user.lastName,
+      profilePic: user.user.profilePic,
+    };
+
+    setCommentsState({
+      comments: [newComment].concat(...commentsState.comments),
+      isLoading: false,
+    });
+  }
+
+  useEffect(() => {
+    async function fetchComments() {
+      const res = await fetch(`${serverRoot}/api/posts/${post._id}/comments`);
+      if (!res.ok) {
+        console.log(await res.json());
+        return setCommentsState({
+          comments: commentsState.comments,
+          isLoading: false,
+        });
+      }
+      const resData = await res.json();
+      if (resData.length !== 0) {
+        return setCommentsState({
+          comments: resData.comments,
+          isLoading: false,
+        });
+      }
+
       return setCommentsState({
         comments: resData.comments,
         isLoading: false,
       });
     }
 
-    return setCommentsState({
-      comments: resData.comments,
-      isLoading: false,
-    });
-  }
-
-  useEffect(() => {
     fetchComments().catch((err) => {
       console.log(err);
     });
@@ -45,7 +59,7 @@ export default function CommentContainer({ user, post, setNumComments }) {
       <CommentInput
         user={user}
         post={post}
-        fetchComments={fetchComments}
+        addNewComment={addNewComment}
         setNumComments={setNumComments}
       />
       {commentsState.isLoading ? (

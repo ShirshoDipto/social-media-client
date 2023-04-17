@@ -69,7 +69,6 @@ export default function PostInput({ user }) {
             ref={content}
             placeholder="What's in your mind?"
             className="postInputWriteArea"
-            rows={5}
           ></textarea>
         </div>
         <hr className="postInputHr" />

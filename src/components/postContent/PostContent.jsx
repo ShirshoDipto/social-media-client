@@ -19,6 +19,7 @@ export default function PostContent({
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const dropdown = useRef();
   const dropdownTrigger = useRef();
+  const updatedPostContent = useRef();
 
   const [postState, setPostState] = useState({
     post: post,
@@ -98,7 +99,7 @@ export default function PostContent({
         isUpdating: postState.isUpdating,
         isLoading: true,
       });
-      return await deleteLike();
+      await deleteLike();
     } else {
       setPostState({
         post: postState.post,
@@ -108,6 +109,48 @@ export default function PostContent({
       });
       await addLike();
     }
+  }
+
+  async function toggleIsUpdating() {
+    setDropdownStatus(false);
+    setPostState({
+      post: postState.post,
+      isLiked: postState.isLiked,
+      isUpdating: true,
+      isLoading: false,
+    });
+  }
+
+  async function updatePost(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = new URLSearchParams(formData);
+
+    const res = await fetch(`${serverRoot}/api/posts/${postState.post._id}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+      body: data,
+    });
+
+    if (!res.ok) {
+      console.log(await res.json());
+    }
+
+    const updatedPost = postState.post;
+    updatedPost.content = updatedPostContent.current.value;
+
+    return setPostState({
+      post: updatedPost,
+      isLiked: postState.isLiked,
+      isUpdating: false,
+      isLoading: false,
+    });
+  }
+
+  async function handleDeletePost() {
+    console.log("Deleting...");
   }
 
   useEffect(() => {
@@ -199,11 +242,11 @@ export default function PostContent({
               </div>
               {dropdownStatus && (
                 <ul className="postDropdown" ref={dropdown}>
-                  <li className="postDropdownItem">
+                  <li className="postDropdownItem" onClick={toggleIsUpdating}>
                     <EditIcon className="postDropdownIcon" />
                     <span className="postDropdownItemText">Update</span>
                   </li>
-                  <li className="postDropdownItem">
+                  <li className="postDropdownItem" onClick={handleDeletePost}>
                     <DeleteIcon className="postDropdownIcon" />
                     <span className="postDropdownItemText">Delete</span>
                   </li>
@@ -214,7 +257,22 @@ export default function PostContent({
         </div>
       </div>
       <div className="postCenter">
-        <div className="postText">{parse(postState.post.content)}</div>
+        {postState.isUpdating ? (
+          <form className="updateFormContainer" onSubmit={updatePost}>
+            <textarea
+              name="content"
+              className="postUpdateTextarea"
+              ref={updatedPostContent}
+              defaultValue={postState.post.content}
+              autoFocus={true}
+            ></textarea>
+            <div className="updateFormButtonContainer">
+              <button className="updateFormButton">Update</button>
+            </div>
+          </form>
+        ) : (
+          <div className="postText">{parse(postState.post.content)}</div>
+        )}
         {postState.post.image && (
           <img
             src={`${serverRoot}/images/${postState.post.image}`}

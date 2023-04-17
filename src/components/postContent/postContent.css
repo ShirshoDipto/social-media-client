@@ -53,6 +53,35 @@
   line-height: 1.3;
 }
 
+.postUpdateTextarea {
+  border: none;
+  background: none;
+  width: 100%;
+  height: 70px;
+  resize: none;
+  color: var(--secondaryText);
+}
+
+.postUpdateTextarea:focus {
+  outline: none;
+}
+
+.updateFormButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 5px;
+}
+
+.updateFormButton {
+  width: 100px;
+  border: none;
+  padding: 7px;
+  border-radius: 7px;
+  cursor: pointer;
+  background-color: var(--topbarBackground);
+  color: var(--primaryText);
+}
+
 .postImg{
     margin-top: 20px;
     width: 100%;
