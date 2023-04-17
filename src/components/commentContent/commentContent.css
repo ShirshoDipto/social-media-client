@@ -25,6 +25,7 @@
     font-size: 0.6rem;
     color: var(--secondaryText);
     margin-top: 3px;
+    margin-bottom: 3px;
 }
 
 .commentRightContainer {

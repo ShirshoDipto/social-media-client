@@ -32,7 +32,7 @@ export default function CommentInput({
       const resData = await res.json();
 
       e.target.reset();
-      addNewComment(resData.comment);
+      await addNewComment(resData.comment);
       setNumComments(resData.numComments);
     } catch (err) {
       console.log(err);

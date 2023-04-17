@@ -12,6 +12,21 @@ export default function Feed({ user }) {
     isLoading: true,
   });
 
+  async function addNewPost(newPost) {
+    newPost.author = {
+      _id: user.user._id,
+      firstName: user.user.firstName,
+      lastName: user.user.lastName,
+      profilePic: user.user.profilePic,
+    };
+
+    setPostsState({
+      posts: [newPost].concat(...postsState.posts),
+      page: postsState.page,
+      isLoading: false,
+    });
+  }
+
   useEffect(() => {
     async function fetchPosts() {
       const res = await fetch(
@@ -49,7 +64,7 @@ export default function Feed({ user }) {
   return (
     <div className="feed">
       <div className="feedWrapper">
-        <PostInput user={user} />
+        <PostInput user={user} addNewPost={addNewPost} />
         {postsState.isLoading ? (
           <CircularProgress className="homePostsLoading" disableShrink />
         ) : (

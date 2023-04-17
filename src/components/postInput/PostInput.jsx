@@ -3,17 +3,21 @@ import PermMediaIcon from "@mui/icons-material/PermMedia";
 import { v4 as uuidv4 } from "uuid";
 import { useRef, useState } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
+import CircularProgress from "@mui/material/CircularProgress";
+import { grey } from "@mui/material/colors";
 
-export default function PostInput({ user }) {
+export default function PostInput({ user, addNewPost }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const [image, setImage] = useState(null);
   const imgRef = useRef();
   const content = useRef();
+  const [isLoading, setIsLoading] = useState(false);
 
   async function handlePostSubmit(e) {
     e.preventDefault();
     const formData = new FormData();
+    setIsLoading(true);
 
     if (image) {
       const fileName = uuidv4();
@@ -37,7 +41,10 @@ export default function PostInput({ user }) {
         console.log(await res.json());
       }
 
-      window.location.reload();
+      const resData = await res.json();
+      await addNewPost(resData.post);
+      setIsLoading(false);
+      e.target.reset();
     } catch (err) {
       console.log(err);
     }
@@ -103,7 +110,18 @@ export default function PostInput({ user }) {
               />
             </div>
           </div>
-          <button className="postInputButton">Post</button>
+          <button className="postInputButton">
+            {isLoading ? (
+              <CircularProgress
+                sx={{ color: grey[500] }}
+                size={15}
+                className="postSubmitLoading"
+                disableShrink
+              />
+            ) : (
+              <span>Post</span>
+            )}
+          </button>
         </div>
       </form>
     </div>
