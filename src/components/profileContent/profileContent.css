@@ -14,6 +14,7 @@
 .profileTop {
   background-color: var(--profileTop);
   border-radius: 20px;
+  margin-bottom: 20px;
 }
 
 .profileBottom {
@@ -27,19 +28,18 @@
 }
 
 .profileCover{
-  height: 320px;
   position: relative;
 }
 
 .profileCoverImg{
   width: 100%;
-  height: 250px;
+  height: 340px;
   object-fit: cover;
 }
 
 .noProfileCover {
   width: 100%;
-  height: 250px;
+  height: 340px;
   background-color: var(--searchBar);
   display: flex;
   justify-content: center;
@@ -56,20 +56,39 @@
   position: absolute;
   left: 30px;
   right: 0;
-  top: 200px;
+  bottom: -35px;
   border: 3px solid white;
 }
 
 .profileSummary{
   display: flex;
   justify-content: space-between;
-  padding-top: 10px;
-  padding-left: 200px;
-  padding-right: 20px;
+  align-items: center;
+  padding: 10px 20px 15px 200px;
 }
 
 .profileNameDescContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
   color: var(--primaryText);
+}
+
+.editProfileContainer {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--primaryText);
+  font-size: 0.8rem;
+  cursor: pointer;
+  background: var(--topbarBackground);
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.editProfileContainer:hover {
+  background-color: var(--topbarBackgroundDarkish);
 }
 
 .friendshipContainer {
@@ -118,6 +137,7 @@
 
 .profileInfoDesc{
   font-weight: 300;
+  font-size: 0.9rem;
 }
 
 .profileBottom{

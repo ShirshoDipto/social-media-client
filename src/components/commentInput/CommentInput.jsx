@@ -13,7 +13,6 @@ export default function CommentInput({
 
   async function handleCommentSubmit(e) {
     e.preventDefault();
-    const text = await content.current.value.replace(/\n\r?/g, "<br />");
 
     try {
       const res = await fetch(`${serverRoot}/api/posts/${post._id}/comments`, {
@@ -22,7 +21,7 @@ export default function CommentInput({
           Authorization: `Bearer ${user.token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ content: text }),
+        body: JSON.stringify({ content: content.current.value }),
       });
 
       if (!res.ok) {

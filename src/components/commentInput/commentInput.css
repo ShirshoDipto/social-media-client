@@ -16,6 +16,7 @@
 
 .commentInputTextarea {
   width: 100%;
+  height: 70px;
   resize: none;
   background-color: var(--searchBar);
   color: var(--secondaryText);

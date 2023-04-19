@@ -1,0 +1,195 @@
+/*  Styles for profile Edit modal */
+
+.profileModalContainer {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--primaryText);
+  background-color: var(--modalBackground);
+}
+
+.profileModalContent {
+  width: 45%;
+  min-width: 420px;
+  background-color: var(--profileTop);
+  border-radius: 10px;
+}
+
+.profileModalHeader {
+  font-weight: 600;
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  border-bottom: thin solid var(--secondaryBorderBackground);
+}
+
+.modalCancelContainer {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  background-color: var(--searchBar);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalCancelContainer:hover {
+  background-color: var(--profileInfoIcon);
+}
+
+.infoList {
+  overflow-y: scroll;
+  height: 75vh;
+}
+
+.infoListItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.infoListItemHeader {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+}
+
+.infoListItemHeaderTitle {
+  font-weight: 600;
+}
+
+.profileModalNameAndDesc {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 30px 10px 30px;
+}
+
+.profileModalNameContainer {
+  display: flex;
+  gap: 10px;
+}
+
+.photoButtonsContainer {
+  display: flex;
+  gap: 15px;
+  font-size: 0.8rem;
+}
+
+.photoRemoveButton {
+  cursor: pointer;
+  color: var(--topbarBackground);
+}
+
+.modalPicContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalProfilePic {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.editCoverImgContainer {
+  width: 80%;
+}
+
+.modalNoProfileCover {
+  width: 100%;
+  height: 250px;
+  background-color: var(--searchBar);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.3rem;
+  color: var(--secondaryText);
+  border-radius: 10px;
+}
+
+.modalCoverPic {
+  width: 80%;
+  height: 250px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.modalBioContainer {
+  padding: 0 30px 20px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modalFormGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bioDesc {
+  font-size: 0.9rem;
+}
+
+.modalFormGroup label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.modalEditInput {
+  background: none;
+  border-bottom: thin solid var(--secondaryBorderBackground);
+  flex: 1;
+  color: var(--secondaryText);
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  padding: 5px;
+}
+
+.modalEditInput:focus {
+  outline: none;
+}
+
+#modalEditRel {
+  background: none;
+  color: var(--secondaryText);
+  border-radius: 5px;
+  border: thin solid var(--secondaryBorderBackground);
+  padding: 5px;
+}
+
+#modalEditRel:focus {
+  outline: none;
+}
+
+.profileModalSelectOption {
+  background: var(--searchBar);
+}
+
+.modalFormSubmitContainer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px;
+}
+
+.modalFormSubmitButton {
+  width: 100px;
+  border: none;
+  padding: 7px;
+  border-radius: 7px;
+  cursor: pointer;
+  background-color: var(--topbarBackground);
+  color: var(--primaryText);
+}

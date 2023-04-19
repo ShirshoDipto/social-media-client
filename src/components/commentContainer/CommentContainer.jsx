@@ -35,6 +35,7 @@ export default function CommentContainer({ user, post, setNumComments }) {
           isLoading: false,
         });
       }
+
       const resData = await res.json();
       if (resData.length !== 0) {
         return setCommentsState({
@@ -69,7 +70,12 @@ export default function CommentContainer({ user, post, setNumComments }) {
           disableShrink
         />
       ) : (
-        <Comments user={user} comments={commentsState.comments} />
+        <Comments
+          user={user}
+          post={post}
+          comments={commentsState.comments}
+          setNumComments={setNumComments}
+        />
       )}
     </div>
   );

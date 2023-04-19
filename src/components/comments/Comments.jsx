@@ -1,9 +1,18 @@
 import "./comments.css";
 import Comment from "../comment/Comment";
+import CommentContent from "../commentContent/CommentContent";
 
-export default function Comments({ user, comments }) {
+export default function Comments({ user, post, comments, setNumComments }) {
   const allComments = comments.map((comment) => {
-    return <Comment key={comment._id} user={user} comment={comment} />;
+    return (
+      <CommentContent
+        key={comment._id}
+        user={user}
+        post={post}
+        comment={comment}
+        setNumComments={setNumComments}
+      />
+    );
   });
 
   if (comments.length === 0) {

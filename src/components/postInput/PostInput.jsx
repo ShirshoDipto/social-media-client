@@ -20,13 +20,12 @@ export default function PostInput({ user, addNewPost }) {
     setIsLoading(true);
 
     if (image) {
-      const fileName = uuidv4();
-      formData.append("imageName", fileName + image.name);
+      const fileName = uuidv4() + image.name;
+      formData.append("imageName", fileName);
       formData.append("image", image);
     }
 
-    const text = await content.current.value.replace(/\n\r?/g, "<br />");
-    formData.append("content", text);
+    formData.append("content", content.current.value);
 
     try {
       const res = await fetch(`${serverRoot}/api/posts`, {
@@ -45,6 +44,7 @@ export default function PostInput({ user, addNewPost }) {
       await addNewPost(resData.post);
       setIsLoading(false);
       e.target.reset();
+      await handleRemoveImg();
     } catch (err) {
       console.log(err);
     }

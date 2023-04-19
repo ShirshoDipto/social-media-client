@@ -14,8 +14,10 @@ export default function PostContent({
   post,
   handleToggleComments,
   numComments,
+  deletePost,
 }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
+  const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const dropdown = useRef();
   const dropdownTrigger = useRef();
@@ -29,62 +31,70 @@ export default function PostContent({
   });
 
   async function addLike() {
-    if (postState.isLoading) {
-      return;
-    }
-
-    const res = await fetch(
-      `${serverRoot}/api/posts/${postState.post._id}/likes`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
+    try {
+      if (postState.isLoading) {
+        return;
       }
-    );
 
-    if (!res.ok) {
-      return console.log(await res.json());
+      const res = await fetch(
+        `${serverRoot}/api/posts/${postState.post._id}/likes`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      if (!res.ok) {
+        return console.log(await res.json());
+      }
+
+      const resData = await res.json();
+      let newPost = postState.post;
+      newPost.numLikes += 1;
+      return setPostState({
+        post: newPost,
+        isLiked: resData.postLike,
+        isUpdating: postState.isUpdating,
+        isLoading: false,
+      });
+    } catch (error) {
+      console.log(error);
     }
-
-    const resData = await res.json();
-    let newPost = postState.post;
-    newPost.numLikes += 1;
-    return setPostState({
-      post: newPost,
-      isLiked: resData.postLike,
-      isUpdating: postState.isUpdating,
-      isLoading: false,
-    });
   }
 
   async function deleteLike() {
-    if (postState.isLoading) {
-      return;
-    }
-
-    const res = await fetch(
-      `${serverRoot}/api/posts/${postState.post._id}/likes/${postState.isLiked._id}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
+    try {
+      if (postState.isLoading) {
+        return;
       }
-    );
 
-    if (!res.ok) {
-      return console.log(await res.json());
+      const res = await fetch(
+        `${serverRoot}/api/posts/${postState.post._id}/likes/${postState.isLiked._id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      if (!res.ok) {
+        return console.log(await res.json());
+      }
+
+      let newPost = postState.post;
+      newPost.numLikes -= 1;
+      return setPostState({
+        post: newPost,
+        isLiked: {},
+        isUpdating: postState.isUpdating,
+        isLoading: postState.isLoading,
+      });
+    } catch (error) {
+      console.log(error);
     }
-
-    let newPost = postState.post;
-    newPost.numLikes -= 1;
-    return setPostState({
-      post: newPost,
-      isLiked: {},
-      isUpdating: postState.isUpdating,
-      isLoading: postState.isLoading,
-    });
   }
 
   async function handleToggleLike() {
@@ -122,35 +132,35 @@ export default function PostContent({
   }
 
   async function updatePost(e) {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const data = new URLSearchParams(formData);
+    try {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = new URLSearchParams(formData);
 
-    const res = await fetch(`${serverRoot}/api/posts/${postState.post._id}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-      body: data,
-    });
+      const res = await fetch(`${serverRoot}/api/posts/${postState.post._id}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: data,
+      });
 
-    if (!res.ok) {
-      console.log(await res.json());
+      if (!res.ok) {
+        console.log(await res.json());
+      }
+
+      const updatedPost = postState.post;
+      updatedPost.content = updatedPostContent.current.value;
+
+      return setPostState({
+        post: updatedPost,
+        isLiked: postState.isLiked,
+        isUpdating: false,
+        isLoading: false,
+      });
+    } catch (error) {
+      console.log(error);
     }
-
-    const updatedPost = postState.post;
-    updatedPost.content = updatedPostContent.current.value;
-
-    return setPostState({
-      post: updatedPost,
-      isLiked: postState.isLiked,
-      isUpdating: false,
-      isLoading: false,
-    });
-  }
-
-  async function handleDeletePost() {
-    console.log("Deleting...");
   }
 
   useEffect(() => {
@@ -210,14 +220,22 @@ export default function PostContent({
     <div className="postWrapper">
       <div className="postTop">
         <div className="postTopLeft">
-          <img
-            src="/assets/person/shusme.jpg"
-            alt=""
-            className="postProfileImg"
-          />
+          {postState.post.author.profilePic ? (
+            <img
+              src={`${serverRoot}/images/${postState.post.author.profilePic}`}
+              alt=""
+              className="postProfileImg"
+            />
+          ) : (
+            <img
+              src={`${clientRoot}/assets/person/noAvatar.png`}
+              alt=""
+              className="postProfileImg"
+            />
+          )}
           <div className="postUserAndDate">
             <Link
-              to={`users/${postState.post.author._id}`}
+              to={`${clientRoot}/users/${postState.post.author._id}`}
               className="routerLink"
             >
               <span className="postUsername">{`${postState.post.author.firstName} ${postState.post.author.lastName}`}</span>
@@ -246,7 +264,7 @@ export default function PostContent({
                     <EditIcon className="postDropdownIcon" />
                     <span className="postDropdownItemText">Update</span>
                   </li>
-                  <li className="postDropdownItem" onClick={handleDeletePost}>
+                  <li className="postDropdownItem" onClick={deletePost}>
                     <DeleteIcon className="postDropdownIcon" />
                     <span className="postDropdownItemText">Delete</span>
                   </li>
@@ -265,13 +283,16 @@ export default function PostContent({
               ref={updatedPostContent}
               defaultValue={postState.post.content}
               autoFocus={true}
+              required={true}
             ></textarea>
             <div className="updateFormButtonContainer">
               <button className="updateFormButton">Update</button>
             </div>
           </form>
         ) : (
-          <div className="postText">{parse(postState.post.content)}</div>
+          <div className="postText">
+            {parse(postState.post.content.replace(/\n\r?/g, "<br />"))}
+          </div>
         )}
         {postState.post.image && (
           <img

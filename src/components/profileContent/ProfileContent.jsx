@@ -1,4 +1,4 @@
-import "./profile.css";
+import "./profileContent.css";
 import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -7,11 +7,13 @@ import HouseIcon from "@mui/icons-material/House";
 import SchoolIcon from "@mui/icons-material/School";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import CircularProgress from "@mui/material/CircularProgress";
+import EditIcon from "@mui/icons-material/Edit";
 import Posts from "../posts/Posts";
+import ProfileUpdateModal from "../profileUpdateModal/ProfileUpdateModal";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-export default function Profile({ user }) {
+export default function ProfileContent({ user }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const params = useParams();
@@ -21,9 +23,18 @@ export default function Profile({ user }) {
     isLoading: true,
     page: 0,
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     async function fetchUserInfos() {
+      if (!profileState.isLoading) {
+        setProfileState({
+          userBio: profileState.userBio,
+          userPosts: profileState.userPosts,
+          isLoading: true,
+          page: 0,
+        });
+      }
       const results = await Promise.all([
         fetch(`${serverRoot}/api/users/${params.userId}`),
         fetch(
@@ -57,7 +68,7 @@ export default function Profile({ user }) {
     fetchUserInfos().catch((err) => {
       console.log(err);
     });
-  }, []);
+  }, [params.userId]);
 
   if (profileState.isLoading) {
     return (
@@ -114,7 +125,7 @@ export default function Profile({ user }) {
                 )}
               </div>
 
-              {user && user.user._id !== profileState.userBio._id && (
+              {user && user.user._id !== profileState.userBio._id ? (
                 <div className="friendshipContainer">
                   <div className="friendshipStatus">
                     <PeopleOutlinedIcon />
@@ -124,6 +135,14 @@ export default function Profile({ user }) {
                     <MessageOutlinedIcon />
                     <span className="messageText">Message</span>
                   </div>
+                </div>
+              ) : (
+                <div
+                  className="editProfileContainer"
+                  onClick={() => setIsModalOpen(true)}
+                >
+                  <EditIcon sx={{ fontSize: 17 }} className="profileEditIcon" />
+                  <span className="profileEditText">Edit Profile</span>
                 </div>
               )}
             </div>
@@ -164,7 +183,7 @@ export default function Profile({ user }) {
                     <HouseIcon className="profileInfoIcon" />
                     {profileState.userBio.city ? (
                       <span className="profileInfoItemDesc">
-                        Lives in <b>{profileState.userBio.city}</b>
+                        Lives in, <b>{profileState.userBio.city}</b>
                       </span>
                     ) : (
                       <span className="profileInfoItemDesc">
@@ -176,7 +195,7 @@ export default function Profile({ user }) {
                     <LocationOnIcon className="profileInfoIcon" />
                     {profileState.userBio.from ? (
                       <span className="profileInfoItemDesc">
-                        From <b>{[profileState.userBio.from]}</b>
+                        From, <b>{[profileState.userBio.from]}</b>
                       </span>
                     ) : (
                       <span className="profileInfoItemDesc">
@@ -248,6 +267,13 @@ export default function Profile({ user }) {
           </div>
         </div>
       </div>
+      {isModalOpen && (
+        <ProfileUpdateModal
+          user={profileState.userBio}
+          token={user.token}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )}
     </div>
   );
 }

@@ -5,22 +5,23 @@
   font-family: "Roboto", sans-serif;
 }
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   width: 5px;
 }
 
-::-webkit-scrollbar-track{
+::-webkit-scrollbar-track {
   background-color: var(--scrollbarTrack);
   border-radius: 3px;
 }
 
-::-webkit-scrollbar-thumb{
+::-webkit-scrollbar-thumb {
   background-color: var(--scrollbarThumb);
   border-radius: 3px;
 }
 
-:root{
+:root {
   --topbarBackground: #1877f2;
+  --topbarBackgroundDarkish: #1466d1;
   --scrollbarTrack: #f1f1f1;
   --scrollbarThumb: rgb(180, 178, 178);
   --profileBackground: #18191A;
@@ -32,20 +33,21 @@
   --searchBar: #3a3b3c;
   --postBackground: #18191a;
   --secondaryBorderBackground: rgba(255, 255, 255, 0.1);
+  --modalBackground: rgba(0, 0, 0, 0.6);
 }
 
 input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus, 
-input:-webkit-autofill:active{
-    -webkit-box-shadow: 0 0 0 30px var(--searchBar) inset !important;
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px var(--searchBar) inset !important;
 }
 
-input:-webkit-autofill{
+input:-webkit-autofill {
   -webkit-text-fill-color: var(--secondaryText) !important;
 }
 
-.routerLink{
+.routerLink {
   text-decoration: none;
   color: inherit;
 }

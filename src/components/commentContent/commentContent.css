@@ -49,6 +49,103 @@
   gap: 10px;
 }
 
+.commentUserAndOptions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.commentUpdateTextarea {
+  border: none;
+  background: none;
+  width: 100%;
+  height: 70px;
+  resize: none;
+  color: var(--secondaryText);
+}
+
+.commentUpdateTextarea:focus {
+  outline: none;
+}
+
+.updateFormButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 5px;
+}
+
+.updateFormButton {
+  width: 100px;
+  border: none;
+  padding: 7px;
+  border-radius: 7px;
+  cursor: pointer;
+  background-color: var(--topbarBackground);
+  color: var(--primaryText);
+}
+
+/* Dropdown menu styles */
+
+.commentMoreVertContainer {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.commentMoreVertContainer:hover {
+  background-color: var(--profileBackground);
+  cursor: pointer;
+}
+
+.moreVert {
+  color: var(--secondaryText);
+}
+
+.commentDropdownContainer {
+  position: relative;
+}
+
+.commentDropdown {
+  position: absolute;
+  top: calc(100% + 15px);
+  right: 0;
+  z-index: 2;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14);
+  list-style: none;
+  background-color: var(--profileBackground);
+  border-radius: 10px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+}
+
+.commentDropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.commentDropdownItem:hover {
+  background-color: var(--searchBar);
+}
+
+.commentDropdownIcon {
+  color: var(--profileInfoIcon);
+}
+
+.commentDropdownItemText {
+  color: var(--secondaryText);
+}
+
 .commentLikeAndReplies {
   display: flex;
   align-items: center;

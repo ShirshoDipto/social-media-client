@@ -1,10 +1,10 @@
 import Homepage from "./pages/hompage/Homepage";
 import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
-import ProfileContainer from "./pages/profileContainer/ProfileContainer";
+import Profile from "./pages/profile/Profile";
 import ScrollToTop from "./ScrollToTop.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GoogleLogin from "./pages/GoogleLogin";
 
 import TimeAgo from "javascript-time-ago";
@@ -16,10 +16,37 @@ TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
 
 function App() {
+  const serverRoot = process.env.REACT_APP_SERVERROOT;
   const userFromLocalStorage = localStorage.getItem("nosebookUser");
   const [currentUser, setCurrentUser] = useState(
     JSON.parse(userFromLocalStorage)
   );
+
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const res = await fetch(
+          `${serverRoot}/api/users/${currentUser.user._id}`
+        );
+
+        if (!res.ok) {
+          throw await res.json();
+        }
+
+        const resData = await res.json();
+        setCurrentUser({
+          user: resData.user,
+          token: currentUser.token,
+        });
+      } catch (error) {
+        throw error;
+      }
+    }
+
+    fetchUser().catch((err) => {
+      return console.log(err);
+    });
+  }, []);
 
   return (
     <BrowserRouter>
@@ -37,7 +64,7 @@ function App() {
           />
           <Route
             path="/users/:userId"
-            element={<ProfileContainer user={currentUser} />}
+            element={<Profile user={currentUser} />}
           />
           <Route path="/login/google/confirm" element={<GoogleLogin />} />
         </Routes>

@@ -131,16 +131,17 @@ export default function Topbar({ user, feedOption, setFeedOption }) {
                   src={`${serverRoot}/images/${user.user.profilePic}`}
                   alt=""
                   className="topbarImg"
-                  onClick={(e) => {
+                  onClick={() => {
                     setDropdownStatus(!dropdownStatus);
                   }}
+                  ref={dropdownTrigger}
                 />
               ) : (
                 <img
                   src={`${clientRoot}/assets/person/noAvatar.png`}
                   alt=""
                   className="topbarImg"
-                  onClick={(e) => {
+                  onClick={() => {
                     setDropdownStatus(!dropdownStatus);
                   }}
                   ref={dropdownTrigger}
@@ -149,8 +150,14 @@ export default function Topbar({ user, feedOption, setFeedOption }) {
 
               {dropdownStatus && (
                 <ul className="topbarDropdown" ref={dropdown}>
-                  <Link to={`users/${user.user._id}`} className="routerLink">
-                    <li className="topbarDropdownProfile">
+                  <Link
+                    to={`${clientRoot}/users/${user.user._id}`}
+                    className="routerLink"
+                  >
+                    <li
+                      className="topbarDropdownProfile"
+                      onClick={() => setDropdownStatus(!dropdownStatus)}
+                    >
                       {user.user.profilePic ? (
                         <img
                           src={`${serverRoot}/images/${user.user.profilePic}`}
