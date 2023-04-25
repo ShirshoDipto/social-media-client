@@ -7,11 +7,12 @@ export default function Posts({ user, posts }) {
   });
 
   if (posts.length === 0) {
-    return (
-      <div className="allPosts">
-        <span className="noPostsText">No posts available.</span>
-      </div>
-    );
+    // return (
+    //   <div className="allPosts">
+    //     <span className="noPostsText">No posts available.</span>
+    //   </div>
+    // );
+    return null;
   }
 
   return <div className="allPosts">{allPosts}</div>;

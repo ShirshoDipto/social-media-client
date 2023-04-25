@@ -1,5 +1,9 @@
 .rightbar {
   flex: 3;
+  position: sticky;
+  top: 50px;
+  height: calc(100vh - 50px);
+  margin-right: 20px;
 }
 
 .rightbarWrapper {
@@ -42,6 +46,13 @@
 
 .rightbarFriendList {
   list-style: none;
+  height: 300px;
+  overflow-y: hidden;
+  padding: 10px 0 10px 0;
+}
+
+.rightbarFriendList:hover {
+  overflow-y: scroll;
 }
 
 .rightbarProfileImgContainer {

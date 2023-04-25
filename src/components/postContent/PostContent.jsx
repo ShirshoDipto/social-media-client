@@ -22,22 +22,14 @@ export default function PostContent({
   const dropdown = useRef();
   const dropdownTrigger = useRef();
   const updatedPostContent = useRef();
-
-  const [postState, setPostState] = useState({
-    post: post,
-    isLiked: {},
-    isUpdating: false,
-    isLoading: false,
-  });
-
+  const [postState, setPostState] = useState(post);
+  const [isLiked, setIsliked] = useState({});
+  const [isUpdating, setIsUpdating] = useState(false);
+  const fullname = `${post.author.firstName} ${post.author.lastName}`;
   async function addLike() {
     try {
-      if (postState.isLoading) {
-        return;
-      }
-
       const res = await fetch(
-        `${serverRoot}/api/posts/${postState.post._id}/likes`,
+        `${serverRoot}/api/posts/${postState._id}/likes`,
         {
           method: "POST",
           headers: {
@@ -51,14 +43,11 @@ export default function PostContent({
       }
 
       const resData = await res.json();
-      let newPost = postState.post;
-      newPost.numLikes += 1;
-      return setPostState({
-        post: newPost,
-        isLiked: resData.postLike,
-        isUpdating: postState.isUpdating,
-        isLoading: false,
+      setPostState({
+        ...postState,
+        numLikes: postState.numLikes + 1,
       });
+      setIsliked(resData.postLike);
     } catch (error) {
       console.log(error);
     }
@@ -66,12 +55,8 @@ export default function PostContent({
 
   async function deleteLike() {
     try {
-      if (postState.isLoading) {
-        return;
-      }
-
       const res = await fetch(
-        `${serverRoot}/api/posts/${postState.post._id}/likes/${postState.isLiked._id}`,
+        `${serverRoot}/api/posts/${postState._id}/likes/${isLiked._id}`,
         {
           method: "DELETE",
           headers: {
@@ -84,14 +69,11 @@ export default function PostContent({
         return console.log(await res.json());
       }
 
-      let newPost = postState.post;
-      newPost.numLikes -= 1;
-      return setPostState({
-        post: newPost,
-        isLiked: {},
-        isUpdating: postState.isUpdating,
-        isLoading: postState.isLoading,
+      setPostState({
+        ...postState,
+        numLikes: postState.numLikes - 1,
       });
+      setIsliked({});
     } catch (error) {
       console.log(error);
     }
@@ -102,33 +84,16 @@ export default function PostContent({
       return alert("Log in to Like and Comment");
     }
 
-    if (Object.keys(postState.isLiked).length !== 0) {
-      setPostState({
-        post: postState.post,
-        isLiked: postState.isLiked,
-        isUpdating: postState.isUpdating,
-        isLoading: true,
-      });
+    if (Object.keys(isLiked).length !== 0) {
       await deleteLike();
     } else {
-      setPostState({
-        post: postState.post,
-        isLiked: postState.isLiked,
-        isUpdating: postState.isUpdating,
-        isLoading: true,
-      });
       await addLike();
     }
   }
 
   async function toggleIsUpdating() {
     setDropdownStatus(false);
-    setPostState({
-      post: postState.post,
-      isLiked: postState.isLiked,
-      isUpdating: true,
-      isLoading: false,
-    });
+    setIsUpdating(true);
   }
 
   async function updatePost(e) {
@@ -137,7 +102,7 @@ export default function PostContent({
       const formData = new FormData(e.target);
       const data = new URLSearchParams(formData);
 
-      const res = await fetch(`${serverRoot}/api/posts/${postState.post._id}`, {
+      const res = await fetch(`${serverRoot}/api/posts/${postState._id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -149,15 +114,11 @@ export default function PostContent({
         console.log(await res.json());
       }
 
-      const updatedPost = postState.post;
-      updatedPost.content = updatedPostContent.current.value;
-
-      return setPostState({
-        post: updatedPost,
-        isLiked: postState.isLiked,
-        isUpdating: false,
-        isLoading: false,
+      setPostState({
+        ...postState,
+        content: updatedPostContent.current.value,
       });
+      setIsUpdating(false);
     } catch (error) {
       console.log(error);
     }
@@ -184,19 +145,13 @@ export default function PostContent({
       if (resData.error) {
         return;
       }
-
-      return setPostState({
-        post: postState.post,
-        isLiked: resData.postLike,
-        isUpdating: postState.isUpdating,
-        isLoading: postState.isUpdating,
-      });
+      setIsliked(resData.postLike);
     }
 
     fetchUserLike().catch((err) => {
       console.log(err);
     });
-  }, []);
+  }, [user, serverRoot, post]);
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -220,9 +175,9 @@ export default function PostContent({
     <div className="postWrapper">
       <div className="postTop">
         <div className="postTopLeft">
-          {postState.post.author.profilePic ? (
+          {postState.author.profilePic ? (
             <img
-              src={`${serverRoot}/images/${postState.post.author.profilePic}`}
+              src={`${serverRoot}/images/${postState.author.profilePic}`}
               alt=""
               className="postProfileImg"
             />
@@ -235,21 +190,21 @@ export default function PostContent({
           )}
           <div className="postUserAndDate">
             <Link
-              to={`${clientRoot}/users/${postState.post.author._id}`}
+              to={`${clientRoot}/users/${postState.author._id}`}
               className="routerLink"
             >
-              <span className="postUsername">{`${postState.post.author.firstName} ${postState.post.author.lastName}`}</span>
+              <span className="postUsername">{fullname}</span>
             </Link>
             <span className="postDate">
               <ReactTimeAgo
-                date={new Date(postState.post.createdAt)}
+                date={new Date(postState.createdAt)}
                 locale="en-US"
               />
             </span>
           </div>
         </div>
         <div className="postTopRight">
-          {user && user.user._id === postState.post.author._id && (
+          {user && user.user._id === postState.author._id && (
             <div className="postDropdownContainer">
               <div
                 className="moreVertContainer"
@@ -275,28 +230,34 @@ export default function PostContent({
         </div>
       </div>
       <div className="postCenter">
-        {postState.isUpdating ? (
+        {isUpdating ? (
           <form className="updateFormContainer" onSubmit={updatePost}>
             <textarea
               name="content"
               className="postUpdateTextarea"
               ref={updatedPostContent}
-              defaultValue={postState.post.content}
+              defaultValue={postState.content}
               autoFocus={true}
               required={true}
             ></textarea>
             <div className="updateFormButtonContainer">
+              <span
+                className="postUpdateCancel"
+                onClick={() => setIsUpdating(false)}
+              >
+                Cancel
+              </span>
               <button className="updateFormButton">Update</button>
             </div>
           </form>
         ) : (
           <div className="postText">
-            {parse(postState.post.content.replace(/\n\r?/g, "<br />"))}
+            {parse(postState.content.replace(/\n\r?/g, "<br />"))}
           </div>
         )}
-        {postState.post.image && (
+        {postState.image && (
           <img
-            src={`${serverRoot}/images/${postState.post.image}`}
+            src={`${serverRoot}/images/${postState.image}`}
             alt=""
             className="postImg"
           />
@@ -307,7 +268,7 @@ export default function PostContent({
           <img src="/assets/like.png" alt="" className="likeIcon" />
           <img src="/assets/heart.png" alt="" className="likeIcon" />
           <span className="postLikeCounter">
-            {postState.post.numLikes} people like it
+            {postState.numLikes} people like it
           </span>
         </div>
         <div className="postBottomRight">
@@ -315,7 +276,7 @@ export default function PostContent({
         </div>
       </div>
       <div className="likeAndCommentContainer">
-        {Object.keys(postState.isLiked).length !== 0 ? (
+        {Object.keys(isLiked).length !== 0 ? (
           <div className="postLike" onClick={handleToggleLike}>
             <ThumbUpOffAltIcon className="postLikeCommentIcon postLiked" />
             <span className="postLikeCommentText postLiked">Like</span>

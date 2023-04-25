@@ -1,6 +1,4 @@
 import "./profileContent.css";
-import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
-import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import HouseIcon from "@mui/icons-material/House";
@@ -11,66 +9,135 @@ import EditIcon from "@mui/icons-material/Edit";
 import Posts from "../posts/Posts";
 import ProfileUpdateModal from "../profileUpdateModal/ProfileUpdateModal";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import FriendshipStatus from "../friendshipStatus/FriendshipStatus";
 
 export default function ProfileContent({ user }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const params = useParams();
-  const [profileState, setProfileState] = useState({
-    userBio: {},
-    userPosts: [],
-    isLoading: true,
-    page: 0,
-  });
+  const [userBio, setUserBio] = useState({});
+  const [userPosts, setUserPosts] = useState({});
+  const [friendship, setFriendship] = useState({});
+  const [isLoading, setIsLoading] = useState({});
+  const [page, setPage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMorePostsLoading, setIsMorePostsLoading] = useState(false);
+  const [isNoMorePosts, setIsNoMorePosts] = useState(false);
 
-  useEffect(() => {
-    async function fetchUserInfos() {
-      if (!profileState.isLoading) {
-        setProfileState({
-          userBio: profileState.userBio,
-          userPosts: profileState.userPosts,
-          isLoading: true,
-          page: 0,
-        });
-      }
-      const results = await Promise.all([
-        fetch(`${serverRoot}/api/users/${params.userId}`),
-        fetch(
-          `${serverRoot}/api/users/${params.userId}/posts?page=${profileState.page}`
-        ),
-      ]);
+  async function loadMorePosts() {
+    try {
+      setIsMorePostsLoading(true);
+      const morePosts = await fetchUserPosts(page);
+      setIsMorePostsLoading(false);
 
-      if (!results[0].ok || !results[1].ok) {
-        setProfileState({
-          userBio: {},
-          userPosts: profileState.userPosts,
-          isLoading: false,
-          page: profileState.page,
-        });
-        console.log(await results[0].json());
-        console.log(await results[1].json());
+      if (morePosts.length < 10) {
+        setIsNoMorePosts(true);
         return;
       }
 
-      const userBioData = await results[0].json();
-      const userPostsData = await results[1].json();
+      setUserPosts([...userPosts, ...morePosts]);
+      setPage(page + 1);
+      return;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-      return setProfileState({
-        userBio: userBioData.user,
-        userPosts: userPostsData.posts,
-        isLoading: false,
-        page: profileState.page + 1,
-      });
+  async function fetchUserBio() {
+    try {
+      const res = await fetch(`${serverRoot}/api/users/${params.userId}`);
+
+      const resData = await res.json();
+
+      if (!res.ok) {
+        throw resData;
+      }
+
+      return resData.user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async function fetchUserPosts(pageNo) {
+    try {
+      const res = await fetch(
+        `${serverRoot}/api/users/${params.userId}/posts?page=${pageNo}`
+      );
+
+      const resData = await res.json();
+
+      if (!res.ok) {
+        throw resData;
+      }
+
+      return resData.posts;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async function fetchUserFriendship() {
+    if (user.user._id.toString() === params.userId.toString()) {
+      return null;
+    }
+
+    try {
+      const res = await fetch(
+        `${serverRoot}/api/users/${params.userId}/friendships`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      const resData = await res.json();
+
+      if (!res.ok) {
+        throw resData;
+      }
+
+      return resData.friendship;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  useEffect(() => {
+    async function fetchUserInfos() {
+      try {
+        const results = await Promise.all([
+          fetchUserBio(),
+          fetchUserPosts(0),
+          fetchUserFriendship(),
+        ]);
+
+        if (results[1].length < 10) {
+          setIsNoMorePosts(true);
+        }
+        setUserBio(results[0]);
+        setUserPosts(results[1]);
+        setFriendship(results[2]);
+        setIsLoading(false);
+        setPage(1);
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     fetchUserInfos().catch((err) => {
       console.log(err);
     });
+
+    return () => {
+      setIsLoading(true);
+      setIsNoMorePosts(false);
+    };
   }, [params.userId]);
 
-  if (profileState.isLoading) {
+  if (isLoading) {
     return (
       <div className="profileContainer">
         <CircularProgress className="profileLoading" disableShrink />
@@ -83,10 +150,10 @@ export default function ProfileContent({ user }) {
       <div className="profile">
         <div className="profileTop">
           <div className="profileCover">
-            {profileState.userBio.coverPic ? (
+            {userBio.coverPic ? (
               <img
                 className="profileCoverImg"
-                src={`${serverRoot}/images/${profileState.userBio.coverPic}`}
+                src={`${serverRoot}/images/${userBio.coverPic}`}
                 alt=""
               />
             ) : (
@@ -95,10 +162,10 @@ export default function ProfileContent({ user }) {
               </div>
             )}
 
-            {profileState.userBio.profilePic ? (
+            {userBio.profilePic ? (
               <img
                 className="profileUserImg"
-                src={`${serverRoot}/images/${profileState.userBio.profilePic}`}
+                src={`${serverRoot}/images/${userBio.profilePic}`}
                 alt=""
               />
             ) : (
@@ -112,12 +179,10 @@ export default function ProfileContent({ user }) {
             <div className="profileSummary">
               <div className="profileNameDescContainer">
                 <h4 className="profileInfoName">
-                  {`${profileState.userBio.firstName} ${profileState.userBio.lastName}`}
+                  {`${userBio.firstName} ${userBio.lastName}`}
                 </h4>
-                {profileState.userBio.desc ? (
-                  <span className="profileInfoDesc">
-                    {profileState.userBio.desc}
-                  </span>
+                {userBio.desc ? (
+                  <span className="profileInfoDesc">{userBio.desc}</span>
                 ) : (
                   <span className="profileInfoDesc">
                     No description available
@@ -125,21 +190,19 @@ export default function ProfileContent({ user }) {
                 )}
               </div>
 
-              {user && user.user._id !== profileState.userBio._id ? (
-                <div className="friendshipContainer">
-                  <div className="friendshipStatus">
-                    <PeopleOutlinedIcon />
-                    <span className="friendship">Friends</span>
-                  </div>
-                  <div className="messageContainer">
-                    <MessageOutlinedIcon />
-                    <span className="messageText">Message</span>
-                  </div>
-                </div>
+              {user && user.user._id !== userBio._id ? (
+                <FriendshipStatus
+                  user={user}
+                  userBio={userBio}
+                  friendship={friendship}
+                  setFriendship={setFriendship}
+                />
               ) : (
                 <div
                   className="editProfileContainer"
-                  onClick={() => setIsModalOpen(true)}
+                  onClick={() => {
+                    setIsModalOpen(true);
+                  }}
                 >
                   <EditIcon sx={{ fontSize: 17 }} className="profileEditIcon" />
                   <span className="profileEditText">Edit Profile</span>
@@ -157,9 +220,9 @@ export default function ProfileContent({ user }) {
                 <div className="profileInfoItemContainer">
                   <div className="profileInfoItem">
                     <BusinessCenterIcon className="profileInfoIcon" />
-                    {profileState.userBio.job ? (
+                    {userBio.job ? (
                       <span className="profileInfoItemDesc">
-                        Works at, <b>{profileState.userBio.job}</b>
+                        Works at, <b>{userBio.job}</b>
                       </span>
                     ) : (
                       <span className="profileInfoItemDesc">
@@ -169,9 +232,9 @@ export default function ProfileContent({ user }) {
                   </div>
                   <div className="profileInfoItem">
                     <SchoolIcon className="profileInfoIcon" />
-                    {profileState.userBio.edu ? (
+                    {userBio.edu ? (
                       <span className="profileInfoItemDesc">
-                        Studied at, <b>{profileState.userBio.edu}</b>
+                        Studied at, <b>{userBio.edu}</b>
                       </span>
                     ) : (
                       <span className="profileInfoItemDesc">
@@ -181,9 +244,9 @@ export default function ProfileContent({ user }) {
                   </div>
                   <div className="profileInfoItem">
                     <HouseIcon className="profileInfoIcon" />
-                    {profileState.userBio.city ? (
+                    {userBio.city ? (
                       <span className="profileInfoItemDesc">
-                        Lives in, <b>{profileState.userBio.city}</b>
+                        Lives in, <b>{userBio.city}</b>
                       </span>
                     ) : (
                       <span className="profileInfoItemDesc">
@@ -193,9 +256,9 @@ export default function ProfileContent({ user }) {
                   </div>
                   <div className="profileInfoItem">
                     <LocationOnIcon className="profileInfoIcon" />
-                    {profileState.userBio.from ? (
+                    {userBio.from ? (
                       <span className="profileInfoItemDesc">
-                        From, <b>{[profileState.userBio.from]}</b>
+                        From, <b>{[userBio.from]}</b>
                       </span>
                     ) : (
                       <span className="profileInfoItemDesc">
@@ -205,19 +268,19 @@ export default function ProfileContent({ user }) {
                   </div>
                   <div className="profileInfoItem">
                     <FavoriteIcon className="profileInfoIcon" />
-                    {profileState.userBio.relationship === 0 && (
+                    {userBio.relationship === 0 && (
                       <span className="profileInfoItemDesc">
                         No info available.
                       </span>
                     )}
 
-                    {profileState.userBio.relationship === 1 && (
+                    {userBio.relationship === 1 && (
                       <span className="profileInfoItemDesc">
                         Relationship status, <b>In a realtoinship</b>
                       </span>
                     )}
 
-                    {profileState.userBio.relationship === 2 && (
+                    {userBio.relationship === 2 && (
                       <span className="profileInfoItemDesc">
                         Relationship status, <b>Married</b>
                       </span>
@@ -229,12 +292,12 @@ export default function ProfileContent({ user }) {
                 <div className="profileSidebarTitle">Friends</div>
                 <hr />
                 <div className="profileFriendlist">
-                  {profileState.userBio.friends.length === 0 ? (
+                  {userBio.friends.length === 0 ? (
                     <div className="noFriendsText">No friends available.</div>
                   ) : (
-                    profileState.userBio.friends.map((fnd) => {
+                    userBio.friends.map((fnd) => {
                       return (
-                        <div className="profileFriend">
+                        <div key={fnd._id} className="profileFriend">
                           {fnd.profilePic ? (
                             <img
                               src={`${serverRoot}/images/${fnd.profilePic}`}
@@ -248,8 +311,14 @@ export default function ProfileContent({ user }) {
                               className="profileFriendImg"
                             />
                           )}
+
                           <span className="profileFriendName">
-                            {`${fnd.firstName} ${fnd.lastName}`}
+                            <Link
+                              className="routerLink"
+                              to={`${clientRoot}/users/${fnd._id}`}
+                            >
+                              {`${fnd.firstName} ${fnd.lastName}`}
+                            </Link>
                           </span>
                         </div>
                       );
@@ -262,14 +331,23 @@ export default function ProfileContent({ user }) {
           <div className="profilePosts">
             <div className="profilePostsWrapper">
               <div className="profilePostsTitle">Posts</div>
-              <Posts user={user} posts={profileState.userPosts} />
+              <Posts user={user} posts={userPosts} />
+              {isMorePostsLoading ? (
+                <CircularProgress className="postsLoading" disableShrink />
+              ) : isNoMorePosts ? (
+                <span className="noMorePoststext">No posts available. </span>
+              ) : (
+                <button className="postLoadMore" onClick={loadMorePosts}>
+                  Load more...
+                </button>
+              )}
             </div>
           </div>
         </div>
       </div>
       {isModalOpen && (
         <ProfileUpdateModal
-          user={profileState.userBio}
+          user={userBio}
           token={user.token}
           setIsModalOpen={setIsModalOpen}
         />

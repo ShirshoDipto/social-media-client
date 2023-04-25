@@ -43,9 +43,41 @@ function App() {
       }
     }
 
-    fetchUser().catch((err) => {
-      return console.log(err);
-    });
+    async function getUser() {
+      try {
+        const res = await fetch(`${serverRoot}/api/login/google/success`, {
+          credentials: "include",
+        });
+
+        if (!res.ok) {
+          return console.log(await res.json());
+        }
+
+        const resData = await res.json();
+
+        localStorage.setItem("nosebookUser", JSON.stringify(resData));
+        setCurrentUser({
+          user: resData.user,
+          token: resData.token,
+        });
+      } catch (err) {
+        throw err;
+      }
+    }
+
+    if (!currentUser) {
+      if (!window.location.search) {
+        return;
+      }
+
+      getUser().catch((err) => {
+        return console.log(err);
+      });
+    } else {
+      fetchUser().catch((err) => {
+        return console.log(err);
+      });
+    }
   }, []);
 
   return (

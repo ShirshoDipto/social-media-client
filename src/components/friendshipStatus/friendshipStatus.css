@@ -1,0 +1,90 @@
+
+
+.statusAndMessage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  font-size: 0.8rem;
+}
+
+.friendshipContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+}
+
+.friendshipStatusText {
+  color: var(--secondaryText);
+  font-size: 0.7rem;
+  text-align: center;
+  height: 15px;
+}
+
+.friendshipStatus, .messageContainer {
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.messageContainer {
+  background: var(--searchBar);
+  padding: 3px 7px 3px 7px;
+  border-radius: 5px;
+  color: var(--primaryText);
+}
+
+.friendshipStatus {
+  color: white;
+  background-color: var(--topbarBackground);
+  padding-left: 7px;
+  padding-right: 7px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  border-radius: 5px;
+}
+
+.rejectFriendship {
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-weight: 500;
+  cursor: pointer;
+  color: white;
+  background-color: rgb(223, 24, 24);
+  padding-left: 7px;
+  padding-right: 7px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  border-radius: 5px;
+}
+
+.rejectFriendship:hover {
+  background: rgb(194, 77, 77);
+}
+
+.friendshipStatus:hover {
+  background-color: var(--topbarBackgroundDarkish);
+}
+
+.messageContainer:hover {
+  background-color: var(--profileInfoIcon);
+}
+
+.fndReqConfirmContainer {
+  display: flex;
+  gap: 10px;
+}
+
+.fndshipUiLoadingContainer {
+  position: absolute;
+  top: 30px;
+  left: -40px;
+}

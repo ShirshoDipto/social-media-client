@@ -18,27 +18,22 @@ export default function Topbar({ user, feedOption, setFeedOption }) {
   const home = useRef();
   const timeline = useRef();
 
-  function handleToggleFeedOption(e) {
-    if (home.current.contains(e.target) && feedOption === "home") {
-      return;
-    }
+  async function handleLogout() {
+    try {
+      const res = await fetch(`${serverRoot}/api/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
 
-    if (timeline.current.contains(e.target) && feedOption === "timeline") {
-      return;
-    }
+      if (!res.ok) {
+        console.log(await res.json());
+      }
 
-    if (home.current.contains(e.target) && feedOption === "timeline") {
-      setFeedOption("home");
+      localStorage.removeItem("nosebookUser");
+      window.location.replace("/");
+    } catch (error) {
+      console.log(error);
     }
-
-    if (timeline.current.contains(e.target) && feedOption === "home") {
-      setFeedOption("timeline");
-    }
-  }
-
-  function handleLogout() {
-    localStorage.removeItem("nosebookUser");
-    window.location.reload();
   }
 
   useEffect(() => {
@@ -72,40 +67,6 @@ export default function Topbar({ user, feedOption, setFeedOption }) {
             placeholder="Search for People"
             className="searchInput"
           />
-        </div>
-      </div>
-      <div className="topbarCenter">
-        <div className="topbarLinks">
-          <div
-            ref={timeline}
-            className={
-              feedOption === "timeline"
-                ? "topbarLinkContainer topbarLinkSelected"
-                : "topbarLinkContainer"
-            }
-            onClick={handleToggleFeedOption}
-          >
-            <TimelineIcon
-              sx={{ fontSize: 30 }}
-              color="primary"
-              className="topbarLink"
-            />
-          </div>
-          <div
-            ref={home}
-            className={
-              feedOption === "home"
-                ? "topbarLinkContainer topbarLinkSelected"
-                : "topbarLinkContainer"
-            }
-            onClick={handleToggleFeedOption}
-          >
-            <HomeIcon
-              sx={{ fontSize: 30 }}
-              color="primary"
-              className="topbarLink"
-            />
-          </div>
         </div>
       </div>
       <div className="topbarRight">

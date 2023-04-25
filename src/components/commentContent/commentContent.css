@@ -84,6 +84,12 @@
   color: var(--primaryText);
 }
 
+.commentUpdateCancel {
+  color: var(--topbarBackground);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
 /* Dropdown menu styles */
 
 .commentMoreVertContainer {

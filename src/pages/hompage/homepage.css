@@ -8,5 +8,6 @@
 
 .homepageContainer {
   display: flex;
+  gap: 8%;
   width: 100%;
 }

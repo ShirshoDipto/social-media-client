@@ -19,24 +19,17 @@ export default function CommentContent({
   const dropdown = useRef();
   const dropdownTrigger = useRef();
   const updatedCommentContent = useRef();
-
-  const [commentState, setCommentState] = useState({
-    comment: comment,
-    isLiked: {},
-    isUpdating: false,
-    isLoading: false,
-  });
-
+  const [commentState, setCommentState] = useState(comment);
+  const [isLiked, setIsLiked] = useState({});
+  const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
+
+  const fullname = `${commentState.author.firstName} ${commentState.author.lastName}`;
 
   async function addLike() {
     try {
-      if (commentState.isLoading) {
-        return;
-      }
-
       const res = await fetch(
-        `${serverRoot}/api/comments/${commentState.comment._id}/likes`,
+        `${serverRoot}/api/comments/${commentState._id}/likes`,
         {
           method: "POST",
           headers: {
@@ -50,14 +43,11 @@ export default function CommentContent({
       }
 
       const resData = await res.json();
-      let newcomment = commentState.comment;
-      newcomment.numLikes += 1;
-      return setCommentState({
-        comment: newcomment,
-        isLiked: resData.commentLike,
-        isUpdating: commentState.isUpdating,
-        isLoading: false,
+      setCommentState({
+        ...commentState,
+        numLikes: commentState.numLikes + 1,
       });
+      setIsLiked(resData.commentLike);
     } catch (error) {
       console.log(error);
     }
@@ -65,12 +55,8 @@ export default function CommentContent({
 
   async function deleteLike() {
     try {
-      if (commentState.isLoading) {
-        return;
-      }
-
       const res = await fetch(
-        `${serverRoot}/api/comments/${commentState.comment._id}/likes/${commentState.isLiked._id}`,
+        `${serverRoot}/api/comments/${commentState._id}/likes/${isLiked._id}`,
         {
           method: "DELETE",
           headers: {
@@ -83,14 +69,11 @@ export default function CommentContent({
         return console.log(await res.json());
       }
 
-      let newcomment = commentState.comment;
-      newcomment.numLikes -= 1;
-      return setCommentState({
-        comment: newcomment,
-        isLiked: {},
-        isUpdating: commentState.isUpdating,
-        isLoading: commentState.isLoading,
+      setCommentState({
+        ...commentState,
+        numLikes: commentState.numLikes - 1,
       });
+      setIsLiked({});
     } catch (error) {
       console.log(error);
     }
@@ -102,21 +85,9 @@ export default function CommentContent({
         return alert("Log in to Like and Comment");
       }
 
-      if (Object.keys(commentState.isLiked).length !== 0) {
-        setCommentState({
-          comment: commentState.comment,
-          isLiked: commentState.isLiked,
-          isUpdating: commentState.isUpdating,
-          isLoading: true,
-        });
+      if (Object.keys(isLiked).length !== 0) {
         return await deleteLike();
       } else {
-        setCommentState({
-          comment: commentState.comment,
-          isLiked: commentState.isLiked,
-          isUpdating: commentState.isUpdating,
-          isLoading: true,
-        });
         await addLike();
       }
     } catch (error) {
@@ -126,12 +97,7 @@ export default function CommentContent({
 
   async function toggleIsUpdating() {
     setDropdownStatus(false);
-    setCommentState({
-      comment: commentState.comment,
-      isLiked: commentState.isLiked,
-      isUpdating: true,
-      isLoading: false,
-    });
+    setIsUpdating(true);
   }
 
   async function updatePost(e) {
@@ -141,7 +107,7 @@ export default function CommentContent({
       const data = new URLSearchParams(formData);
 
       const res = await fetch(
-        `${serverRoot}/api/posts/${post._id}/comments/${commentState.comment._id}`,
+        `${serverRoot}/api/posts/${post._id}/comments/${commentState._id}`,
         {
           method: "PUT",
           headers: {
@@ -155,15 +121,11 @@ export default function CommentContent({
         return console.log(await res.json());
       }
 
-      const updatedComment = commentState.comment;
-      updatedComment.content = updatedCommentContent.current.value;
-
-      return setCommentState({
-        comment: updatedComment,
-        isLiked: commentState.isLiked,
-        isUpdating: false,
-        isLoading: false,
+      setCommentState({
+        ...commentState,
+        content: updatedCommentContent.current.value,
       });
+      setIsUpdating(false);
     } catch (error) {
       console.log(error);
     }
@@ -172,7 +134,7 @@ export default function CommentContent({
   async function deleteComment() {
     try {
       const res = await fetch(
-        `${serverRoot}/api/posts/${post._id}/comments/${commentState.comment._id}`,
+        `${serverRoot}/api/posts/${post._id}/comments/${commentState._id}`,
         {
           method: "DELETE",
           headers: {
@@ -202,7 +164,7 @@ export default function CommentContent({
         }
 
         const res = await fetch(
-          `${serverRoot}/api/comments/${commentState.comment._id}/likes`,
+          `${serverRoot}/api/comments/${comment._id}/likes`,
           {
             headers: {
               Authorization: `Bearer ${user.token}`,
@@ -220,12 +182,7 @@ export default function CommentContent({
           return;
         }
 
-        return setCommentState({
-          comment: commentState.comment,
-          isLiked: resData.commentLike,
-          isUpdating: commentState.isUpdating,
-          isLoading: commentState.isUpdating,
-        });
+        setIsLiked(resData.commentLike);
       } catch (error) {
         console.log(error);
       }
@@ -260,9 +217,9 @@ export default function CommentContent({
 
   return (
     <div className="commentWrapper">
-      {comment.author.profilePic ? (
+      {commentState.author.profilePic ? (
         <img
-          src={`${serverRoot}/images/${comment.author.profilePic}`}
+          src={`${serverRoot}/images/${commentState.author.profilePic}`}
           alt=""
           className="commentUserImg"
         />
@@ -277,10 +234,10 @@ export default function CommentContent({
       <div className="commentRightContainer">
         <div className="commentUserNameAndComment">
           <div className="commentUserAndOptions">
-            <Link to={`${clientRoot}/users/${commentState.comment.author._id}`}>
-              <div className="commentUsername">{`${commentState.comment.author.firstName} ${commentState.comment.author.lastName}`}</div>
+            <Link to={`${clientRoot}/users/${commentState.author._id}`}>
+              <div className="commentUsername">{fullname}</div>
             </Link>
-            {user && user.user._id === commentState.comment.author._id && (
+            {user && user.user._id === commentState.author._id && (
               <div className="commentDropdownContainer">
                 <div
                   className="commentMoreVertContainer"
@@ -307,41 +264,47 @@ export default function CommentContent({
               </div>
             )}
           </div>
-          {commentState.isUpdating ? (
+          {isUpdating ? (
             <form className="updateFormContainer" onSubmit={updatePost}>
               <textarea
                 name="content"
                 className="commentUpdateTextarea"
                 ref={updatedCommentContent}
-                defaultValue={commentState.comment.content}
+                defaultValue={commentState.content}
                 autoFocus={true}
                 required={true}
               ></textarea>
               <div className="updateFormButtonContainer">
+                <span
+                  className="commentUpdateCancel"
+                  onClick={() => setIsUpdating(false)}
+                >
+                  Cancel
+                </span>
                 <button className="updateFormButton">Update</button>
               </div>
             </form>
           ) : (
             <div className="commentRightContent">
-              {parse(commentState.comment.content.replace(/\n\r?/g, "<br />"))}
+              {parse(commentState.content.replace(/\n\r?/g, "<br />"))}
             </div>
           )}
         </div>
         <div className="commentLikeAndReplies">
-          {Object.keys(commentState.isLiked).length !== 0 ? (
+          {Object.keys(isLiked).length !== 0 ? (
             <span
               className="commentLike commentLiked"
               onClick={handleToggleLike}
             >
-              Like({commentState.comment.numLikes})
+              Like({commentState.numLikes})
             </span>
           ) : (
             <span className="commentLike" onClick={handleToggleLike}>
-              Like({commentState.comment.numLikes})
+              Like({commentState.numLikes})
             </span>
           )}
           <span className="commentDate">
-            {<ReactTimeAgo date={new Date(commentState.comment.createdAt)} />}
+            {<ReactTimeAgo date={new Date(commentState.createdAt)} />}
           </span>
         </div>
       </div>

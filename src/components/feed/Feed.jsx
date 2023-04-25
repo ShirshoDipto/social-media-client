@@ -6,11 +6,10 @@ import { useEffect, useState } from "react";
 
 export default function Feed({ user }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
-  const [postsState, setPostsState] = useState({
-    posts: [],
-    page: 0,
-    isLoading: true,
-  });
+  const [posts, setPosts] = useState([]);
+  const [page, setPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isNoMorePosts, setIsNoMorePosts] = useState(false);
 
   async function addNewPost(newPost) {
     newPost.author = {
@@ -20,55 +19,53 @@ export default function Feed({ user }) {
       profilePic: user.user.profilePic,
     };
 
-    setPostsState({
-      posts: [newPost].concat(...postsState.posts),
-      page: postsState.page,
-      isLoading: false,
-    });
+    setPosts([newPost, ...posts]);
   }
 
   useEffect(() => {
     async function fetchPosts() {
-      const res = await fetch(
-        `${serverRoot}/api/posts?page=${postsState.page}`
-      );
-      if (!res.ok) {
-        console.log(await res.json());
-        return setPostsState({
-          posts: postsState.posts,
-          page: postsState.page,
-          isLoading: false,
-        });
-      }
-      const resData = await res.json();
-      if (resData.length !== 0) {
-        return setPostsState({
-          posts: resData.posts,
-          page: postsState.page + 1,
-          isLoading: false,
-        });
-      }
+      try {
+        const res = await fetch(`${serverRoot}/api/posts?page=${page}`);
 
-      return setPostsState({
-        posts: resData.posts,
-        page: postsState.page,
-        isLoading: false,
-      });
+        const resData = await res.json();
+        if (!res.ok) {
+          throw resData;
+        }
+
+        setPosts([...posts, ...resData.posts]);
+        setIsLoading(false);
+        if (resData.posts.length < 10) {
+          setIsNoMorePosts(true);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     fetchPosts().catch((err) => {
       console.log(err);
     });
-  }, []);
+  }, [page]);
 
   return (
     <div className="feed">
       <div className="feedWrapper">
         <PostInput user={user} addNewPost={addNewPost} />
-        {postsState.isLoading ? (
+        <Posts user={user} posts={posts} />
+        {isLoading ? (
           <CircularProgress className="homePostsLoading" disableShrink />
+        ) : isNoMorePosts ? (
+          <span className="noMorePoststext">No posts available. </span>
         ) : (
-          <Posts user={user} posts={postsState.posts} />
+          <button
+            className="postLoadMore"
+            onClick={() => {
+              setIsLoading(true);
+              setPage(page + 1);
+            }}
+          >
+            Load more...
+          </button>
         )}
       </div>
     </div>

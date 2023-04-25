@@ -313,7 +313,7 @@ export default function ProfileUpdateModal({ user, token, setIsModalOpen }) {
     <div
       className="profileModalContainer"
       ref={profileEditModalContainer}
-      onClick={(e) => {
+      onMouseDown={(e) => {
         e.target === profileEditModalContainer.current && setIsModalOpen(false);
       }}
     >
