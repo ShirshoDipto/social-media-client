@@ -25,7 +25,16 @@ export default function Feed({ user }) {
   useEffect(() => {
     async function fetchPosts() {
       try {
-        const res = await fetch(`${serverRoot}/api/posts?page=${page}`);
+        const res = await fetch(
+          `${serverRoot}/api/posts/timeline?page=${page}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+
+        // const res = await fetch(`${serverRoot}/api/posts?page=${page}`);
 
         const resData = await res.json();
         if (!res.ok) {
@@ -42,10 +51,14 @@ export default function Feed({ user }) {
       }
     }
 
-    fetchPosts().catch((err) => {
-      console.log(err);
-    });
-  }, [page]);
+    if (user) {
+      fetchPosts().catch((err) => {
+        console.log(err);
+      });
+    } else {
+      return setIsLoading(false);
+    }
+  }, [page, user]);
 
   return (
     <div className="feed">

@@ -4,19 +4,15 @@ import PersonIcon from "@mui/icons-material/Person";
 import ChatIcon from "@mui/icons-material/Chat";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import LogoutIcon from "@mui/icons-material/Logout";
-import HomeIcon from "@mui/icons-material/Home";
-import TimelineIcon from "@mui/icons-material/Timeline";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 
-export default function Topbar({ user, feedOption, setFeedOption }) {
+export default function Topbar({ user }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const dropdown = useRef();
   const dropdownTrigger = useRef();
-  const home = useRef();
-  const timeline = useRef();
 
   async function handleLogout() {
     try {

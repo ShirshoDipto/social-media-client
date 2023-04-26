@@ -288,13 +288,24 @@ export default function ProfileUpdateModal({ user, token, setIsModalOpen }) {
         body: JSON.stringify(data),
       });
 
+      const resData = await res.json();
       if (!res.ok) {
-        const resData = await res.json();
         throw resData;
       }
+
+      return resData.user;
     } catch (error) {
       throw error;
     }
+  }
+
+  async function updateLocalStorage(updatedUser) {
+    const nosebookUser = {
+      user: updatedUser,
+      token: token,
+    };
+
+    localStorage.setItem("nosebookUser", JSON.stringify(nosebookUser));
   }
 
   async function updateProfile(e) {
@@ -302,7 +313,8 @@ export default function ProfileUpdateModal({ user, token, setIsModalOpen }) {
       e.preventDefault();
       const profilePicName = await updateProfilePic();
       const coverPicName = await updateCoverPic();
-      await updateUserBio(profilePicName, coverPicName);
+      const updatedUser = await updateUserBio(profilePicName, coverPicName);
+      await updateLocalStorage(updatedUser);
       window.location.reload();
     } catch (error) {
       return console.log(error);

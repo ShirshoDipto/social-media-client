@@ -37,7 +37,8 @@ export default function PostInput({ user, addNewPost }) {
       });
 
       if (!res.ok) {
-        console.log(await res.json());
+        setIsLoading(false);
+        return console.log(await res.json());
       }
 
       const resData = await res.json();

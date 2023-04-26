@@ -2,6 +2,7 @@ import Homepage from "./pages/hompage/Homepage";
 import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
 import Profile from "./pages/profile/Profile";
+import CircularProgress from "@mui/material/CircularProgress";
 import ScrollToTop from "./ScrollToTop.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -23,27 +24,7 @@ function App() {
   );
 
   useEffect(() => {
-    async function fetchUser() {
-      try {
-        const res = await fetch(
-          `${serverRoot}/api/users/${currentUser.user._id}`
-        );
-
-        if (!res.ok) {
-          throw await res.json();
-        }
-
-        const resData = await res.json();
-        setCurrentUser({
-          user: resData.user,
-          token: currentUser.token,
-        });
-      } catch (error) {
-        throw error;
-      }
-    }
-
-    async function getUser() {
+    async function getUserFromGoogleAuth() {
       try {
         const res = await fetch(`${serverRoot}/api/login/google/success`, {
           credentials: "include",
@@ -70,11 +51,7 @@ function App() {
         return;
       }
 
-      getUser().catch((err) => {
-        return console.log(err);
-      });
-    } else {
-      fetchUser().catch((err) => {
+      getUserFromGoogleAuth().catch((err) => {
         return console.log(err);
       });
     }

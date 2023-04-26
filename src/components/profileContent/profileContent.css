@@ -165,6 +165,10 @@
   flex-wrap: wrap;
   height: 350px;
   gap: 15px;
+  overflow-y: hidden;
+}
+
+.profileFriendlist:hover {
   overflow-y: scroll;
 }
 

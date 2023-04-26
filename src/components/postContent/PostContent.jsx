@@ -26,6 +26,7 @@ export default function PostContent({
   const [isLiked, setIsliked] = useState({});
   const [isUpdating, setIsUpdating] = useState(false);
   const fullname = `${post.author.firstName} ${post.author.lastName}`;
+
   async function addLike() {
     try {
       const res = await fetch(
