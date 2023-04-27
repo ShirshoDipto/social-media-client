@@ -2,7 +2,6 @@ import Homepage from "./pages/hompage/Homepage";
 import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
 import Profile from "./pages/profile/Profile";
-import CircularProgress from "@mui/material/CircularProgress";
 import ScrollToTop from "./ScrollToTop.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -12,6 +11,7 @@ import TimeAgo from "javascript-time-ago";
 
 import en from "javascript-time-ago/locale/en.json";
 import ru from "javascript-time-ago/locale/ru.json";
+import Messenger from "./pages/messenger/Messenger";
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
@@ -74,6 +74,10 @@ function App() {
           <Route
             path="/users/:userId"
             element={<Profile user={currentUser} />}
+          />
+          <Route
+            path="/messenger"
+            element={currentUser ? <Messenger user={currentUser} /> : <Login />}
           />
           <Route path="/login/google/confirm" element={<GoogleLogin />} />
         </Routes>

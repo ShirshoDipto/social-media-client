@@ -1,0 +1,82 @@
+
+
+.searchbar {
+  width: 60%;
+  height: 30px;
+  background-color: white;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--secondaryText);
+  background-color: var(--searchBar);
+  position: relative;
+}
+
+.searchIcon {
+  font-size: 20px !important;
+  margin-left: 10px;
+}
+
+.searchInput {
+  border: none;
+  width: 100%;
+  background: none;
+  color: var(--secondaryText);
+}
+
+.searchInput:focus {
+  outline: none;
+}
+
+/* Dropdown styles */
+
+.searchDropdownContainer {
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  background-color: var(--searchBarDarkish);
+  border-radius: 0 0 5px 5px;
+  padding: 5px;
+  font-size: 0.8rem;
+  box-shadow: 3px 3px 3px black;
+}
+
+.searchImg {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.searchResultList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.searchResultListItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.searchResultListItem:hover {
+  background-color: var(--profileTop);
+}
+
+.noResultsFoundText {
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.searchLoadingContainer {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 5px;
+}

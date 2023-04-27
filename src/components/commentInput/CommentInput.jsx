@@ -13,6 +13,9 @@ export default function CommentInput({
 
   async function handleCommentSubmit(e) {
     e.preventDefault();
+    if (!user) {
+      return alert("Log in to Like and Comment");
+    }
 
     try {
       const res = await fetch(`${serverRoot}/api/posts/${post._id}/comments`, {

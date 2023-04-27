@@ -1,11 +1,11 @@
 import "./topbar.css";
-import SearchIcon from "@mui/icons-material/Search";
 import PersonIcon from "@mui/icons-material/Person";
 import ChatIcon from "@mui/icons-material/Chat";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
+import SearchBar from "../searchBar/SearchBar";
 
 export default function Topbar({ user }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
@@ -56,14 +56,7 @@ export default function Topbar({ user }) {
         <Link to="/" className="routerLink">
           <span className="topbarLogo">NoseBook</span>
         </Link>
-        <div className="searchbar">
-          <SearchIcon className="searchIcon" />
-          <input
-            type="text"
-            placeholder="Search for People"
-            className="searchInput"
-          />
-        </div>
+        <SearchBar />
       </div>
       <div className="topbarRight">
         {user ? (

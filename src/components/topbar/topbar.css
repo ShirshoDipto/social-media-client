@@ -16,34 +16,6 @@
   gap: 10px;
 }
 
-.searchbar {
-  width: 60%;
-  height: 30px;
-  background-color: white;
-  border-radius: 30px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  color: var(--secondaryText);
-  background-color: var(--searchBar);
-}
-
-.searchIcon {
-  font-size: 20px !important;
-  margin-left: 10px;
-}
-
-.searchInput {
-  border: none;
-  width: 100%;
-  background: none;
-  color: var(--secondaryText);
-}
-
-.searchInput:focus {
-  outline: none;
-}
-
 .topbarLogo{
   font-size: 24px;
   margin-left: 20px;

@@ -16,6 +16,9 @@ export default function PostInput({ user, addNewPost }) {
 
   async function handlePostSubmit(e) {
     e.preventDefault();
+    if (!user) {
+      return alert("Log in to Like and Comment");
+    }
     const formData = new FormData();
     setIsLoading(true);
 
