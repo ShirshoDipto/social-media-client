@@ -1,0 +1,146 @@
+/* Notification styles in general*/
+
+.notificationList {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 5px;
+  background-color: var(--searchBarDarkish);
+  border-radius: 5px;
+}
+
+.notifDropDown { 
+  position: absolute;
+  top: 45px;
+  right: 0;
+  background-color: var(--searchBarDarkish);
+  border-radius: 5px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.notificationItem{
+  width: 250px;
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background-color: var(--profileTop);
+  border-radius: 5px;
+}
+
+.noNotifications {
+  width: 250px;
+  gap: 10px;
+  padding: 10px;
+  background-color: var(--searchBarDarkish);
+  border-radius: 5px;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.notifMsgLeft {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.notifMsgRight {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.notifMsgText {
+  font-size: 0.8rem;
+}
+
+.notifSenderName:hover {
+  text-decoration: underline;
+}
+
+.notifMsgOption {
+  display:flex;
+  gap: 10px;
+}
+
+.notificationIcon{
+  cursor: pointer;
+  color: var(--secondaryText);
+}
+
+.markAsRead{
+  color: var(--topbarBackground);
+  padding: 5px 5px 5px 0px;
+  font-size: 0.8rem;
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  background-color: inherit;
+}
+
+.markAllAsRead {
+  color: var(--topbarBackground);
+  padding: 5px 5px 5px 0px;
+  font-size: 0.8rem;
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  background-color: inherit;
+  text-align: center;
+}
+
+.markAllAsRead span:hover, .markAsRead:hover {
+  color: var(--topbarBackgroundDarkish);
+  cursor: pointer;
+}
+
+/* Specific to friend requests */
+
+.notifContainer {
+  position: relative;
+}
+
+.fndReqConfirmed{
+  position: fixed;
+  top: 60px;
+  left: 10px;
+  background-color: limegreen;
+  color: var(--primaryText);
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+}
+
+.reqLoadingContainer {
+  height: 25px;
+  width: 100%;
+  padding-left: 57px;
+}
+
+.fndAccept, .fndReject {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 60px;
+  height: 25px;
+  border: none;
+  border-radius: 5px;
+  color: var(--primaryText);
+  cursor: pointer;
+}
+
+.fndAccept:focus, .fndReject:focus {
+  outline: none;
+} 
+
+.fndAccept {
+  background-color: var(--topbarBackground);
+}
+
+.fndReject {
+  background-color: rgb(196, 51, 51);
+}
+

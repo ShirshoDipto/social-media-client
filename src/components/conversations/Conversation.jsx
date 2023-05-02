@@ -1,20 +1,46 @@
 import "./conversation.css";
 
-export default function Conversation() {
+export default function Conversation({
+  user,
+  conversation,
+  currentChat,
+  setCurrentChat,
+  getMessages,
+}) {
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
+  const serverRoot = process.env.REACT_APP_SERVERROOT;
+
+  let contact = conversation.members[0];
+  if (user.user._id === conversation.members[0]._id) {
+    contact = conversation.members[1];
+  }
+
+  const fullname = `${contact.firstName} ${contact.lastName}`;
+
   return (
-    <div className="conversation">
+    <div
+      className={
+        conversation._id === currentChat?._id
+          ? "conversation active"
+          : "conversation"
+      }
+      onClick={() => {
+        getMessages(conversation._id);
+        setCurrentChat(conversation);
+      }}
+    >
       <img
-        src={`${clientRoot}/assets/person/shusme.jpg`}
+        src={
+          contact.profilePic
+            ? `${serverRoot}/images/${contact.profilePic}`
+            : `${clientRoot}/assets/person/noAvatar.png`
+        }
         alt=""
         className="conversationImg"
       />
       <div className="conversationTexts">
-        <div className="conversationName">Shusme Islam</div>
-        <div className="conversationLatest">
-          You are always korolla to me. But I still love you. And I will keep
-          loving you.
-        </div>
+        <div className="conversationName">{fullname}</div>
+        <div className="conversationLatest">{conversation.lastMsg}</div>
       </div>
     </div>
   );

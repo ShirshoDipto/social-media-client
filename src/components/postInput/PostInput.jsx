@@ -6,13 +6,24 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import CircularProgress from "@mui/material/CircularProgress";
 import { grey } from "@mui/material/colors";
 
-export default function PostInput({ user, addNewPost }) {
+export default function PostInput({ user, posts, setPosts }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const [image, setImage] = useState(null);
   const imgRef = useRef();
   const content = useRef();
   const [isLoading, setIsLoading] = useState(false);
+
+  async function addNewPost(newPost) {
+    newPost.author = {
+      _id: user.user._id,
+      firstName: user.user.firstName,
+      lastName: user.user.lastName,
+      profilePic: user.user.profilePic,
+    };
+
+    setPosts([newPost, ...posts]);
+  }
 
   async function handlePostSubmit(e) {
     e.preventDefault();

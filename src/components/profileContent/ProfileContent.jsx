@@ -17,10 +17,9 @@ export default function ProfileContent({ user }) {
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const params = useParams();
   const [userBio, setUserBio] = useState({});
-  const [userPosts, setUserPosts] = useState({});
-  const [friendship, setFriendship] = useState({});
-  const [isLoading, setIsLoading] = useState({});
-  const [page, setPage] = useState(0);
+  const [userPosts, setUserPosts] = useState([]);
+  const [friendship, setFriendship] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMorePostsLoading, setIsMorePostsLoading] = useState(false);
   const [isNoMorePosts, setIsNoMorePosts] = useState(false);
@@ -28,17 +27,23 @@ export default function ProfileContent({ user }) {
   async function loadMorePosts() {
     try {
       setIsMorePostsLoading(true);
-      const morePosts = await fetchUserPosts(page);
-      setIsMorePostsLoading(false);
 
-      if (morePosts.length < 10) {
-        setIsNoMorePosts(true);
-        return;
+      const res = await fetch(
+        `${serverRoot}/api/users/${params.userId}/posts?skip=${userPosts.length}`
+      );
+
+      const resData = await res.json();
+
+      if (!res.ok) {
+        throw resData;
       }
 
-      setUserPosts([...userPosts, ...morePosts]);
-      setPage(page + 1);
-      return;
+      if (resData.posts.length < 10) {
+        setIsNoMorePosts(true);
+      }
+
+      setUserPosts([...userPosts, ...resData.posts]);
+      setIsMorePostsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -55,24 +60,6 @@ export default function ProfileContent({ user }) {
       }
 
       return resData.user;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async function fetchUserPosts(pageNo) {
-    try {
-      const res = await fetch(
-        `${serverRoot}/api/users/${params.userId}/posts?page=${pageNo}`
-      );
-
-      const resData = await res.json();
-
-      if (!res.ok) {
-        throw resData;
-      }
-
-      return resData.posts;
     } catch (error) {
       throw error;
     }
@@ -105,12 +92,30 @@ export default function ProfileContent({ user }) {
     }
   }
 
+  async function fetchUserPosts() {
+    try {
+      const res = await fetch(
+        `${serverRoot}/api/users/${params.userId}/posts?skip=${userPosts.length}`
+      );
+
+      const resData = await res.json();
+
+      if (!res.ok) {
+        throw resData;
+      }
+
+      return resData.posts;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   useEffect(() => {
     async function fetchUserInfos() {
       try {
         const results = await Promise.all([
           fetchUserBio(),
-          fetchUserPosts(0),
+          fetchUserPosts(),
           fetchUserFriendship(),
         ]);
 
@@ -121,7 +126,6 @@ export default function ProfileContent({ user }) {
         setUserPosts(results[1]);
         setFriendship(results[2]);
         setIsLoading(false);
-        setPage(1);
       } catch (error) {
         console.log(error);
       }
@@ -135,7 +139,8 @@ export default function ProfileContent({ user }) {
       setIsLoading(true);
       setIsNoMorePosts(false);
     };
-  }, [params.userId]);
+    // eslint-disable-next-line
+  }, []);
 
   if (isLoading) {
     return (
@@ -161,20 +166,15 @@ export default function ProfileContent({ user }) {
                 <span className="noProfileCoverText">No Cover Available</span>
               </div>
             )}
-
-            {userBio.profilePic ? (
-              <img
-                className="profileUserImg"
-                src={`${serverRoot}/images/${userBio.profilePic}`}
-                alt=""
-              />
-            ) : (
-              <img
-                className="profileUserImg"
-                src={`${clientRoot}/assets/person/noAvatar.png`}
-                alt=""
-              />
-            )}
+            <img
+              className="profileUserImg"
+              src={
+                userBio.profilePic
+                  ? `${serverRoot}/images/${userBio.profilePic}`
+                  : `${clientRoot}/assets/person/noAvatar.png`
+              }
+              alt=""
+            />
 
             <div className="profileSummary">
               <div className="profileNameDescContainer">
@@ -298,19 +298,15 @@ export default function ProfileContent({ user }) {
                     userBio.friends.map((fnd) => {
                       return (
                         <div key={fnd._id} className="profileFriend">
-                          {fnd.profilePic ? (
-                            <img
-                              src={`${serverRoot}/images/${fnd.profilePic}`}
-                              alt=""
-                              className="profileFriendImg"
-                            />
-                          ) : (
-                            <img
-                              src={`${clientRoot}/assets/person/noAvatar.png`}
-                              alt=""
-                              className="profileFriendImg"
-                            />
-                          )}
+                          <img
+                            src={
+                              fnd.profilePic
+                                ? `${serverRoot}/images/${fnd.profilePic}`
+                                : `${clientRoot}/assets/person/noAvatar.png`
+                            }
+                            alt=""
+                            className="profileFriendImg"
+                          />
 
                           <span className="profileFriendName">
                             <Link
@@ -331,11 +327,17 @@ export default function ProfileContent({ user }) {
           <div className="profilePosts">
             <div className="profilePostsWrapper">
               <div className="profilePostsTitle">Posts</div>
-              <Posts user={user} posts={userPosts} />
+              <Posts user={user} posts={userPosts} setPosts={setUserPosts} />
               {isMorePostsLoading ? (
                 <CircularProgress className="postsLoading" disableShrink />
               ) : isNoMorePosts ? (
-                <span className="noMorePoststext">No posts available. </span>
+                userPosts.length === 0 ? (
+                  <span className="noMorePoststext">No posts available. </span>
+                ) : (
+                  <span className="noMorePoststext">
+                    No more posts available.
+                  </span>
+                )
               ) : (
                 <button className="postLoadMore" onClick={loadMorePosts}>
                   Load more...

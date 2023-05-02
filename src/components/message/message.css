@@ -3,6 +3,10 @@
   gap: 10px;
 }
 
+.message.own {
+  justify-content: flex-end;
+}
+
 .messageImg {
   width: 40px;
   height: 40px;
@@ -17,26 +21,27 @@
 }
 
 .messageDetails {
-  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 2px;
+  max-width: 70%;
 }
 
 .messageDetails.own {
   align-items: flex-end;
 }
 
-.messageText {
+.msgText {
   background-color: var(--searchBarDarkish);
   padding: 10px;
   font-size: 0.9rem;
   border-radius: 0 10px 10px 10px;
-  max-width: 70%;
   line-height: 1.3;
+  flex-grow: 0;
+  min-width: 80px;
 }
 
-.messageText.own {
+.msgText.own {
   border-radius: 10px 0 10px 10px;
   background-color: var(--topbarBackgroundDarkish);
 }

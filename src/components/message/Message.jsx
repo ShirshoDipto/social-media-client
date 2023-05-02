@@ -1,24 +1,30 @@
 import "./message.css";
+import ReactTimeAgo from "react-time-ago";
 
-export default function Message({ own }) {
+export default function Message({ own, message }) {
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
+  const serverRoot = process.env.REACT_APP_SERVERROOT;
+
   return (
-    <div className="message">
+    <div className={own ? "message own" : "message"}>
       {!own && (
         <img
           className="messageImg"
-          src={`${clientRoot}/assets/person/shusme.jpg`}
+          src={
+            message.sender.profilePic
+              ? `${serverRoot}/images/${message.sender.profilePic}`
+              : `${clientRoot}/assets/person/noAvatar.png`
+          }
           alt=""
         />
       )}
       <div className={own ? "messageDetails own" : "messageDetails"}>
-        <span className="senderDetail">Shusme, 1 min ago</span>
-        <p className={own ? "messageText own" : "messageText"}>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eos
-          praesentium perspiciatis fuga sint, dolorum laboriosam provident
-          commodi ex repellat dicta, odit fugit et. Est repellat eligendi soluta
-          totam, sunt distinctio.
-        </p>
+        <span className="senderDetail">
+          {!own && message.sender.firstName}
+          {!own && ", "}
+          <ReactTimeAgo date={new Date(message.createdAt)} locale="en-US" />
+        </span>
+        <p className={own ? "msgText own" : "msgText"}>{message.content}</p>
       </div>
     </div>
   );

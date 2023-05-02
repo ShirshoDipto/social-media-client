@@ -14,7 +14,8 @@ export default function PostContent({
   post,
   handleToggleComments,
   numComments,
-  deletePost,
+  posts,
+  setPosts,
 }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
@@ -22,32 +23,47 @@ export default function PostContent({
   const dropdown = useRef();
   const dropdownTrigger = useRef();
   const updatedPostContent = useRef();
-  const [postState, setPostState] = useState(post);
+  const [numLikes, setNumLikes] = useState(post.numLikes);
   const [isLiked, setIsliked] = useState({});
   const [isUpdating, setIsUpdating] = useState(false);
   const fullname = `${post.author.firstName} ${post.author.lastName}`;
 
+  async function handleDeletePost() {
+    try {
+      const res = await fetch(`${serverRoot}/api/posts/${post._id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+
+      const resData = await res.json();
+      if (!res.ok) {
+        throw resData;
+      }
+
+      const newPosts = posts.filter((p) => p._id !== post._id);
+      return setPosts(newPosts);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async function addLike() {
     try {
-      const res = await fetch(
-        `${serverRoot}/api/posts/${postState._id}/likes`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
+      const res = await fetch(`${serverRoot}/api/posts/${post._id}/likes`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
 
       if (!res.ok) {
         return console.log(await res.json());
       }
 
       const resData = await res.json();
-      setPostState({
-        ...postState,
-        numLikes: postState.numLikes + 1,
-      });
+      setNumLikes(numLikes + 1);
       setIsliked(resData.postLike);
     } catch (error) {
       console.log(error);
@@ -57,7 +73,7 @@ export default function PostContent({
   async function deleteLike() {
     try {
       const res = await fetch(
-        `${serverRoot}/api/posts/${postState._id}/likes/${isLiked._id}`,
+        `${serverRoot}/api/posts/${post._id}/likes/${isLiked._id}`,
         {
           method: "DELETE",
           headers: {
@@ -70,10 +86,7 @@ export default function PostContent({
         return console.log(await res.json());
       }
 
-      setPostState({
-        ...postState,
-        numLikes: postState.numLikes - 1,
-      });
+      setNumLikes(numLikes - 1);
       setIsliked({});
     } catch (error) {
       console.log(error);
@@ -97,13 +110,26 @@ export default function PostContent({
     setIsUpdating(true);
   }
 
+  async function replacePost(postContent) {
+    const newPosts = posts.map((p) => {
+      if (post._id !== p._id) {
+        return p;
+      }
+
+      const newPost = { ...post };
+      newPost.content = postContent;
+      return newPost;
+    });
+    return newPosts;
+  }
+
   async function updatePost(e) {
     try {
       e.preventDefault();
       const formData = new FormData(e.target);
       const data = new URLSearchParams(formData);
 
-      const res = await fetch(`${serverRoot}/api/posts/${postState._id}`, {
+      const res = await fetch(`${serverRoot}/api/posts/${post._id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -115,10 +141,8 @@ export default function PostContent({
         console.log(await res.json());
       }
 
-      setPostState({
-        ...postState,
-        content: updatedPostContent.current.value,
-      });
+      const newPosts = await replacePost(updatedPostContent.current.value);
+      setPosts(newPosts);
       setIsUpdating(false);
     } catch (error) {
       console.log(error);
@@ -137,11 +161,10 @@ export default function PostContent({
         },
       });
 
-      if (!res.ok) {
-        console.log(await res.json());
-      }
-
       const resData = await res.json();
+      if (!res.ok) {
+        throw resData;
+      }
 
       if (resData.error) {
         return;
@@ -152,7 +175,7 @@ export default function PostContent({
     fetchUserLike().catch((err) => {
       console.log(err);
     });
-  }, [user, serverRoot, post]);
+  }, [post._id, serverRoot, user]);
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -176,9 +199,9 @@ export default function PostContent({
     <div className="postWrapper">
       <div className="postTop">
         <div className="postTopLeft">
-          {postState.author.profilePic ? (
+          {post.author.profilePic ? (
             <img
-              src={`${serverRoot}/images/${postState.author.profilePic}`}
+              src={`${serverRoot}/images/${post.author.profilePic}`}
               alt=""
               className="postProfileImg"
             />
@@ -191,21 +214,18 @@ export default function PostContent({
           )}
           <div className="postUserAndDate">
             <Link
-              to={`${clientRoot}/users/${postState.author._id}`}
+              to={`${clientRoot}/users/${post.author._id}`}
               className="routerLink"
             >
               <span className="postUsername">{fullname}</span>
             </Link>
             <span className="postDate">
-              <ReactTimeAgo
-                date={new Date(postState.createdAt)}
-                locale="en-US"
-              />
+              <ReactTimeAgo date={new Date(post.createdAt)} locale="en-US" />
             </span>
           </div>
         </div>
         <div className="postTopRight">
-          {user && user.user._id === postState.author._id && (
+          {user && user.user._id === post.author._id && (
             <div className="postDropdownContainer">
               <div
                 className="moreVertContainer"
@@ -220,7 +240,7 @@ export default function PostContent({
                     <EditIcon className="postDropdownIcon" />
                     <span className="postDropdownItemText">Update</span>
                   </li>
-                  <li className="postDropdownItem" onClick={deletePost}>
+                  <li className="postDropdownItem" onClick={handleDeletePost}>
                     <DeleteIcon className="postDropdownIcon" />
                     <span className="postDropdownItemText">Delete</span>
                   </li>
@@ -237,7 +257,7 @@ export default function PostContent({
               name="content"
               className="postUpdateTextarea"
               ref={updatedPostContent}
-              defaultValue={postState.content}
+              defaultValue={post.content}
               autoFocus={true}
               required={true}
             ></textarea>
@@ -253,12 +273,12 @@ export default function PostContent({
           </form>
         ) : (
           <div className="postText">
-            {parse(postState.content.replace(/\n\r?/g, "<br />"))}
+            {parse(post.content.replace(/\n\r?/g, "<br />"))}
           </div>
         )}
-        {postState.image && (
+        {post.image && (
           <img
-            src={`${serverRoot}/images/${postState.image}`}
+            src={`${serverRoot}/images/${post.image}`}
             alt=""
             className="postImg"
           />
@@ -268,9 +288,7 @@ export default function PostContent({
         <div className="postBottomLeft">
           <img src="/assets/like.png" alt="" className="likeIcon" />
           <img src="/assets/heart.png" alt="" className="likeIcon" />
-          <span className="postLikeCounter">
-            {postState.numLikes} people like it
-          </span>
+          <span className="postLikeCounter">{numLikes} people like it</span>
         </div>
         <div className="postBottomRight">
           <div className="postCommentText">{numComments} comments</div>

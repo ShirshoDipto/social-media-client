@@ -94,14 +94,13 @@
   align-items: center;
 }
 
-
 .topbarIconItem {
   margin-right: 15px;
-  cursor: pointer;
   position: relative;
   height: 100%;
   display: flex;
   align-items: center;
+  color: var(--secondaryText);
 }
 
 .topbarIconBadge {
@@ -196,3 +195,4 @@
 .logoutText {
   font-size: 0.9rem;
 }
+

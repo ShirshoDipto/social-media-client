@@ -1,11 +1,11 @@
 import "./topbar.css";
-import PersonIcon from "@mui/icons-material/Person";
-import ChatIcon from "@mui/icons-material/Chat";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import SearchBar from "../searchBar/SearchBar";
+import FriendReq from "../friendReq/FriendReq";
+import NewMsg from "../newMsg/NewMsg";
+import GeneralNotification from "../generalNotification/GeneralNotification";
 
 export default function Topbar({ user }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
@@ -63,16 +63,15 @@ export default function Topbar({ user }) {
           <div className="topbarRightWrapper">
             <div className="topbarIcons">
               <div className="topbarIconItem">
-                <PersonIcon />
-                <span className="topbarIconBadge">1</span>
+                <FriendReq user={user} />
               </div>
+              <Link to={`${clientRoot}/messenger`} className="routerLink">
+                <div className="topbarIconItem">
+                  <NewMsg user={user} />
+                </div>
+              </Link>
               <div className="topbarIconItem">
-                <ChatIcon />
-                <span className="topbarIconBadge">2</span>
-              </div>
-              <div className="topbarIconItem">
-                <NotificationsIcon />
-                <span className="topbarIconBadge">1</span>
+                <GeneralNotification user={user} />
               </div>
             </div>
             <div className="topbarDropdownContainer">

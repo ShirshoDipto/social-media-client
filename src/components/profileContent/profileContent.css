@@ -4,6 +4,7 @@
   display: flex;
   justify-content: center;
   background-color: var(--profileBackground);
+  padding-bottom: 20px;
 }
 
 .profile{
@@ -163,13 +164,9 @@
   padding: 5px;
   display: flex;
   flex-wrap: wrap;
-  height: 350px;
+  max-height: 350px;
   gap: 15px;
-  overflow-y: hidden;
-}
-
-.profileFriendlist:hover {
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .noFriendsText {

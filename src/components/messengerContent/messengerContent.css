@@ -1,0 +1,114 @@
+.messenger {
+  height: calc(100vh - 50px);
+  display: flex;
+  justify-content: center;
+}
+
+.messengerLoading {
+  margin: 50px;
+}
+
+.conversations {
+  width: 350px;
+}
+
+.conversationsWrapper {
+  padding: 10px;
+  border-right: thin solid var(--secondaryBorderBackground);
+}
+
+.coversationsInput {
+  width: 90%;
+  padding: 10px 0;
+  border: none;
+  border-bottom: 1px solid gray;
+  background: none;
+}
+
+.coversationsInput:focus {
+  outline: none;
+}
+
+.conversationContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px 0 10px 0;
+}
+
+.chatBox {
+  flex: 4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.selectChatText {
+  padding: 7px;
+  border-radius: 10px;
+  background-color: var(--searchBarDarkish);
+  color: var(--secondaryText);
+}
+
+.chatBoxWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.conversationsWrapper,
+.chatBoxWrapper {
+  padding: 10px;
+  height: 100%;
+}
+
+/* .chatBoxTop {
+  border: thin solid red;
+} */
+
+.chatBoxCenter {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 100px 20px 50px;
+  overflow: auto;
+  flex: 1;
+}
+
+.chatBoxBottom {
+  display: flex;
+  justify-content: center;
+  padding: 10px 100px 10px 100px;
+  position: relative;
+}
+
+.messageInput {
+  flex: 1;
+  border: none;
+  height: 50px;
+  border-radius: 25px;
+  background-color: var(--searchBarDarkish);
+  padding: 10px 20px 10px 20px;
+  color: var(--secondaryText);
+}
+
+.messageInput:focus {
+  outline: none;
+}
+
+.msgInputButton {
+  background: none;
+  border: none;
+  position: absolute;
+  top: 22px;
+  right: 110px;
+}
+
+.msgInputButton:focus {
+  outline: none;
+}
+
+.sendIcon {
+  cursor: pointer;
+  color: var(--profileInfoIcon);
+}

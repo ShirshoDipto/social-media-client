@@ -6,12 +6,14 @@ import ScrollToTop from "./ScrollToTop.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 import GoogleLogin from "./pages/GoogleLogin";
+import { socket } from "./socket";
 
 import TimeAgo from "javascript-time-ago";
 
 import en from "javascript-time-ago/locale/en.json";
 import ru from "javascript-time-ago/locale/ru.json";
 import Messenger from "./pages/messenger/Messenger";
+import Topbar from "./components/topbar/Topbar";
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
@@ -46,21 +48,28 @@ function App() {
       }
     }
 
-    if (!currentUser) {
-      if (!window.location.search) {
-        return;
-      }
-
+    if (!currentUser && window.location.search) {
       getUserFromGoogleAuth().catch((err) => {
         return console.log(err);
       });
     }
+    // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    socket.auth = { userId: currentUser?.user._id };
+    socket.connect();
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [currentUser]);
 
   return (
     <BrowserRouter>
       <ScrollToTop />
       <div className="App">
+        {/* <Topbar user={currentUser} /> */}
         <Routes>
           <Route path="/" element={<Homepage user={currentUser} />} />
           <Route

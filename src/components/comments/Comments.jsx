@@ -1,5 +1,4 @@
 import "./comments.css";
-import Comment from "../comment/Comment";
 import CommentContent from "../commentContent/CommentContent";
 
 export default function Comments({ user, post, comments, setNumComments }) {

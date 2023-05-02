@@ -1,9 +1,9 @@
 import "./friendshipStatus.css";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useState } from "react";
 
 export default function FriendshipStatus({
@@ -13,15 +13,12 @@ export default function FriendshipStatus({
   setFriendship,
 }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
+  const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const params = useParams();
   const [isLoading, setIsLoading] = useState(false);
 
   let friendshipStatusText;
   const fullname = userBio.firstName + " " + userBio.lastName;
-
-  async function handleFriendship() {
-    console.log("Handling...");
-  }
 
   async function sendFriendRequest() {
     try {
@@ -211,10 +208,17 @@ export default function FriendshipStatus({
       <span className="friendshipStatusText">{friendshipStatusText}</span>
       <div className="statusAndMessage">
         {friendshipStatusUi}
-        <div className="messageContainer">
-          <MessageOutlinedIcon />
-          <span className="messageText">Message</span>
-        </div>
+        {friendship?.status === 1 && (
+          <Link
+            className="routerLink"
+            to={`${clientRoot}/messenger?userId=${params.userId}`}
+          >
+            <div className="messageContainer">
+              <MessageOutlinedIcon />
+              <span className="messageText">Message</span>
+            </div>
+          </Link>
+        )}
       </div>
     </div>
   );
