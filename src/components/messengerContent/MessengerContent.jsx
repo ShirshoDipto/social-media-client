@@ -6,6 +6,7 @@ import Message from "../../components/message/Message";
 import { useEffect, useRef, useState } from "react";
 import SocketComponent from "../socketComponent/SocketComponent";
 import { socket } from "../../socket";
+import { v4 as uuidv4 } from "uuid";
 
 export default function MessengerContent({ user }) {
   const [conversations, setConversations] = useState([]);
@@ -61,6 +62,28 @@ export default function MessengerContent({ user }) {
     }
   }
 
+  async function getMessages(conversationId) {
+    try {
+      const res = await fetch(
+        `${serverRoot}/api/messenger/conversations/${conversationId}/messages?skip=0`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      const resData = await res.json();
+      if (!res.ok) {
+        throw resData;
+      }
+
+      setMessages(resData.messages);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -108,11 +131,29 @@ export default function MessengerContent({ user }) {
   }, [currentChat, updateConversations]);
 
   useEffect(() => {
-    function handleCurrentChat(conversations) {
+    async function createNewConv(userId) {
+      const res = await fetch(`${serverRoot}/api/messenger/conversations`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId }),
+      });
+
+      const resData = await res.json();
+      if (!res.ok) {
+        throw resData;
+      }
+
+      return resData.conversation;
+    }
+
+    async function handleCurrentChat(converses) {
       if (window.location.search) {
         const url = new URL(window.location.href);
         const userId = url.searchParams.get("userId");
-        const chatToActive = conversations.find((conv) => {
+        let chatToActive = converses.find((conv) => {
           if (
             conv.members[0]._id === userId ||
             conv.members[1]._id === userId
@@ -121,6 +162,11 @@ export default function MessengerContent({ user }) {
           }
           return false;
         });
+
+        if (!chatToActive) {
+          chatToActive = await createNewConv(userId);
+          setConversations([chatToActive, ...converses]);
+        }
 
         setCurrentChat(chatToActive);
         getMessages(chatToActive._id);
@@ -143,10 +189,9 @@ export default function MessengerContent({ user }) {
           throw resData;
         }
 
-        socket.emit("newUser", user);
         setConversations(resData.conversations);
+        await handleCurrentChat(resData.conversations);
         setIsLoading(false);
-        handleCurrentChat(resData.conversations);
       } catch (error) {
         console.log(error);
       }
@@ -156,28 +201,6 @@ export default function MessengerContent({ user }) {
       console.log(err);
     });
   }, [serverRoot, user]);
-
-  async function getMessages(conversationId) {
-    try {
-      const res = await fetch(
-        `${serverRoot}/api/messenger/conversations/${conversationId}/messages?skip=0`,
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
-
-      const resData = await res.json();
-      if (!res.ok) {
-        throw resData;
-      }
-
-      setMessages(resData.messages);
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({

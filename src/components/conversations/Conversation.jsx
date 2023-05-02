@@ -9,7 +9,6 @@ export default function Conversation({
 }) {
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const serverRoot = process.env.REACT_APP_SERVERROOT;
-
   let contact = conversation.members[0];
   if (user.user._id === conversation.members[0]._id) {
     contact = conversation.members[1];
@@ -25,7 +24,9 @@ export default function Conversation({
           : "conversation"
       }
       onClick={() => {
-        getMessages(conversation._id);
+        if (!conversation.temp) {
+          getMessages(conversation._id);
+        }
         setCurrentChat(conversation);
       }}
     >

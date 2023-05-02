@@ -208,17 +208,15 @@ export default function FriendshipStatus({
       <span className="friendshipStatusText">{friendshipStatusText}</span>
       <div className="statusAndMessage">
         {friendshipStatusUi}
-        {friendship?.status === 1 && (
-          <Link
-            className="routerLink"
-            to={`${clientRoot}/messenger?userId=${params.userId}`}
-          >
-            <div className="messageContainer">
-              <MessageOutlinedIcon />
-              <span className="messageText">Message</span>
-            </div>
-          </Link>
-        )}
+        <Link
+          className="routerLink"
+          to={`${clientRoot}/messenger?userId=${params.userId}`}
+        >
+          <div className="messageContainer">
+            <MessageOutlinedIcon />
+            <span className="messageText">Message</span>
+          </div>
+        </Link>
       </div>
     </div>
   );
