@@ -1,8 +1,8 @@
 import { io } from "socket.io-client";
 
-const serverRoot = process.env.REACT_APP_SERVERROOT;
+const socketRoot = process.env.REACT_APP_SOCKETROOT;
 
-export const socket = io(serverRoot, {
+export const socket = io(socketRoot, {
   autoConnect: false,
 });
 

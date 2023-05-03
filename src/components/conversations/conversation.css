@@ -29,6 +29,24 @@
   gap: 5px;
 }
 
+.convNameContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.unseenMsgsNum {
+  background-color: var(--topbarBackground);
+  color: white;
+  width: 15px;
+  height: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.7rem;
+  border-radius: 50%;
+}
+
 .conversationName {
   font-weight: 500;
 }
@@ -36,7 +54,7 @@
 .conversationLatest {
   color: var(--secondaryText);
   font-size: 0.8rem;
-  width: 250px;
+  width: 200px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

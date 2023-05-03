@@ -1,7 +1,7 @@
 import "./message.css";
 import ReactTimeAgo from "react-time-ago";
 
-export default function Message({ own, message }) {
+export default function Message({ own, msg }) {
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const serverRoot = process.env.REACT_APP_SERVERROOT;
 
@@ -11,8 +11,8 @@ export default function Message({ own, message }) {
         <img
           className="messageImg"
           src={
-            message.sender.profilePic
-              ? `${serverRoot}/images/${message.sender.profilePic}`
+            msg.sender.profilePic
+              ? `${serverRoot}/images/${msg.sender.profilePic}`
               : `${clientRoot}/assets/person/noAvatar.png`
           }
           alt=""
@@ -20,11 +20,11 @@ export default function Message({ own, message }) {
       )}
       <div className={own ? "messageDetails own" : "messageDetails"}>
         <span className="senderDetail">
-          {!own && message.sender.firstName}
+          {!own && msg.sender.firstName}
           {!own && ", "}
-          <ReactTimeAgo date={new Date(message.createdAt)} locale="en-US" />
+          <ReactTimeAgo date={new Date(msg.createdAt)} locale="en-US" />
         </span>
-        <p className={own ? "msgText own" : "msgText"}>{message.content}</p>
+        <p className={own ? "msgText own" : "msgText"}>{msg.content}</p>
       </div>
     </div>
   );

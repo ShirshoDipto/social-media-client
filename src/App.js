@@ -57,7 +57,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    socket.auth = { userId: currentUser?.user._id };
+    socket.auth = { user: currentUser && currentUser };
     socket.connect();
 
     return () => {
