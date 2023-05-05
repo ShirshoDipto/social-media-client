@@ -1,8 +1,8 @@
 import "./messengerContent.css";
-import SendIcon from "@mui/icons-material/Send";
 import CircularProgress from "@mui/material/CircularProgress";
 import Conversation from "../../components/conversations/Conversation";
 import Message from "../../components/message/Message";
+import ChatBoxForm from "../../components/chatBoxForm/ChatBoxForm";
 import { useEffect, useRef, useState } from "react";
 import SocketComponent from "../socketComponent/SocketComponent";
 import { v4 as uuidv4 } from "uuid";
@@ -191,17 +191,9 @@ export default function MessengerContent({ user }) {
     return msg;
   }
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e, msgContent) {
     e.preventDefault();
-
-    const formData = new FormData(e.target);
-    const formJson = Object.fromEntries(formData.entries());
-
-    if (formJson.content.length === 0) {
-      return;
-    }
-
-    const msg = await sendSocketEvent(formJson.content);
+    const msg = await sendSocketEvent(msgContent);
 
     setNewMsgs([...newMsgs, msg]);
     await updateConvsForNewMsg(msg);
@@ -446,23 +438,12 @@ export default function MessengerContent({ user }) {
                     );
                   })}
               </div>
-              {/* <div className="scrollbarPosition" ref={newMsgRef}></div> */}
             </div>
-            <form
-              className="chatBoxBottom"
-              onSubmit={handleSubmit}
-              autoComplete="off"
-            >
-              <input
-                type="text"
-                className="messageInput"
-                placeholder="Type a message"
-                name="content"
-              />
-              <button className="msgInputButton">
-                <SendIcon className="sendIcon" />
-              </button>
-            </form>
+            <ChatBoxForm
+              user={user}
+              currentChat={currentChat}
+              handleSubmit={handleSubmit}
+            />
           </div>
         )}
       </div>
