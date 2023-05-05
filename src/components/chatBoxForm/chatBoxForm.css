@@ -1,23 +1,30 @@
 .chatBoxForm {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  padding: 10px 100px 10px 100px;
-  position: relative;
+  padding: 10px 100px 30px 100px;
 }
 
-/* .formInputContainer {
+.isTyping {
+  color: var(--secondaryText);
+  font-size: 0.8rem;
+  height: 20px;
+}
+
+.formInputContainer {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
-} */
+  border-radius: 25px;
+  height: 50px;
+  background-color: var(--searchBarDarkish);
+  width: 100%;
+}
 
 .messageInput {
   flex: 1;
   border: none;
-  height: 50px;
-  border-radius: 25px;
-  background-color: var(--searchBarDarkish);
+  border-radius: 25px 0 0 25px;
   padding: 10px 20px 10px 20px;
+  background: none;
   color: var(--secondaryText);
 }
 
@@ -28,9 +35,8 @@
 .msgInputButton {
   background: none;
   border: none;
-  position: absolute;
-  top: 22px;
-  right: 110px;
+  padding: 0 10px 0 10px;
+  border-radius: 0 25px 25px 0;
 }
 
 .msgInputButton:focus {

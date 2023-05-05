@@ -192,7 +192,7 @@ export default function MessengerContent({ user }) {
   }
 
   async function handleSubmit(e, msgContent) {
-    e.preventDefault();
+    console.log(msgContent);
     const msg = await sendSocketEvent(msgContent);
 
     setNewMsgs([...newMsgs, msg]);

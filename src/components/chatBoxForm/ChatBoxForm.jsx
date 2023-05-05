@@ -1,76 +1,88 @@
 import "./chatBoxForm.css";
 import SendIcon from "@mui/icons-material/Send";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { socket } from "../../socket";
 
 export default function ChatBoxForm({ user, currentChat, handleSubmit }) {
-  const [msgContent, setMsgContent] = useState("");
-  const [isContactTyping, setIsContactTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const msgContent = useRef();
 
   let contact = currentChat.members.find(
     (member) => member._id !== user.user._id
   );
 
+  let timeout = null;
+
   async function sendTypingEvent(e) {
-    setMsgContent(e.target.value);
-    socket.emit("sendTyping", {
-      receiverId: contact._id,
-      chatId: currentChat._id,
-    });
+    if (!timeout) {
+      socket.emit("sendTyping", {
+        receiverId: contact._id,
+        chatId: currentChat._id,
+      });
+    }
+
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      timeout = null;
+      socket.emit("stopTyping", {
+        receiverId: contact._id,
+        chatId: currentChat._id,
+      });
+    }, 2000);
   }
 
   useEffect(() => {
     function onTyping() {
-      setIsContactTyping(true);
+      setIsTyping(true);
     }
 
     function onGetMsg() {
-      setIsContactTyping(false);
+      setIsTyping(false);
+    }
+
+    function onStoppedTyping() {
+      setIsTyping(false);
     }
 
     socket.on("getTyping", onTyping);
     socket.on("getMsg", onGetMsg);
+    socket.on("stoppedTyping", onStoppedTyping);
 
     return () => {
       socket.off("getTyping", onTyping);
       socket.off("getMsg", onGetMsg);
+      socket.off("stoppedTyping", onStoppedTyping);
     };
   }, []);
-
-  // useEffect(() => {
-  //   if (isContactTyping) {
-  //     setTimeout(() => {
-  //       setIsContactTyping(false);
-  //       console.log("set contact typing to false");
-  //     }, 6000);
-  //   }
-  // }, [isContactTyping]);
 
   return (
     <form
       className="chatBoxForm"
       onSubmit={(e) => {
-        if (msgContent.length === 0) {
+        e.preventDefault();
+        if (msgContent.current.value.length === 0) {
           return;
         }
-        handleSubmit(e, msgContent);
+        handleSubmit(e, msgContent.current.value);
       }}
       autoComplete="off"
     >
-      <div className="formInputContainer"></div>
-      {isContactTyping && (
-        <div className="isTyping">{contact.firstName} is typing...</div>
-      )}
-      <input
-        type="text"
-        className="messageInput"
-        placeholder="Type a message"
-        name="content"
-        onChange={(e) => sendTypingEvent(e)}
-      />
-      <button className="msgInputButton">
-        <SendIcon className="sendIcon" />
-      </button>
+      <div className="isTyping">
+        {isTyping && <span>{contact.firstName} is typing ...</span>}
+      </div>
+      <div className="formInputContainer">
+        <input
+          ref={msgContent}
+          type="text"
+          className="messageInput"
+          placeholder="Type a message"
+          name="content"
+          onChange={(e) => sendTypingEvent(e)}
+        />
+        <button className="msgInputButton">
+          <SendIcon className="sendIcon" />
+        </button>
+      </div>
     </form>
   );
 }
