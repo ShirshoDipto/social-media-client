@@ -15,7 +15,9 @@ export default function MessengerContent({ user }) {
   const [unseenMsgs, setUnseenMsgs] = useState([]);
   const [newMsgs, setNewMsgs] = useState([]);
   const [oldMsgs, setOldMsgs] = useState([]);
-  const scrollRef = useRef();
+  const oldMsgRef = useRef();
+  const newMsgRef = useRef();
+  const unseenMsgRef = useRef();
   const serverRoot = process.env.REACT_APP_SERVERROOT;
 
   async function getUnseenMsgs(convId) {
@@ -62,29 +64,87 @@ export default function MessengerContent({ user }) {
     }
   }
 
-  async function getMessages(convId) {
+  async function markUnseenAsSeen(conv) {
+    try {
+      const res = await fetch(
+        `${serverRoot}/api/messenger/conversations/${conv._id}/messages/markAsSeen`,
+
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            seenBy: [conv.members[0]._id, conv.members[1]._id],
+          }),
+        }
+      );
+
+      const resData = await res.json();
+      if (!res.ok) {
+        throw resData;
+      }
+
+      return resData.messages;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function setNumUnseenToZero(convId) {
+    const newConvs = conversations.map((conv) => {
+      if (conv._id === convId) {
+        const newConv = JSON.parse(JSON.stringify(conv));
+        newConv.unseenMsgs.forEach((msg) => {
+          if (msg.userId === user.user._id) {
+            msg.numUnseen = 0;
+          }
+        });
+        return newConv;
+      }
+      return conv;
+    });
+
+    setConversations(newConvs);
+  }
+
+  async function getMessages(conv) {
     const [unseen, old] = await Promise.all([
-      getUnseenMsgs(convId),
-      getOldMsgs(convId, 0),
+      getUnseenMsgs(conv._id),
+      getOldMsgs(conv._id, 0),
     ]);
+
+    const numUnseenMsgs = conv.unseenMsgs.find(
+      (elem) => elem.userId === user.user._id && elem.numUnseen > 0
+    );
+
+    console.log(numUnseenMsgs);
+
+    if (numUnseenMsgs) {
+      markUnseenAsSeen(conv); // Happens asynchronously. Beacuse I don't have to wait for it to finish before rendering....
+      setNumUnseenToZero(conv._id);
+    }
 
     setUnseenMsgs(unseen);
     setOldMsgs(old);
+    setNewMsgs([]);
   }
 
-  async function updateConversations(newMessage) {
+  async function updateConvsForNewMsg(newMessage) {
     const newConversations = conversations.map((conv) => {
       if (newMessage.conversationId === conv._id) {
-        // const newConv = { ...conv };
         const newConv = JSON.parse(JSON.stringify(conv));
         newConv.lastMsg = newMessage.content;
+
         if (!newMessage.seenBy.includes(user.user._id)) {
-          for (let member of newConv.members) {
-            if (member.member._id === user.user._id) {
-              member.unseenMsgs += 1;
+          for (let msg of newConv.unseenMsgs) {
+            if (msg.userId === user.user._id) {
+              msg.numUnseen += 1;
             }
           }
         }
+
         return newConv;
       }
 
@@ -100,7 +160,7 @@ export default function MessengerContent({ user }) {
 
   async function sendSocketEvent(msgContent) {
     const receiver = currentChat.members.find(
-      (m) => m.member._id !== user.user._id
+      (member) => member._id !== user.user._id
     );
 
     const msg = {
@@ -119,7 +179,7 @@ export default function MessengerContent({ user }) {
     };
 
     socket.emit("sendMsg", {
-      receiverId: receiver.member._id,
+      receiverId: receiver._id,
       msg,
     });
 
@@ -133,8 +193,22 @@ export default function MessengerContent({ user }) {
 
     const msg = await sendSocketEvent(formJson.content);
     setNewMsgs([...newMsgs, msg]);
-    await updateConversations(msg);
+    await updateConvsForNewMsg(msg);
     e.target.reset();
+  }
+
+  async function changeCurrentChat(conv) {
+    if (currentChat?._id === conv._id) {
+      return;
+    }
+
+    socket.emit("currentChatActive", {
+      userId: user.user._id,
+      activeChat: conv,
+    });
+
+    getMessages(conv);
+    setCurrentChat(conv);
   }
 
   useEffect(() => {
@@ -147,7 +221,7 @@ export default function MessengerContent({ user }) {
     }
 
     function onGetMsg(msg) {
-      updateConversations(msg);
+      updateConvsForNewMsg(msg);
       if (msg.conversationId === currentChat?._id) {
         setNewMsgs((m) => [...m, msg]);
       }
@@ -162,7 +236,7 @@ export default function MessengerContent({ user }) {
       socket.off("getMsg", onGetMsg);
       socket.off("internalError", onInternalError);
     };
-  }, [currentChat, updateConversations]);
+  }, [currentChat, updateConvsForNewMsg]);
 
   useEffect(() => {
     async function createNewConv(userId) {
@@ -189,8 +263,8 @@ export default function MessengerContent({ user }) {
         const userId = url.searchParams.get("userId");
         let chatToActive = converses.find((conv) => {
           if (
-            conv.members[0].member._id === userId ||
-            conv.members[1].member._id === userId
+            conv.members[0]._id === userId ||
+            conv.members[1]._id === userId
           ) {
             return true;
           }
@@ -207,8 +281,8 @@ export default function MessengerContent({ user }) {
           activeChat: chatToActive,
         });
 
+        getMessages(chatToActive);
         setCurrentChat(chatToActive);
-        getMessages(chatToActive._id);
       }
     }
 
@@ -242,18 +316,32 @@ export default function MessengerContent({ user }) {
   }, [serverRoot, user]);
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({
-      behavior: "smooth",
-    });
-  }, [newMsgs]);
-
-  useEffect(() => {
     socket.emit("messengerActive", user.user._id);
 
     return () => {
       socket.emit("messengerDeactive", user.user._id);
     };
   }, [user.user._id]);
+
+  useEffect(() => {
+    newMsgRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [newMsgs]);
+
+  useEffect(() => {
+    oldMsgRef.current?.scrollIntoView({
+      behavior: "instant",
+    });
+  }, [oldMsgs]);
+
+  useEffect(() => {
+    unseenMsgRef.current?.scrollBy({
+      top: 200,
+      left: 0,
+      behavior: "instant",
+    });
+  }, unseenMsgs);
 
   if (isLoading) {
     return (
@@ -278,12 +366,7 @@ export default function MessengerContent({ user }) {
                 <div
                   key={conv._id}
                   onClick={() => {
-                    socket.emit("currentChatActive", {
-                      userId: user.user._id,
-                      activeChat: conv,
-                    });
-                    setCurrentChat(conv);
-                    getMessages(conv._id);
+                    changeCurrentChat(conv);
                   }}
                 >
                   <Conversation
@@ -308,7 +391,7 @@ export default function MessengerContent({ user }) {
                 {oldMsgs.length > 0 &&
                   oldMsgs.map((msg) => {
                     return (
-                      <div key={msg._id}>
+                      <div key={msg._id} ref={oldMsgRef}>
                         <Message
                           own={msg.sender._id === user.user._id}
                           msg={msg}
@@ -318,6 +401,13 @@ export default function MessengerContent({ user }) {
                   })}
               </div>
               <div className="unseenMsgs">
+                {unseenMsgs.length > 0 && (
+                  <div className="unseenMsgsText" ref={unseenMsgRef}>
+                    <hr />
+                    <span>Unread Messages</span>
+                    <hr />
+                  </div>
+                )}
                 {unseenMsgs.length > 0 &&
                   unseenMsgs.map((msg) => {
                     return (
@@ -334,7 +424,7 @@ export default function MessengerContent({ user }) {
                 {newMsgs.length > 0 &&
                   newMsgs.map((msg) => {
                     return (
-                      <div key={msg._id}>
+                      <div key={msg._id} ref={newMsgRef}>
                         <Message
                           own={msg.sender._id === user.user._id}
                           msg={msg}
@@ -343,7 +433,7 @@ export default function MessengerContent({ user }) {
                     );
                   })}
               </div>
-              <div className="scrollbarPosition" ref={scrollRef}></div>
+              {/* <div className="scrollbarPosition" ref={newMsgRef}></div> */}
             </div>
             <form
               className="chatBoxBottom"

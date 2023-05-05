@@ -38,13 +38,16 @@
 .unseenMsgsNum {
   background-color: var(--topbarBackground);
   color: white;
-  width: 15px;
-  height: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 0.7rem;
-  border-radius: 50%;
+  min-width: 20px;
+  border-radius: 10px;
+}
+
+.unseenMsgsNum span {
+  padding: 4px;
 }
 
 .conversationName {
