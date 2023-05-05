@@ -32,15 +32,15 @@ export default function Conversation({ user, conversation, currentChat }) {
         className="conversationImg"
       />
       <div className="conversationTexts">
-        <div className="convNameContainer">
-          <div className="conversationName">{fullname}</div>
+        <div className="conversationName">{fullname}</div>
+        <div className="convLatestContainer">
+          <div className="conversationLatest">{conversation.lastMsg}</div>
           {unseenMsgs.numUnseen > 0 && (
             <div className="unseenMsgsNum">
               <span>{unseenMsgs.numUnseen}</span>
             </div>
           )}
         </div>
-        <div className="conversationLatest">{conversation.lastMsg}</div>
       </div>
     </div>
   );

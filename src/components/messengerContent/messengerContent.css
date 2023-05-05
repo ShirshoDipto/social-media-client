@@ -9,8 +9,7 @@
 }
 
 .conversations {
-  /* width: 350px; */
-  flex: 1;
+  width: 320px;
 }
 
 .conversationsWrapper {
@@ -81,10 +80,6 @@
   flex-direction: column;
   gap: 20px;
 }
-
-/* .unseenMsgs {
-  border-bottom: thin solid var(--topbarBackground);
-} */
 
 .unseenMsgsText {
   display: flex;

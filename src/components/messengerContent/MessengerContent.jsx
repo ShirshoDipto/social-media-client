@@ -17,7 +17,8 @@ export default function MessengerContent({ user }) {
   const [oldMsgs, setOldMsgs] = useState([]);
   const oldMsgRef = useRef();
   const newMsgRef = useRef();
-  const unseenMsgRef = useRef();
+  const [hasUnseenMsgs, setHasUnseenMsgs] = useState(false);
+
   const serverRoot = process.env.REACT_APP_SERVERROOT;
 
   async function getUnseenMsgs(convId) {
@@ -92,7 +93,7 @@ export default function MessengerContent({ user }) {
     }
   }
 
-  async function setNumUnseenToZero(convId) {
+  async function updateNumUnseenToZero(convId) {
     const newConvs = conversations.map((conv) => {
       if (conv._id === convId) {
         const newConv = JSON.parse(JSON.stringify(conv));
@@ -119,11 +120,10 @@ export default function MessengerContent({ user }) {
       (elem) => elem.userId === user.user._id && elem.numUnseen > 0
     );
 
-    console.log(numUnseenMsgs);
-
     if (numUnseenMsgs) {
       markUnseenAsSeen(conv); // Happens asynchronously. Beacuse I don't have to wait for it to finish before rendering....
-      setNumUnseenToZero(conv._id);
+      updateNumUnseenToZero(conv._id);
+      setHasUnseenMsgs(true);
     }
 
     setUnseenMsgs(unseen);
@@ -193,10 +193,16 @@ export default function MessengerContent({ user }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+
     const formData = new FormData(e.target);
     const formJson = Object.fromEntries(formData.entries());
 
+    if (formJson.content.length === 0) {
+      return;
+    }
+
     const msg = await sendSocketEvent(formJson.content);
+
     setNewMsgs([...newMsgs, msg]);
     await updateConvsForNewMsg(msg);
     e.target.reset();
@@ -329,24 +335,16 @@ export default function MessengerContent({ user }) {
   }, [user.user._id]);
 
   useEffect(() => {
-    newMsgRef.current?.scrollIntoView({
-      behavior: "smooth",
-    });
-  }, [newMsgs]);
-
-  useEffect(() => {
     oldMsgRef.current?.scrollIntoView({
       behavior: "instant",
     });
   }, [oldMsgs]);
 
-  // useEffect(() => {
-  //   unseenMsgRef.current?.scrollTo({
-  //     top: 0,
-  //     left: 0,
-  //     behavior: "instant",
-  //   });
-  // }, [unseenMsgs]);
+  useEffect(() => {
+    newMsgRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [newMsgs]);
 
   if (isLoading) {
     return (
@@ -385,7 +383,14 @@ export default function MessengerContent({ user }) {
           </div>
         </div>
       </div>
-      <div className="chatBox">
+      <div
+        className="chatBox"
+        onClick={() => {
+          if (hasUnseenMsgs) {
+            setHasUnseenMsgs(false);
+          }
+        }}
+      >
         {!currentChat ? (
           <div className="selectChatText">Select a chat to start messaging</div>
         ) : (
@@ -408,11 +413,13 @@ export default function MessengerContent({ user }) {
               <div className="unseenMsgs">
                 {unseenMsgs.length > 0 && (
                   <>
-                    <div className="unseenMsgsText" ref={unseenMsgRef}>
-                      <div />
-                      <span>Unread Messages</span>
-                      <div />
-                    </div>
+                    {hasUnseenMsgs && (
+                      <div className="unseenMsgsText">
+                        <div />
+                        <span>Unread Messages</span>
+                        <div />
+                      </div>
+                    )}
                     {unseenMsgs.map((msg) => {
                       return (
                         <div key={msg._id}>
@@ -423,9 +430,6 @@ export default function MessengerContent({ user }) {
                         </div>
                       );
                     })}
-                    <div className="unseenMsgsText" ref={unseenMsgRef}>
-                      <div />
-                    </div>
                   </>
                 )}
               </div>

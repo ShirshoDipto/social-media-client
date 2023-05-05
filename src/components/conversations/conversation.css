@@ -1,5 +1,6 @@
 .conversation {
   display: flex;
+  align-items: center;
   padding: 10px;
   gap: 10px;
   cursor: pointer;
@@ -27,12 +28,15 @@
   flex-direction: column;
   justify-content: center;
   gap: 5px;
+  width: 100%;
+  /* border: thin solid red; */
 }
 
-.convNameContainer {
+.convLatestContainer {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .unseenMsgsNum {
@@ -42,12 +46,14 @@
   justify-content: center;
   align-items: center;
   font-size: 0.7rem;
-  min-width: 20px;
-  border-radius: 10px;
+  min-width: 17px;
+  border-radius: 8px;
+  position: absolute;
+  right: 0;
 }
 
 .unseenMsgsNum span {
-  padding: 4px;
+  padding: 2px;
 }
 
 .conversationName {
@@ -56,8 +62,8 @@
 
 .conversationLatest {
   color: var(--secondaryText);
-  font-size: 0.8rem;
   width: 200px;
+  font-size: 0.8rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
