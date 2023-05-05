@@ -82,6 +82,23 @@
   gap: 20px;
 }
 
+/* .unseenMsgs {
+  border-bottom: thin solid var(--topbarBackground);
+} */
+
+.unseenMsgsText {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8rem;
+  color: var(--topbarBackground);
+}
+
+.unseenMsgsText div {
+  flex: 1;
+  border-bottom: thin solid var(--topbarBackground);
+}
+
 .chatBoxBottom {
   display: flex;
   justify-content: center;

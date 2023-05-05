@@ -136,6 +136,7 @@ export default function MessengerContent({ user }) {
       if (newMessage.conversationId === conv._id) {
         const newConv = JSON.parse(JSON.stringify(conv));
         newConv.lastMsg = newMessage.content;
+        newConv.updatedAt = new Date().toISOString();
 
         if (!newMessage.seenBy.includes(user.user._id)) {
           for (let msg of newConv.unseenMsgs) {
@@ -151,9 +152,13 @@ export default function MessengerContent({ user }) {
       return conv;
     });
 
-    const sortedConv = newConversations.sort(
-      (a, b) => a.updatedAt > b.updatedAt
-    );
+    const sortedConv = newConversations.sort((a, b) => {
+      if (b.updatedAt > a.updatedAt) {
+        return 1;
+      } else {
+        return -1;
+      }
+    });
 
     setConversations(sortedConv);
   }
@@ -335,13 +340,13 @@ export default function MessengerContent({ user }) {
     });
   }, [oldMsgs]);
 
-  useEffect(() => {
-    unseenMsgRef.current?.scrollBy({
-      top: 200,
-      left: 0,
-      behavior: "instant",
-    });
-  }, unseenMsgs);
+  // useEffect(() => {
+  //   unseenMsgRef.current?.scrollTo({
+  //     top: 0,
+  //     left: 0,
+  //     behavior: "instant",
+  //   });
+  // }, [unseenMsgs]);
 
   if (isLoading) {
     return (
@@ -402,23 +407,27 @@ export default function MessengerContent({ user }) {
               </div>
               <div className="unseenMsgs">
                 {unseenMsgs.length > 0 && (
-                  <div className="unseenMsgsText" ref={unseenMsgRef}>
-                    <hr />
-                    <span>Unread Messages</span>
-                    <hr />
-                  </div>
+                  <>
+                    <div className="unseenMsgsText" ref={unseenMsgRef}>
+                      <div />
+                      <span>Unread Messages</span>
+                      <div />
+                    </div>
+                    {unseenMsgs.map((msg) => {
+                      return (
+                        <div key={msg._id}>
+                          <Message
+                            own={msg.sender._id === user.user._id}
+                            msg={msg}
+                          />
+                        </div>
+                      );
+                    })}
+                    <div className="unseenMsgsText" ref={unseenMsgRef}>
+                      <div />
+                    </div>
+                  </>
                 )}
-                {unseenMsgs.length > 0 &&
-                  unseenMsgs.map((msg) => {
-                    return (
-                      <div key={msg._id}>
-                        <Message
-                          own={msg.sender._id === user.user._id}
-                          msg={msg}
-                        />
-                      </div>
-                    );
-                  })}
               </div>
               <div className="newMsgs">
                 {newMsgs.length > 0 &&
