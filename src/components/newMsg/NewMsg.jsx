@@ -3,24 +3,26 @@ import ChatIcon from "@mui/icons-material/Chat";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { socket } from "../../socket";
 
 export default function NewMsg({ user }) {
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const dropdown = useRef();
   const dropdownTrigger = useRef();
   const [notifications, setNotifications] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isMarkingAsSeen, setIsMarkingAsSeen] = useState(false);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [isMarked, setIsMarked] = useState(false);
-  const [numNotif, setNumNotif] = useState(0);
+  const [numNotif, setNumNotif] = useState(0); // cannot use notifications.length.
 
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const serverRoot = process.env.REACT_APP_SERVERROOT;
 
   async function fetchOldNotifications() {
     try {
-      setIsLoading(true);
+      setIsFetchingMore(true);
       const res = await fetch(
-        `${serverRoot}/api/notifications/oldNotifications?skip=${notifications.length}`,
+        `${serverRoot}/api/notifications/oldMsgNotifs?skip=${notifications.length}`,
         {
           headers: {
             Authorization: `Bearer ${user.token}`,
@@ -34,31 +36,35 @@ export default function NewMsg({ user }) {
       }
 
       setNotifications([...notifications, ...resData.notifications]);
-      setIsLoading(false);
+      setIsFetchingMore(false);
     } catch (error) {
       console.log(error);
     }
   }
 
   async function markAllAsRead() {
-    if (isMarked || notifications.length === 0) {
+    if (isMarked) {
       return;
     }
-    setIsLoading(true);
+
+    setIsMarkingAsSeen(true);
     try {
-      const res = await fetch(`${serverRoot}/api/notifications/markAllAsRead`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
+      const res = await fetch(
+        `${serverRoot}/api/notifications/markUnseenMsgsAsSeen`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
 
       const resData = await res.json();
       if (!res.ok) {
         throw resData;
       }
 
-      setIsLoading(false);
+      setIsMarkingAsSeen(false);
       setIsMarked(true);
       setNumNotif(0);
     } catch (error) {
@@ -68,14 +74,11 @@ export default function NewMsg({ user }) {
 
   useEffect(() => {
     async function fetchNewNotifications() {
-      const res = await fetch(
-        `${serverRoot}/api/notifications/newNotifications`,
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
+      const res = await fetch(`${serverRoot}/api/notifications/newMsgNotifs`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
 
       const resData = await res.json();
       if (!res.ok) {
@@ -89,7 +92,7 @@ export default function NewMsg({ user }) {
     fetchNewNotifications().catch((err) => {
       console.log(err);
     });
-  }, [user.token]);
+  }, [user.token, serverRoot]);
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -98,6 +101,10 @@ export default function NewMsg({ user }) {
         !dropdown.current.contains(e.target) &&
         !dropdownTrigger.current.contains(e.target)
       ) {
+        if (notifications.length > 0) {
+          setNotifications([]);
+          setNumNotif(0);
+        }
         setDropdownStatus(false);
       }
     }
@@ -107,6 +114,19 @@ export default function NewMsg({ user }) {
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
+  }, [notifications.length]);
+
+  useEffect(() => {
+    function onNewMsgNotif(notif) {
+      setNotifications((n) => [notif, ...n]);
+      setNumNotif((n) => n + 1);
+      setIsMarked(false);
+    }
+
+    socket.on("newMsg", onNewMsgNotif);
+    return () => {
+      socket.off("newMsg", onNewMsgNotif);
+    };
   }, []);
 
   return (
@@ -115,6 +135,10 @@ export default function NewMsg({ user }) {
         className="notificationIcon"
         ref={dropdownTrigger}
         onClick={() => {
+          if (dropdownStatus && notifications.length > 0) {
+            setNotifications([]);
+            setNumNotif(0);
+          }
           setDropdownStatus(!dropdownStatus);
           markAllAsRead();
         }}
@@ -122,9 +146,17 @@ export default function NewMsg({ user }) {
 
       {numNotif > 0 && <span className="topbarIconBadge">{numNotif}</span>}
       {dropdownStatus && (
-        <div className="notifDropDown" ref={dropdown}>
-          {notifications.length > 0 ? (
-            <div className="genNotificationList">
+        <div className="msgNotifDropDown" ref={dropdown}>
+          {isMarkingAsSeen ? (
+            <div className="markLoadingContainer">
+              <CircularProgress
+                size={15}
+                className="searchLoading"
+                disableShrink
+              />
+            </div>
+          ) : notifications.length > 0 ? (
+            <div className="msgNotificationList">
               {notifications.map((notif) => {
                 return (
                   <div key={notif._id} className="notificationItem">
@@ -146,48 +178,31 @@ export default function NewMsg({ user }) {
                         >
                           <b className="notifSenderName">{`${notif.sender.firstName} ${notif.sender.lastName}`}</b>
                         </Link>{" "}
-                        if your friend now.
+                        sent a message.
                       </div>
                     </div>
                   </div>
                 );
               })}
-              {isLoading && (
-                <div className="markLoadingContainer">
-                  <CircularProgress
-                    size={15}
-                    className="searchLoading"
-                    disableShrink
-                  />
-                </div>
-              )}
-
-              <div className="showOldNotif">
-                <span onClick={fetchOldNotifications}>
-                  Show old notifications
-                </span>
-              </div>
             </div>
           ) : (
-            <>
-              {isLoading ? (
-                <div className="markLoadingContainer">
-                  <CircularProgress
-                    size={15}
-                    className="searchLoading"
-                    disableShrink
-                  />
-                </div>
-              ) : (
-                <div className="noNotifications">No new notifications</div>
-              )}
-              <div className="showOldNotif">
-                <span onClick={fetchOldNotifications}>
-                  Show old notifications
-                </span>
-              </div>
-            </>
+            <div className="noNotifications">No new notifications</div>
           )}
+          {isFetchingMore && (
+            <div className="markLoadingContainer">
+              <CircularProgress
+                size={15}
+                className="searchLoading"
+                disableShrink
+              />
+            </div>
+          )}
+          <div className="notifOptions">
+            <Link className="routerLink" to={`${clientRoot}/messenger`}>
+              <span>Open Messenger</span>
+            </Link>
+            <span onClick={fetchOldNotifications}>Show old notifications</span>
+          </div>
         </div>
       )}
     </div>

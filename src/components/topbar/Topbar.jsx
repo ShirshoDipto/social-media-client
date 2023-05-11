@@ -65,11 +65,9 @@ export default function Topbar({ user }) {
               <div className="topbarIconItem">
                 <FriendReq user={user} />
               </div>
-              <Link to={`${clientRoot}/messenger`} className="routerLink">
-                <div className="topbarIconItem">
-                  <NewMsg user={user} />
-                </div>
-              </Link>
+              <div className="topbarIconItem">
+                <NewMsg user={user} />
+              </div>
               <div className="topbarIconItem">
                 <GeneralNotification user={user} />
               </div>

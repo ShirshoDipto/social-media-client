@@ -4,11 +4,11 @@ export default function Conversation({ user, conversation, currentChat }) {
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const serverRoot = process.env.REACT_APP_SERVERROOT;
 
-  let unseenMsgs = conversation.unseenMsgs.find(
+  const unseenMsgs = conversation.unseenMsgs.find(
     (msg) => msg.userId === user.user._id
   );
 
-  let contact = conversation.members.find(
+  const contact = conversation.members.find(
     (member) => member._id !== user.user._id
   );
 

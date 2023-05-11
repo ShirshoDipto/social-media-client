@@ -56,26 +56,26 @@
   width: 100%;
 }
 
-.conversationsWrapper,
-.chatBoxWrapper {
+.conversationsWrapper {
   padding: 10px;
   height: 100%;
 }
 
-/* .chatBoxWrapper {
-} */
-
-/* .chatBoxTop {
-  border: thin solid red;
-} */
+.chatBoxWrapper {
+  height: 100%;
+}
 
 .chatBoxCenter {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 20px 100px 20px 50px;
-  overflow: auto;
+  padding: 20px 50px 10px 50px;
+  overflow: hidden;
   flex: 1;
+}
+
+.chatBoxCenter:hover {
+  overflow: overlay;
 }
 
 .oldMsgs, .newMsgs, .unseenMsgs {
@@ -87,7 +87,7 @@
 .unseenMsgsText {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
   font-size: 0.8rem;
   color: var(--topbarBackground);
 }

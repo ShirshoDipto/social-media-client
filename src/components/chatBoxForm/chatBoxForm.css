@@ -2,12 +2,12 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 10px 100px 30px 100px;
+  padding: 5px 50px 20px 50px;
 }
 
 .isTyping {
-  color: var(--secondaryText);
-  font-size: 0.8rem;
+  color: var(--typingText);
+  font-size: 0.7rem;
   height: 20px;
 }
 
@@ -47,3 +47,6 @@
   cursor: pointer;
   color: var(--profileInfoIcon);
 }
+
+/* Typing indicator styling */
+

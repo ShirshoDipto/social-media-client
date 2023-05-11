@@ -7,7 +7,7 @@ export default function ChatBoxForm({ user, currentChat, handleSubmit }) {
   const [isTyping, setIsTyping] = useState(false);
   const msgContent = useRef();
 
-  let contact = currentChat.members.find(
+  const contact = currentChat.members.find(
     (member) => member._id !== user.user._id
   );
 

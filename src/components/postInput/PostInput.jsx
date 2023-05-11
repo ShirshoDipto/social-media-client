@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CircularProgress from "@mui/material/CircularProgress";
 import { grey } from "@mui/material/colors";
+import { socket } from "../../socket";
 
 export default function PostInput({ user, posts, setPosts }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
@@ -14,7 +15,7 @@ export default function PostInput({ user, posts, setPosts }) {
   const content = useRef();
   const [isLoading, setIsLoading] = useState(false);
 
-  async function addNewPost(newPost) {
+  async function addPostAndSendEvent(newPost) {
     newPost.author = {
       _id: user.user._id,
       firstName: user.user.firstName,
@@ -23,6 +24,15 @@ export default function PostInput({ user, posts, setPosts }) {
     };
 
     setPosts([newPost, ...posts]);
+    socket.emit("sendPost", {
+      userId: user.user._id,
+      post: newPost,
+    });
+  }
+
+  async function handleRemoveImg() {
+    setImage(null);
+    imgRef.current.value = "";
   }
 
   async function handlePostSubmit(e) {
@@ -56,18 +66,13 @@ export default function PostInput({ user, posts, setPosts }) {
       }
 
       const resData = await res.json();
-      await addNewPost(resData.post);
+      await addPostAndSendEvent(resData.post);
       setIsLoading(false);
       e.target.reset();
       await handleRemoveImg();
     } catch (err) {
       console.log(err);
     }
-  }
-
-  async function handleRemoveImg() {
-    setImage(null);
-    imgRef.current.value = "";
   }
 
   return (

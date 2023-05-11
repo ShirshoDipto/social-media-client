@@ -1,6 +1,8 @@
 import "./friendReq.css";
 import PersonIcon from "@mui/icons-material/Person";
 import CircularProgress from "@mui/material/CircularProgress";
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -15,9 +17,21 @@ export default function FriendReq({ user }) {
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const serverRoot = process.env.REACT_APP_SERVERROOT;
 
+  async function handleClose() {
+    setIsConfirmed(false);
+  }
+
   const fndReqConfirmed = (
     <div className="fndReqConfirmed">
-      <span>Friend request accepted successfully</span>
+      <Snackbar
+        open={isConfirmed}
+        autoHideDuration={3000}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+          Friend request accepted successfully
+        </Alert>
+      </Snackbar>
     </div>
   );
 
@@ -73,15 +87,6 @@ export default function FriendReq({ user }) {
       console.log(error);
     }
   }
-
-  useEffect(() => {
-    if (isConfirmed) {
-      setTimeout(() => {
-        setIsConfirmed(false);
-      }, 2000);
-      console.log("Effect running...");
-    }
-  }, [isConfirmed]);
 
   useEffect(() => {
     async function fetchFndReqNotifications() {

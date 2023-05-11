@@ -3,13 +3,15 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { socket } from "../../socket";
 
 export default function GeneralNotification({ user }) {
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const dropdown = useRef();
   const dropdownTrigger = useRef();
   const [notifications, setNotifications] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isMarkingAsSeen, setIsMarkingAsSeen] = useState(false);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [isMarked, setIsMarked] = useState(false);
   const [numNotif, setNumNotif] = useState(0);
 
@@ -18,7 +20,7 @@ export default function GeneralNotification({ user }) {
 
   async function fetchOldNotifications() {
     try {
-      setIsLoading(true);
+      setIsFetchingMore(true);
       const res = await fetch(
         `${serverRoot}/api/notifications/oldNotifications?skip=${notifications.length}`,
         {
@@ -34,17 +36,18 @@ export default function GeneralNotification({ user }) {
       }
 
       setNotifications([...notifications, ...resData.notifications]);
-      setIsLoading(false);
+      setIsFetchingMore(false);
     } catch (error) {
       console.log(error);
     }
   }
 
   async function markAllAsRead() {
-    if (isMarked || notifications.length === 0) {
+    if (isMarked) {
       return;
     }
-    setIsLoading(true);
+
+    setIsMarkingAsSeen(true);
     try {
       const res = await fetch(`${serverRoot}/api/notifications/markAllAsRead`, {
         method: "PUT",
@@ -58,7 +61,7 @@ export default function GeneralNotification({ user }) {
         throw resData;
       }
 
-      setIsLoading(false);
+      setIsMarkingAsSeen(false);
       setIsMarked(true);
       setNumNotif(0);
     } catch (error) {
@@ -89,7 +92,7 @@ export default function GeneralNotification({ user }) {
     fetchNewNotifications().catch((err) => {
       console.log(err);
     });
-  }, [user.token]);
+  }, [user.token, serverRoot]);
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -98,6 +101,11 @@ export default function GeneralNotification({ user }) {
         !dropdown.current.contains(e.target) &&
         !dropdownTrigger.current.contains(e.target)
       ) {
+        if (notifications.length > 0) {
+          setNotifications([]);
+          setNumNotif(0);
+        }
+
         setDropdownStatus(false);
       }
     }
@@ -107,6 +115,20 @@ export default function GeneralNotification({ user }) {
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
+  }, [notifications.length]);
+
+  useEffect(() => {
+    function onNewPost(notif) {
+      setNotifications((n) => [notif, ...n]);
+      setNumNotif((n) => n + 1);
+      setIsMarked(false);
+    }
+
+    socket.on("getPost", onNewPost);
+
+    return () => {
+      socket.off("getPost", onNewPost);
+    };
   }, []);
 
   return (
@@ -115,6 +137,10 @@ export default function GeneralNotification({ user }) {
         className="notificationIcon"
         ref={dropdownTrigger}
         onClick={() => {
+          if (dropdownStatus && notifications.length > 0) {
+            setNotifications([]);
+            setNumNotif(0);
+          }
           setDropdownStatus(!dropdownStatus);
           markAllAsRead();
         }}
@@ -122,7 +148,15 @@ export default function GeneralNotification({ user }) {
       {numNotif > 0 && <span className="topbarIconBadge">{numNotif}</span>}
       {dropdownStatus && (
         <div className="notifDropDown" ref={dropdown}>
-          {notifications.length > 0 ? (
+          {isMarkingAsSeen ? (
+            <div className="markLoadingContainer">
+              <CircularProgress
+                size={15}
+                className="searchLoading"
+                disableShrink
+              />
+            </div>
+          ) : notifications.length > 0 ? (
             <div className="genNotificationList">
               {notifications.map((notif) => {
                 return (
@@ -145,48 +179,31 @@ export default function GeneralNotification({ user }) {
                         >
                           <b className="notifSenderName">{`${notif.sender.firstName} ${notif.sender.lastName}`}</b>
                         </Link>{" "}
-                        if your friend now.
+                        {notif.notificationType === 1 &&
+                          "has accepted your friend request"}
+                        {notif.notificationType === 3 &&
+                          "has uploaded a new post"}
                       </div>
                     </div>
                   </div>
                 );
               })}
-              {isLoading && (
-                <div className="markLoadingContainer">
-                  <CircularProgress
-                    size={15}
-                    className="searchLoading"
-                    disableShrink
-                  />
-                </div>
-              )}
-
-              <div className="showOldNotif">
-                <span onClick={fetchOldNotifications}>
-                  Show old notifications
-                </span>
-              </div>
             </div>
           ) : (
-            <>
-              {isLoading ? (
-                <div className="markLoadingContainer">
-                  <CircularProgress
-                    size={15}
-                    className="searchLoading"
-                    disableShrink
-                  />
-                </div>
-              ) : (
-                <div className="noNotifications">No new notifications</div>
-              )}
-              <div className="showOldNotif">
-                <span onClick={fetchOldNotifications}>
-                  Show old notifications
-                </span>
-              </div>
-            </>
+            <div className="noNotifications">No new notifications</div>
           )}
+          {isFetchingMore && (
+            <div className="markLoadingContainer">
+              <CircularProgress
+                size={15}
+                className="searchLoading"
+                disableShrink
+              />
+            </div>
+          )}
+          <div className="showOldNotif">
+            <span onClick={fetchOldNotifications}>Show old notifications</span>
+          </div>
         </div>
       )}
     </div>

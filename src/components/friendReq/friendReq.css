@@ -106,10 +106,7 @@
   position: fixed;
   top: 60px;
   left: 10px;
-  background-color: limegreen;
   color: var(--primaryText);
-  padding: 5px;
-  border-radius: 5px;
   font-size: 0.8rem;
 }
 

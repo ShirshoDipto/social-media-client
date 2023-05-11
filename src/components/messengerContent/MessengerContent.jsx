@@ -4,7 +4,6 @@ import Conversation from "../../components/conversations/Conversation";
 import Message from "../../components/message/Message";
 import ChatBoxForm from "../../components/chatBoxForm/ChatBoxForm";
 import { useEffect, useRef, useState } from "react";
-import SocketComponent from "../socketComponent/SocketComponent";
 import { v4 as uuidv4 } from "uuid";
 import { socket } from "../../socket";
 
@@ -192,7 +191,6 @@ export default function MessengerContent({ user }) {
   }
 
   async function handleSubmit(e, msgContent) {
-    console.log(msgContent);
     const msg = await sendSocketEvent(msgContent);
 
     setNewMsgs([...newMsgs, msg]);
@@ -348,13 +346,8 @@ export default function MessengerContent({ user }) {
 
   return (
     <div className="messenger">
-      {user && <SocketComponent />}
       <div className="conversations">
         <div className="conversationsWrapper">
-          <input
-            placeholder="Search for friends"
-            className="coversationsInput"
-          />
           <div className="conversationContainer">
             {conversations.map((conv) => {
               return (
@@ -387,11 +380,11 @@ export default function MessengerContent({ user }) {
           <div className="selectChatText">Select a chat to start messaging</div>
         ) : (
           <div className="chatBoxWrapper">
-            <div className="chatBoxTop"></div>
+            {/* <ChatBoxTop user={user} currentChat={currentChat} /> */}
             <div className="chatBoxCenter">
-              <div className="oldMsgs">
-                {oldMsgs.length > 0 &&
-                  oldMsgs.map((msg) => {
+              {oldMsgs.length > 0 && (
+                <div className="oldMsgs">
+                  {oldMsgs.map((msg) => {
                     return (
                       <div key={msg._id} ref={oldMsgRef}>
                         <Message
@@ -401,33 +394,32 @@ export default function MessengerContent({ user }) {
                       </div>
                     );
                   })}
-              </div>
-              <div className="unseenMsgs">
-                {unseenMsgs.length > 0 && (
-                  <>
-                    {hasUnseenMsgs && (
-                      <div className="unseenMsgsText">
-                        <div />
-                        <span>Unread Messages</span>
-                        <div />
+                </div>
+              )}
+              {unseenMsgs.length > 0 && (
+                <div className="unseenMsgs">
+                  {hasUnseenMsgs && (
+                    <div className="unseenMsgsText">
+                      <div />
+                      <span>Unread Messages</span>
+                      <div />
+                    </div>
+                  )}
+                  {unseenMsgs.map((msg) => {
+                    return (
+                      <div key={msg._id}>
+                        <Message
+                          own={msg.sender._id === user.user._id}
+                          msg={msg}
+                        />
                       </div>
-                    )}
-                    {unseenMsgs.map((msg) => {
-                      return (
-                        <div key={msg._id}>
-                          <Message
-                            own={msg.sender._id === user.user._id}
-                            msg={msg}
-                          />
-                        </div>
-                      );
-                    })}
-                  </>
-                )}
-              </div>
-              <div className="newMsgs">
-                {newMsgs.length > 0 &&
-                  newMsgs.map((msg) => {
+                    );
+                  })}
+                </div>
+              )}
+              {newMsgs.length > 0 && (
+                <div className="newMsgs">
+                  {newMsgs.map((msg) => {
                     return (
                       <div key={msg._id} ref={newMsgRef}>
                         <Message
@@ -437,7 +429,8 @@ export default function MessengerContent({ user }) {
                       </div>
                     );
                   })}
-              </div>
+                </div>
+              )}
             </div>
             <ChatBoxForm
               user={user}
