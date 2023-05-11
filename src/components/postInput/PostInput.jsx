@@ -17,15 +17,15 @@ export default function PostInput({ user, posts, setPosts }) {
 
   async function addPostAndSendEvent(newPost) {
     newPost.author = {
-      _id: user.user._id,
-      firstName: user.user.firstName,
-      lastName: user.user.lastName,
-      profilePic: user.user.profilePic,
+      _id: user.userInfo._id,
+      firstName: user.userInfo.firstName,
+      lastName: user.userInfo.lastName,
+      profilePic: user.userInfo.profilePic,
     };
 
     setPosts([newPost, ...posts]);
     socket.emit("sendPost", {
-      userId: user.user._id,
+      userId: user.userInfo._id,
       post: newPost,
     });
   }
@@ -79,9 +79,9 @@ export default function PostInput({ user, posts, setPosts }) {
     <div className="postInput">
       <form className="postInputWrapper" onSubmit={handlePostSubmit}>
         <div className="postInputTop">
-          {user && user.user.profilePic ? (
+          {user && user.userInfo.profilePic ? (
             <img
-              src={`${serverRoot}/images/${user.user.profilePic}`}
+              src={`${serverRoot}/images/${user.userInfo.profilePic}`}
               alt=""
               className="postInputProfileImg"
             />

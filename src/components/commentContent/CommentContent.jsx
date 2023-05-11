@@ -237,7 +237,7 @@ export default function CommentContent({
             <Link to={`${clientRoot}/users/${commentState.author._id}`}>
               <div className="commentUsername">{fullname}</div>
             </Link>
-            {user && user.user._id === commentState.author._id && (
+            {user && user.userInfo._id === commentState.author._id && (
               <div className="commentDropdownContainer">
                 <div
                   className="commentMoreVertContainer"

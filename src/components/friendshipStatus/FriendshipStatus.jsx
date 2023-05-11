@@ -165,7 +165,7 @@ export default function FriendshipStatus({
 
     if (
       friendship.status === 0 &&
-      friendship.requester.toString() === user.user._id.toString()
+      friendship.requester.toString() === user.userInfo._id.toString()
     ) {
       friendshipStatusText = `You sent a friend request to ${fullname}`;
       return (
@@ -178,7 +178,7 @@ export default function FriendshipStatus({
 
     if (
       friendship.status === 0 &&
-      friendship.recipient.toString() === user.user._id.toString()
+      friendship.recipient.toString() === user.userInfo._id.toString()
     ) {
       friendshipStatusText = `${fullname} sent you a friend request`;
       return (

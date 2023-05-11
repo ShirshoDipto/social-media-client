@@ -73,9 +73,9 @@ export default function Topbar({ user }) {
               </div>
             </div>
             <div className="topbarDropdownContainer">
-              {user.user.profilePic ? (
+              {user.userInfo.profilePic ? (
                 <img
-                  src={`${serverRoot}/images/${user.user.profilePic}`}
+                  src={`${serverRoot}/images/${user.userInfo.profilePic}`}
                   alt=""
                   className="topbarImg"
                   onClick={() => {
@@ -98,16 +98,16 @@ export default function Topbar({ user }) {
               {dropdownStatus && (
                 <ul className="topbarDropdown" ref={dropdown}>
                   <Link
-                    to={`${clientRoot}/users/${user.user._id}`}
+                    to={`${clientRoot}/users/${user.userInfo._id}`}
                     className="routerLink"
                   >
                     <li
                       className="topbarDropdownProfile"
                       onClick={() => setDropdownStatus(!dropdownStatus)}
                     >
-                      {user.user.profilePic ? (
+                      {user.userInfo.profilePic ? (
                         <img
-                          src={`${serverRoot}/images/${user.user.profilePic}`}
+                          src={`${serverRoot}/images/${user.userInfo.profilePic}`}
                           alt=""
                           className="topbarImg"
                         />
@@ -118,7 +118,7 @@ export default function Topbar({ user }) {
                           className="topbarImg"
                         />
                       )}
-                      <span className="dropdownProfileName">{`${user.user.firstName} ${user.user.lastName}`}</span>
+                      <span className="dropdownProfileName">{`${user.userInfo.firstName} ${user.userInfo.lastName}`}</span>
                     </li>
                   </Link>
                   <hr className="dropdownHr" />

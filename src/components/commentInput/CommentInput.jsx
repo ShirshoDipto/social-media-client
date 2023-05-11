@@ -44,9 +44,9 @@ export default function CommentInput({
   return (
     <div className="commentInput">
       <div className="commentInputWrapper">
-        {user && user.user.profilePic ? (
+        {user && user.userInfo.profilePic ? (
           <img
-            src={`${serverRoot}/images/${user.user.profilePic}`}
+            src={`${serverRoot}/images/${user.userInfo.profilePic}`}
             alt=""
             className="commentInputUserImg"
           />

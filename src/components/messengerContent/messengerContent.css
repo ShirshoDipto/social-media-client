@@ -84,6 +84,36 @@
   gap: 20px;
 }
 
+.showMoreMsg {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.showMoreMsg button {
+  background-color: var(--searchBarDarkish);
+  color: var(--secondaryText);
+  border: none;
+  padding: 8px;
+  border-radius: 15px;
+}
+
+.showMoreMsg button:hover {
+  cursor: pointer;
+  background-color: var(--searchBar);
+}
+
+.showMoreMsg button:focus {
+  outline: none;
+}
+
+.showMoreMsg div {
+  border-bottom: thin solid var(--secondaryBorderBackground);
+  flex: 1;
+}
+
 .unseenMsgsText {
   display: flex;
   align-items: center;

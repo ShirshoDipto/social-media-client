@@ -5,11 +5,11 @@ export default function Conversation({ user, conversation, currentChat }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
 
   const unseenMsgs = conversation.unseenMsgs.find(
-    (msg) => msg.userId === user.user._id
+    (msg) => msg.userId === user.userInfo._id
   );
 
   const contact = conversation.members.find(
-    (member) => member._id !== user.user._id
+    (member) => member._id !== user.userInfo._id
   );
 
   const fullname = `${contact.firstName} ${contact.lastName}`;

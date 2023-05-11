@@ -42,10 +42,6 @@ export default function Login() {
     }
   }
 
-  async function handleGoogleLogin() {
-    window.open("http://localhost:5000/api/login/google", "_self");
-  }
-
   return (
     <div className="login">
       <div className="loginWrapper">
@@ -109,7 +105,9 @@ export default function Login() {
             <button
               type="button"
               className="loginGoogleButton"
-              onClick={handleGoogleLogin}
+              onClick={() => {
+                window.open("http://localhost:5000/api/login/google", "_self");
+              }}
             >
               <GoogleIcon color="action" />
               <span>Continue with Google</span>

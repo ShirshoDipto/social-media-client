@@ -225,7 +225,7 @@ export default function PostContent({
           </div>
         </div>
         <div className="postTopRight">
-          {user && user.user._id === post.author._id && (
+          {user && user.userInfo._id === post.author._id && (
             <div className="postDropdownContainer">
               <div
                 className="moreVertContainer"

@@ -97,7 +97,7 @@ export default function MessengerContent({ user }) {
       if (conv._id === convId) {
         const newConv = JSON.parse(JSON.stringify(conv));
         newConv.unseenMsgs.forEach((msg) => {
-          if (msg.userId === user.user._id) {
+          if (msg.userId === user.userInfo._id) {
             msg.numUnseen = 0;
           }
         });
@@ -116,7 +116,7 @@ export default function MessengerContent({ user }) {
     ]);
 
     const numUnseenMsgs = conv.unseenMsgs.find(
-      (elem) => elem.userId === user.user._id && elem.numUnseen > 0
+      (elem) => elem.userId === user.userInfo._id && elem.numUnseen > 0
     );
 
     if (numUnseenMsgs) {
@@ -137,9 +137,9 @@ export default function MessengerContent({ user }) {
         newConv.lastMsg = newMessage.content;
         newConv.updatedAt = new Date().toISOString();
 
-        if (!newMessage.seenBy.includes(user.user._id)) {
+        if (!newMessage.seenBy.includes(user.userInfo._id)) {
           for (let msg of newConv.unseenMsgs) {
-            if (msg.userId === user.user._id) {
+            if (msg.userId === user.userInfo._id) {
               msg.numUnseen += 1;
             }
           }
@@ -164,20 +164,20 @@ export default function MessengerContent({ user }) {
 
   async function sendSocketEvent(msgContent) {
     const receiver = currentChat.members.find(
-      (member) => member._id !== user.user._id
+      (member) => member._id !== user.userInfo._id
     );
 
     const msg = {
       _id: uuidv4(),
       conversationId: currentChat._id,
       sender: {
-        _id: user.user._id,
-        firstName: user.user.firstName,
-        lastName: user.user.lastName,
-        profilePic: user.user.profilePic,
+        _id: user.userInfo._id,
+        firstName: user.userInfo.firstName,
+        lastName: user.userInfo.lastName,
+        profilePic: user.userInfo.profilePic,
       },
       content: msgContent,
-      seenBy: [user.user._id],
+      seenBy: [user.userInfo._id],
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -204,7 +204,7 @@ export default function MessengerContent({ user }) {
     }
 
     socket.emit("currentChatActive", {
-      userId: user.user._id,
+      userId: user.userInfo._id,
       activeChat: conv,
     });
 
@@ -278,7 +278,7 @@ export default function MessengerContent({ user }) {
         }
 
         socket.emit("currentChatActive", {
-          userId: user.user._id,
+          userId: user.userInfo._id,
           activeChat: chatToActive,
         });
 
@@ -290,7 +290,7 @@ export default function MessengerContent({ user }) {
     async function fetchConversations() {
       try {
         const res = await fetch(
-          `${serverRoot}/api/messenger/conversations/${user.user._id}`,
+          `${serverRoot}/api/messenger/conversations/${user.userInfo._id}`,
           {
             headers: {
               Authorization: `Bearer ${user.token}`,
@@ -317,12 +317,12 @@ export default function MessengerContent({ user }) {
   }, [serverRoot, user]);
 
   useEffect(() => {
-    socket.emit("messengerActive", user.user._id);
+    socket.emit("messengerActive", user.userInfo._id);
 
     return () => {
-      socket.emit("messengerDeactive", user.user._id);
+      socket.emit("messengerDeactive", user.userInfo._id);
     };
-  }, [user.user._id]);
+  }, [user.userInfo._id]);
 
   useEffect(() => {
     oldMsgRef.current?.scrollIntoView({
@@ -380,15 +380,29 @@ export default function MessengerContent({ user }) {
           <div className="selectChatText">Select a chat to start messaging</div>
         ) : (
           <div className="chatBoxWrapper">
-            {/* <ChatBoxTop user={user} currentChat={currentChat} /> */}
             <div className="chatBoxCenter">
               {oldMsgs.length > 0 && (
                 <div className="oldMsgs">
+                  <div className="showMoreMsg">
+                    <div></div>
+                    <button
+                      onClick={async () => {
+                        const msgs = await getOldMsgs(
+                          currentChat._id,
+                          oldMsgs.length
+                        );
+                        setOldMsgs([...msgs, ...oldMsgs]);
+                      }}
+                    >
+                      Show More
+                    </button>
+                    <div></div>
+                  </div>
                   {oldMsgs.map((msg) => {
                     return (
                       <div key={msg._id} ref={oldMsgRef}>
                         <Message
-                          own={msg.sender._id === user.user._id}
+                          own={msg.sender._id === user.userInfo._id}
                           msg={msg}
                         />
                       </div>
@@ -409,7 +423,7 @@ export default function MessengerContent({ user }) {
                     return (
                       <div key={msg._id}>
                         <Message
-                          own={msg.sender._id === user.user._id}
+                          own={msg.sender._id === user.userInfo._id}
                           msg={msg}
                         />
                       </div>
@@ -423,7 +437,7 @@ export default function MessengerContent({ user }) {
                     return (
                       <div key={msg._id} ref={newMsgRef}>
                         <Message
-                          own={msg.sender._id === user.user._id}
+                          own={msg.sender._id === user.userInfo._id}
                           msg={msg}
                         />
                       </div>

@@ -66,7 +66,7 @@ export default function ProfileContent({ user }) {
   }
 
   async function fetchUserFriendship() {
-    if (user.user._id.toString() === params.userId.toString()) {
+    if (!user || user.userInfo._id.toString() === params.userId.toString()) {
       return null;
     }
 
@@ -190,14 +190,15 @@ export default function ProfileContent({ user }) {
                 )}
               </div>
 
-              {user && user.user._id !== userBio._id ? (
+              {user && user.userInfo._id !== userBio._id && (
                 <FriendshipStatus
                   user={user}
                   userBio={userBio}
                   friendship={friendship}
                   setFriendship={setFriendship}
                 />
-              ) : (
+              )}
+              {user && user.userInfo._id === userBio._id && (
                 <div
                   className="editProfileContainer"
                   onClick={() => {

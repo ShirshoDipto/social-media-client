@@ -8,7 +8,7 @@ export default function ChatBoxForm({ user, currentChat, handleSubmit }) {
   const msgContent = useRef();
 
   const contact = currentChat.members.find(
-    (member) => member._id !== user.user._id
+    (member) => member._id !== user.userInfo._id
   );
 
   let timeout = null;

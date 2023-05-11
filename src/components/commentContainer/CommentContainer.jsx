@@ -14,9 +14,9 @@ export default function CommentContainer({ user, post, setNumComments }) {
   async function addNewComment(newComment) {
     newComment.author = {
       _id: newComment.author,
-      firstName: user.user.firstName,
-      lastName: user.user.lastName,
-      profilePic: user.user.profilePic,
+      firstName: user.userInfo.firstName,
+      lastName: user.userInfo.lastName,
+      profilePic: user.userInfo.profilePic,
     };
 
     setCommentsState({
