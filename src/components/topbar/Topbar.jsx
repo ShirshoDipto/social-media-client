@@ -1,11 +1,11 @@
 import "./topbar.css";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import SearchBar from "../searchBar/SearchBar";
-import FriendReq from "../friendReq/FriendReq";
-import NewMsg from "../newMsg/NewMsg";
-import GeneralNotification from "../generalNotification/GeneralNotification";
+import NewMsgNotifs from "../newMsgNotifs/NewMsgNotifs";
+import GeneralNotifs from "../generalNotifs/GeneralNotifs";
+import FriendReqNotifs from "../friendReqNotifs/FriendReqNotifs";
 
 export default function Topbar({ user }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
@@ -13,6 +13,7 @@ export default function Topbar({ user }) {
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const dropdown = useRef();
   const dropdownTrigger = useRef();
+  const location = useLocation();
 
   async function handleLogout() {
     try {
@@ -50,6 +51,10 @@ export default function Topbar({ user }) {
     };
   }, []);
 
+  if (location.pathname === "/login" || location.pathname === "/signup") {
+    return null;
+  }
+
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">
@@ -63,13 +68,13 @@ export default function Topbar({ user }) {
           <div className="topbarRightWrapper">
             <div className="topbarIcons">
               <div className="topbarIconItem">
-                <FriendReq user={user} />
+                <FriendReqNotifs user={user} />
               </div>
               <div className="topbarIconItem">
-                <NewMsg user={user} />
+                <NewMsgNotifs user={user} />
               </div>
               <div className="topbarIconItem">
-                <GeneralNotification user={user} />
+                <GeneralNotifs user={user} />
               </div>
             </div>
             <div className="topbarDropdownContainer">

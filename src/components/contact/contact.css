@@ -1,0 +1,48 @@
+.contact {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  padding: 5px;
+  border-radius: 5px;
+}
+.contact:hover {
+  background-color: var(--searchBarDarkish);
+}
+
+.contactProfileImgContainer {
+  margin-right: 10px;
+  position: relative;
+}
+
+.contactProfileImg {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.contactOnline, .contactOffline {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 2px;
+  right: 0;
+}
+
+.contactOnline {
+  background-color: limegreen;
+}
+
+.contactOffline {
+  background-color: gray;
+}
+
+.contactUsername {
+  font-weight: 500;
+  color: var(--primaryText);
+}
+
+.contactUsername:hover {
+  text-decoration: underline;
+}

@@ -191,7 +191,7 @@ export default function CommentContent({
     fetchUserLike().catch((err) => {
       console.log(err);
     });
-  }, []);
+  }, [comment._id, serverRoot, user]);
 
   useEffect(() => {
     function handleClickOutside(e) {

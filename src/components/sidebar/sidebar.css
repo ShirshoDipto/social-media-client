@@ -1,8 +1,10 @@
 .sidebar {
-  flex: 2.5;
+  flex: 2;
+  max-width: 300px;
   height: calc(100vh - 50px);
   position: sticky;
   top: 50px;
+  font-size: 0.9rem;
 }
 
 .sidebarWrapper {

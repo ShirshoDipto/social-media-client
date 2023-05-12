@@ -24,10 +24,7 @@ export default function PostInput({ user, posts, setPosts }) {
     };
 
     setPosts([newPost, ...posts]);
-    socket.emit("sendPost", {
-      userId: user.userInfo._id,
-      post: newPost,
-    });
+    socket.emit("sendPost", user.userInfo._id);
   }
 
   async function handleRemoveImg() {

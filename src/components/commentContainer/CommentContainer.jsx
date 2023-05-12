@@ -53,7 +53,7 @@ export default function CommentContainer({ user, post, setNumComments }) {
     fetchComments().catch((err) => {
       console.log(err);
     });
-  }, []);
+  }, [serverRoot, commentsState.comments, post._id]);
 
   return (
     <div className="commentContainer">

@@ -1,20 +1,17 @@
-import "./friendReq.css";
+import "./friendReqNotifs.css";
 import PersonIcon from "@mui/icons-material/Person";
-import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import Notification from "../notification/Notification";
 
-export default function FriendReq({ user }) {
+export default function FriendReqNotifs({ user }) {
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const dropdown = useRef();
   const dropdownTrigger = useRef();
   const [notifications, setNotifications] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [isConfirmed, setIsConfirmed] = useState(false);
 
-  const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const serverRoot = process.env.REACT_APP_SERVERROOT;
 
   async function handleClose() {
@@ -36,7 +33,6 @@ export default function FriendReq({ user }) {
   );
 
   async function rejectFriendRequest(notif) {
-    setIsLoading(true);
     try {
       const res = await fetch(
         `${serverRoot}/api/users/${notif.sender._id}/friendships/${notif.friendshipId}`,
@@ -55,14 +51,12 @@ export default function FriendReq({ user }) {
 
       const newNotifications = notifications.filter((n) => n._id !== notif._id);
       setNotifications(newNotifications);
-      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
   }
 
   async function acceptFriendRequest(notif) {
-    setIsLoading(true);
     try {
       const res = await fetch(
         `${serverRoot}/api/users/${notif.sender._id}/friendships/${notif.friendshipId}`,
@@ -82,7 +76,6 @@ export default function FriendReq({ user }) {
       const newNotifications = notifications.filter((n) => n._id !== notif._id);
       setNotifications(newNotifications);
       setIsConfirmed(true);
-      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -100,12 +93,11 @@ export default function FriendReq({ user }) {
         throw resData;
       }
       setNotifications(resData.notifications);
-      setIsLoading(false);
     }
     fetchFndReqNotifications().catch((err) => {
       console.log(err);
     });
-  }, []);
+  }, [serverRoot, user.token]);
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -144,46 +136,12 @@ export default function FriendReq({ user }) {
             <div className="notificationList">
               {notifications.map((notif) => {
                 return (
-                  <div key={notif._id} className="notificationItem">
-                    <img
-                      src={
-                        notif.sender.profilePic
-                          ? `${serverRoot}/images/${notif.sender.profilePic}`
-                          : `${clientRoot}/assets/person/noAvatar.png`
-                      }
-                      alt=""
-                      className="notifMsgLeft"
-                    />
-                    <div className="notifMsgRight">
-                      <div className="notifMsgText">
-                        <Link
-                          className="routerLink"
-                          to={`${clientRoot}/users/${notif.sender._id}`}
-                        >
-                          <b className="notifSenderName">{`${notif.sender.firstName} ${notif.sender.lastName}`}</b>
-                        </Link>{" "}
-                        has sent you a friend request.
-                      </div>
-                      <div className="notifMsgOption">
-                        <button
-                          className="fndAccept"
-                          onClick={() => {
-                            acceptFriendRequest(notif);
-                          }}
-                        >
-                          Accept
-                        </button>
-                        <button
-                          className="fndReject"
-                          onClick={(e) => {
-                            rejectFriendRequest(notif);
-                          }}
-                        >
-                          Reject
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+                  <Notification
+                    key={notif._id}
+                    notif={notif}
+                    acceptFriendRequest={acceptFriendRequest}
+                    rejectFriendRequest={rejectFriendRequest}
+                  />
                 );
               })}
             </div>

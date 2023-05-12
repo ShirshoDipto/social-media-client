@@ -130,6 +130,7 @@ export default function MessengerContent({ user }) {
     setNewMsgs([]);
   }
 
+  // eslint-disable-next-line
   async function updateConvsForNewMsg(newMessage) {
     const newConversations = conversations.map((conv) => {
       if (newMessage.conversationId === conv._id) {
@@ -314,6 +315,7 @@ export default function MessengerContent({ user }) {
     fetchConversations().catch((err) => {
       console.log(err);
     });
+    // eslint-disable-next-line
   }, [serverRoot, user]);
 
   useEffect(() => {
@@ -389,7 +391,7 @@ export default function MessengerContent({ user }) {
                       onClick={async () => {
                         const msgs = await getOldMsgs(
                           currentChat._id,
-                          oldMsgs.length
+                          oldMsgs.length + unseenMsgs.length + newMsgs.length
                         );
                         setOldMsgs([...msgs, ...oldMsgs]);
                       }}

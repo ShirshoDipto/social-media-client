@@ -1,6 +1,9 @@
 import "./conversation.css";
+import { socket } from "../../socket";
+import { useEffect, useState } from "react";
 
 export default function Conversation({ user, conversation, currentChat }) {
+  const [isActive, setIsActive] = useState(null);
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const serverRoot = process.env.REACT_APP_SERVERROOT;
 
@@ -14,6 +17,21 @@ export default function Conversation({ user, conversation, currentChat }) {
 
   const fullname = `${contact.firstName} ${contact.lastName}`;
 
+  useEffect(() => {
+    function onUserStatus({ userId, status }) {
+      if (userId === contact._id) {
+        setIsActive(status);
+      }
+    }
+
+    socket.on("receiveUserStatus", onUserStatus);
+    socket.emit("getUserStatus", contact);
+
+    return () => {
+      socket.off("receiveUserStatus", onUserStatus);
+    };
+  }, [contact]);
+
   return (
     <div
       className={
@@ -22,15 +40,21 @@ export default function Conversation({ user, conversation, currentChat }) {
           : "conversation"
       }
     >
-      <img
-        src={
-          contact.profilePic
-            ? `${serverRoot}/images/${contact.profilePic}`
-            : `${clientRoot}/assets/person/noAvatar.png`
-        }
-        alt=""
-        className="conversationImg"
-      />
+      <div className="convImgContainer">
+        <img
+          src={
+            contact.profilePic
+              ? `${serverRoot}/images/${contact.profilePic}`
+              : `${clientRoot}/assets/person/noAvatar.png`
+          }
+          alt=""
+          className="conversationImg"
+        />
+
+        <span
+          className={isActive ? "convUserOnline" : "convUserOffline"}
+        ></span>
+      </div>
       <div className="conversationTexts">
         <div className="conversationName">{fullname}</div>
         <div className="convLatestContainer">

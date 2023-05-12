@@ -15,6 +15,10 @@
   background-color: var(--searchBar);
 }
 
+.convImgContainer {
+  position: relative;
+}
+
 .conversationImg {
   width: 40px;
   height: 40px;
@@ -23,13 +27,29 @@
   flex-shrink: 0;
 }
 
+.convUserOnline, .convUserOffline {
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 2px;
+  right: 0;
+}
+
+.convUserOnline {
+  background-color: limegreen;
+}
+
+.convUserOffline {
+  background-color: gray;
+}
+
 .conversationTexts {
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 5px;
   width: 100%;
-  /* border: thin solid red; */
 }
 
 .convLatestContainer {

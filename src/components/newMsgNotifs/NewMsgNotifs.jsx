@@ -1,9 +1,10 @@
-import "./newMsg.css";
+import "./newMsgNotifs.css";
 import ChatIcon from "@mui/icons-material/Chat";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { socket } from "../../socket";
+import Notification from "../notification/Notification";
 
 export default function NewMsg({ user }) {
   const [dropdownStatus, setDropdownStatus] = useState(false);
@@ -43,7 +44,7 @@ export default function NewMsg({ user }) {
   }
 
   async function markAllAsRead() {
-    if (isMarked) {
+    if (isMarked || notifications.length === 0) {
       return;
     }
 
@@ -158,31 +159,7 @@ export default function NewMsg({ user }) {
           ) : notifications.length > 0 ? (
             <div className="msgNotificationList">
               {notifications.map((notif) => {
-                return (
-                  <div key={notif._id} className="notificationItem">
-                    <img
-                      src={
-                        notif.sender.profilePic
-                          ? `${serverRoot}/images/${notif.sender.profilePic}`
-                          : `${clientRoot}/assets/person/noAvatar.png`
-                      }
-                      alt=""
-                      className="notifMsgLeft"
-                    />
-
-                    <div className="notifMsgRight">
-                      <div className="notifMsgText">
-                        <Link
-                          className="routerLink"
-                          to={`${clientRoot}/users/${notif.sender._id}`}
-                        >
-                          <b className="notifSenderName">{`${notif.sender.firstName} ${notif.sender.lastName}`}</b>
-                        </Link>{" "}
-                        sent a message.
-                      </div>
-                    </div>
-                  </div>
-                );
+                return <Notification key={notif._id} notif={notif} />;
               })}
             </div>
           ) : (

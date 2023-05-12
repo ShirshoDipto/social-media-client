@@ -1,11 +1,11 @@
-import "./generalNotification.css";
+import "./generalNotifs.css";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import { socket } from "../../socket";
+import Notification from "../notification/Notification";
 
-export default function GeneralNotification({ user }) {
+export default function GeneralNotifs({ user }) {
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const dropdown = useRef();
   const dropdownTrigger = useRef();
@@ -15,7 +15,6 @@ export default function GeneralNotification({ user }) {
   const [isMarked, setIsMarked] = useState(false);
   const [numNotif, setNumNotif] = useState(0);
 
-  const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const serverRoot = process.env.REACT_APP_SERVERROOT;
 
   async function fetchOldNotifications() {
@@ -43,7 +42,7 @@ export default function GeneralNotification({ user }) {
   }
 
   async function markAllAsRead() {
-    if (isMarked) {
+    if (isMarked || notifications.length === 0) {
       return;
     }
 
@@ -159,34 +158,7 @@ export default function GeneralNotification({ user }) {
           ) : notifications.length > 0 ? (
             <div className="genNotificationList">
               {notifications.map((notif) => {
-                return (
-                  <div key={notif._id} className="notificationItem">
-                    <img
-                      src={
-                        notif.sender.profilePic
-                          ? `${serverRoot}/images/${notif.sender.profilePic}`
-                          : `${clientRoot}/assets/person/noAvatar.png`
-                      }
-                      alt=""
-                      className="notifMsgLeft"
-                    />
-
-                    <div className="notifMsgRight">
-                      <div className="notifMsgText">
-                        <Link
-                          className="routerLink"
-                          to={`${clientRoot}/users/${notif.sender._id}`}
-                        >
-                          <b className="notifSenderName">{`${notif.sender.firstName} ${notif.sender.lastName}`}</b>
-                        </Link>{" "}
-                        {notif.notificationType === 1 &&
-                          "has accepted your friend request"}
-                        {notif.notificationType === 3 &&
-                          "has uploaded a new post"}
-                      </div>
-                    </div>
-                  </div>
-                );
+                return <Notification key={notif._id} notif={notif} />;
               })}
             </div>
           ) : (

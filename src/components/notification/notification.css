@@ -1,0 +1,61 @@
+.notificationItem{
+  width: 250px;
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background-color: var(--profileTop);
+  border-radius: 5px;
+}
+
+.notifMsgLeft {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.notifMsgRight {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+.notifMsgText {
+  font-size: 0.8rem;
+}
+
+.notifSenderName:hover {
+  text-decoration: underline;
+}
+
+.notifMsgOption {
+  display: flex;
+  gap: 10px;
+}
+
+.fndAccept, .fndReject {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 60px;
+  height: 25px;
+  border: none;
+  border-radius: 5px;
+  color: var(--primaryText);
+  cursor: pointer;
+}
+
+.fndAccept:focus, .fndReject:focus {
+  outline: none;
+} 
+
+.fndAccept {
+  background-color: var(--topbarBackground);
+}
+
+.fndReject {
+  background-color: rgb(196, 51, 51);
+}

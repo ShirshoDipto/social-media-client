@@ -1,0 +1,36 @@
+.contacts {
+  flex: 2;
+  max-width: 300px;
+  position: sticky;
+  top: 50px;
+  height: calc(100vh - 50px);
+  font-size: 0.9rem;
+}
+
+.contactsWrapper {
+  padding: 20px 20px 0 0;
+}
+
+.contactsTitle {
+  margin-bottom: 20px;
+  color: var(--primaryText);
+}
+
+.contactsList {
+  list-style: none;
+  padding: 10px 0 10px 0;
+  height: 350px;
+  overflow-y: hidden;
+}
+
+.contactsList:hover {
+  overflow-y: overlay;
+}
+
+.noFndsText {
+  width: 100%;
+  text-align: center;
+  color: var(--secondaryText);
+  font-size: 0.8rem;
+}
+

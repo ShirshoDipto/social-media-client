@@ -40,7 +40,7 @@ function App() {
 
         localStorage.setItem("nosebookUser", JSON.stringify(resData));
         setCurrentUser({
-          user: resData.user,
+          userInfo: resData.userInfo,
           token: resData.token,
         });
       } catch (err) {
@@ -53,12 +53,13 @@ function App() {
         return console.log(err);
       });
     }
-    // eslint-disable-next-line
-  }, []);
+  }, [serverRoot, currentUser]);
 
   useEffect(() => {
-    socket.auth = { user: currentUser && currentUser };
-    socket.connect();
+    if (currentUser) {
+      socket.auth = { user: currentUser && currentUser };
+      socket.connect();
+    }
 
     return () => {
       socket.disconnect();
@@ -69,7 +70,7 @@ function App() {
     <BrowserRouter>
       <ScrollToTop />
       <div className="App">
-        {/* <Topbar user={currentUser} /> */}
+        <Topbar user={currentUser} />
         <Routes>
           <Route path="/" element={<Homepage user={currentUser} />} />
           <Route

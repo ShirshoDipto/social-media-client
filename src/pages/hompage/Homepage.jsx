@@ -1,17 +1,17 @@
 import "./homepage.css";
-import Topbar from "../../components/topbar/Topbar";
+// import Topbar from "../../components/topbar/Topbar";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Feed from "../../components/feed/Feed";
-import Rightbar from "../../components/rightbar/Rightbar";
+import Contacts from "../../components/contacts/Contacts";
 
 export default function Homepage({ user }) {
   return (
     <div className="home">
-      <Topbar user={user} />
+      {/* <Topbar user={user} /> */}
       <div className="homepageContainer">
         <Sidebar user={user} />
         <Feed user={user} />
-        <Rightbar user={user} />
+        <Contacts user={user} />
       </div>
     </div>
   );
