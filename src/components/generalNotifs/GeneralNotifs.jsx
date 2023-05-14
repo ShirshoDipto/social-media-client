@@ -123,7 +123,16 @@ export default function GeneralNotifs({ user }) {
       setIsMarked(false);
     }
 
+    function onFndReq(notif) {
+      if (notif.notificationType === 1) {
+        setNotifications((n) => [notif, ...n]);
+        setNumNotif((n) => n + 1);
+        setIsMarked(false);
+      }
+    }
+
     socket.on("getPost", onNewPost);
+    socket.on("getFndReq", onFndReq);
 
     return () => {
       socket.off("getPost", onNewPost);

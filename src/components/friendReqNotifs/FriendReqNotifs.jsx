@@ -4,6 +4,7 @@ import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
 import { useEffect, useRef, useState } from "react";
 import Notification from "../notification/Notification";
+import { socket } from "../../socket";
 
 export default function FriendReqNotifs({ user }) {
   const [dropdownStatus, setDropdownStatus] = useState(false);
@@ -14,18 +15,18 @@ export default function FriendReqNotifs({ user }) {
 
   const serverRoot = process.env.REACT_APP_SERVERROOT;
 
-  async function handleClose() {
-    setIsConfirmed(false);
-  }
-
   const fndReqConfirmed = (
     <div className="fndReqConfirmed">
       <Snackbar
         open={isConfirmed}
         autoHideDuration={3000}
-        onClose={handleClose}
+        onClose={() => setIsConfirmed(false)}
       >
-        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+        <Alert
+          onClose={() => setIsConfirmed(false)}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
           Friend request accepted successfully
         </Alert>
       </Snackbar>
@@ -51,8 +52,12 @@ export default function FriendReqNotifs({ user }) {
 
       const newNotifications = notifications.filter((n) => n._id !== notif._id);
       setNotifications(newNotifications);
+      setDropdownStatus(false);
     } catch (error) {
       console.log(error);
+      const newNotifications = notifications.filter((n) => n._id !== notif._id);
+      setNotifications(newNotifications);
+      setDropdownStatus(false);
     }
   }
 
@@ -76,8 +81,13 @@ export default function FriendReqNotifs({ user }) {
       const newNotifications = notifications.filter((n) => n._id !== notif._id);
       setNotifications(newNotifications);
       setIsConfirmed(true);
+      setDropdownStatus(false);
+      socket.emit("sendFndReq", resData.notification);
     } catch (error) {
       console.log(error);
+      const newNotifications = notifications.filter((n) => n._id !== notif._id);
+      setNotifications(newNotifications);
+      setDropdownStatus(false);
     }
   }
 
@@ -114,6 +124,20 @@ export default function FriendReqNotifs({ user }) {
 
     return () => {
       document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    function onFndReq(notif) {
+      if (notif.notificationType === 0) {
+        setNotifications((n) => [notif, ...n]);
+      }
+    }
+
+    socket.on("getFndReq", onFndReq);
+
+    return () => {
+      socket.off("getFndReq", onFndReq);
     };
   }, []);
 

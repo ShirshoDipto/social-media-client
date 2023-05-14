@@ -9,6 +9,8 @@ export default function Notification({
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const serverRoot = process.env.REACT_APP_SERVERROOT;
 
+  const fullname = `${notif.sender.firstName} ${notif.sender.lastName}`;
+
   return (
     <div key={notif._id} className="notificationItem">
       <img
@@ -26,7 +28,7 @@ export default function Notification({
             className="routerLink"
             to={`${clientRoot}/users/${notif.sender._id}`}
           >
-            <b className="notifSenderName">{`${notif.sender.firstName} ${notif.sender.lastName}`}</b>
+            <b className="notifSenderName">{fullname}</b>
           </Link>{" "}
           {notif.notificationType === 0 && "has sent you a friend request"}
           {notif.notificationType === 1 && "has accepted your friend request"}

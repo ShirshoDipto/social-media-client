@@ -5,6 +5,7 @@ import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Link, useParams } from "react-router-dom";
 import { useState } from "react";
+import { socket } from "../../socket";
 
 export default function FriendshipStatus({
   user,
@@ -40,6 +41,7 @@ export default function FriendshipStatus({
 
       setFriendship(resData.friendship);
       setIsLoading(false);
+      socket.emit("sendFndReq", resData.notification);
     } catch (error) {
       console.log(error);
     }
@@ -115,6 +117,7 @@ export default function FriendshipStatus({
 
       setFriendship(resData.friendship);
       setIsLoading(false);
+      // socket.emit("sendFndReq", )
     } catch (error) {
       console.log(error);
     }
