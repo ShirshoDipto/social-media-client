@@ -130,7 +130,13 @@ export default function FriendReqNotifs({ user }) {
   useEffect(() => {
     function onFndReq(notif) {
       if (notif.notificationType === 0) {
-        setNotifications((n) => [notif, ...n]);
+        const existingNotif = notifications.find(
+          (n) => n.sender._id === notif.sender._id
+        );
+
+        if (!existingNotif) {
+          setNotifications((n) => [notif, ...n]);
+        }
       }
     }
 
@@ -139,7 +145,7 @@ export default function FriendReqNotifs({ user }) {
     return () => {
       socket.off("getFndReq", onFndReq);
     };
-  }, []);
+  }, [notifications]);
 
   return (
     <div className="notifContainer">

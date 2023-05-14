@@ -24,31 +24,6 @@ export default function ProfileContent({ user }) {
   const [isMorePostsLoading, setIsMorePostsLoading] = useState(false);
   const [hasNoMorePosts, setHasNoMorePosts] = useState(false);
 
-  async function loadMorePosts() {
-    try {
-      setIsMorePostsLoading(true);
-
-      const res = await fetch(
-        `${serverRoot}/api/users/${params.userId}/posts?skip=${userPosts.length}`
-      );
-
-      const resData = await res.json();
-
-      if (!res.ok) {
-        throw resData;
-      }
-
-      if (resData.posts.length < 10) {
-        setHasNoMorePosts(true);
-      }
-
-      setUserPosts([...userPosts, ...resData.posts]);
-      setIsMorePostsLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   async function fetchUserBio() {
     try {
       const res = await fetch(`${serverRoot}/api/users/${params.userId}`);
@@ -135,23 +110,26 @@ export default function ProfileContent({ user }) {
     fetchUserInfos().catch((err) => {
       console.log(err);
     });
-
-    return () => {
-      setIsLoading(true);
-      setHasNoMorePosts(false);
-    };
     // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
-    function onScroll() {
+    async function onScroll() {
       const scrollTop = document.documentElement.scrollTop;
       const offsetHeight = document.documentElement.offsetHeight;
       const innerHeight = window.innerHeight;
 
       if (scrollTop + innerHeight + 1 >= offsetHeight) {
         if (!hasNoMorePosts) {
-          loadMorePosts();
+          setIsMorePostsLoading(true);
+          const newPosts = await fetchUserPosts();
+
+          if (newPosts.length < 10) {
+            setHasNoMorePosts(true);
+          }
+
+          setUserPosts([...userPosts, ...newPosts]);
+          setIsMorePostsLoading(false);
         }
       }
     }
@@ -214,7 +192,6 @@ export default function ProfileContent({ user }) {
                   user={user}
                   userBio={userBio}
                   friendship={friendship}
-                  setFriendship={setFriendship}
                 />
               )}
               {user && user.userInfo._id === userBio._id && (

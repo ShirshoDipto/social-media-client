@@ -7,16 +7,12 @@ import { Link, useParams } from "react-router-dom";
 import { useState } from "react";
 import { socket } from "../../socket";
 
-export default function FriendshipStatus({
-  user,
-  userBio,
-  friendship,
-  setFriendship,
-}) {
+export default function FriendshipStatus({ user, userBio, friendship }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const params = useParams();
   const [isLoading, setIsLoading] = useState(false);
+  const [fndshipState, setFndshipState] = useState(friendship);
 
   let friendshipStatusText;
   const fullname = userBio.firstName + " " + userBio.lastName;
@@ -39,7 +35,7 @@ export default function FriendshipStatus({
         throw resData;
       }
 
-      setFriendship(resData.friendship);
+      setFndshipState(resData.friendship);
       setIsLoading(false);
       socket.emit("sendFndReq", resData.notification);
     } catch (error) {
@@ -51,7 +47,7 @@ export default function FriendshipStatus({
     try {
       setIsLoading(true);
       const res = await fetch(
-        `${serverRoot}/api/users/${params.userId}/friendships/${friendship._id}/cancel`,
+        `${serverRoot}/api/users/${params.userId}/friendships/${fndshipState._id}/cancel`,
         {
           method: "DELETE",
           headers: {
@@ -65,7 +61,7 @@ export default function FriendshipStatus({
         throw resData;
       }
 
-      setFriendship(resData.friendship);
+      setFndshipState(resData.friendship);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -76,7 +72,7 @@ export default function FriendshipStatus({
     try {
       setIsLoading(true);
       const res = await fetch(
-        `${serverRoot}/api/users/${params.userId}/friendships/${friendship._id}`,
+        `${serverRoot}/api/users/${params.userId}/friendships/${fndshipState._id}`,
         {
           method: "DELETE",
           headers: {
@@ -90,7 +86,7 @@ export default function FriendshipStatus({
         throw resData;
       }
 
-      setFriendship(null);
+      setFndshipState(null);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -101,7 +97,7 @@ export default function FriendshipStatus({
     try {
       setIsLoading(true);
       const res = await fetch(
-        `${serverRoot}/api/users/${params.userId}/friendships/${friendship._id}`,
+        `${serverRoot}/api/users/${params.userId}/friendships/${fndshipState._id}`,
         {
           method: "PUT",
           headers: {
@@ -115,7 +111,7 @@ export default function FriendshipStatus({
         throw resData;
       }
 
-      setFriendship(resData.friendship);
+      setFndshipState(resData.friendship);
       setIsLoading(false);
       // socket.emit("sendFndReq", )
     } catch (error) {
@@ -141,7 +137,7 @@ export default function FriendshipStatus({
         throw resData;
       }
 
-      setFriendship(null);
+      setFndshipState(null);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -149,7 +145,7 @@ export default function FriendshipStatus({
   }
 
   function getFriendshipUI() {
-    if (!friendship) {
+    if (!fndshipState) {
       return (
         <div className="friendshipStatus" onClick={sendFriendRequest}>
           <PersonAddIcon />
@@ -158,7 +154,7 @@ export default function FriendshipStatus({
       );
     }
 
-    if (friendship.status === 1) {
+    if (fndshipState.status === 1) {
       friendshipStatusText = `You are friends with ${fullname}`;
       return (
         <div className="friendshipStatus" onClick={removeFromFriendList}>
@@ -169,8 +165,8 @@ export default function FriendshipStatus({
     }
 
     if (
-      friendship.status === 0 &&
-      friendship.requester.toString() === user.userInfo._id.toString()
+      fndshipState.status === 0 &&
+      fndshipState.requester.toString() === user.userInfo._id.toString()
     ) {
       friendshipStatusText = `You sent a friend request to ${fullname}`;
       return (
@@ -182,8 +178,8 @@ export default function FriendshipStatus({
     }
 
     if (
-      friendship.status === 0 &&
-      friendship.recipient.toString() === user.userInfo._id.toString()
+      fndshipState.status === 0 &&
+      fndshipState.recipient.toString() === user.userInfo._id.toString()
     ) {
       friendshipStatusText = `${fullname} sent you a friend request`;
       return (
