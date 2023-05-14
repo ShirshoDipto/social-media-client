@@ -91,11 +91,19 @@ export default function Contacts({ user }) {
         <div className="contactsList">
           {onlineFnds.length > 0 &&
             onlineFnds.map((fnd) => {
-              return <Contact key={fnd._id} fnd={fnd} status={true} />;
+              if (fnd) {
+                return <Contact key={fnd._id} fnd={fnd} status={true} />;
+              } else {
+                return null;
+              }
             })}
           {offlineFnds.length > 0 &&
             offlineFnds.map((fnd) => {
-              return <Contact key={fnd._id} fnd={fnd} status={false} />;
+              if (fnd) {
+                return <Contact key={fnd._id} fnd={fnd} status={false} />;
+              } else {
+                return null;
+              }
             })}
         </div>
       </div>
