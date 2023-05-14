@@ -67,8 +67,17 @@ export default function ChatBoxForm({ user, currentChat, handleSubmit }) {
       }}
       autoComplete="off"
     >
-      <div className="isTyping">
-        {isTyping && <span>{contact.firstName} is typing ...</span>}
+      <div className="isTypingContainer">
+        {isTyping && (
+          <div className="isTypingWrapper">
+            <div>{contact.firstName} is typing</div>
+            <div className="typingIndicator">
+              <span className="dot"></span>
+              <span className="dot"></span>
+              <span className="dot"></span>
+            </div>
+          </div>
+        )}
       </div>
       <div className="formInputContainer">
         <input

@@ -5,10 +5,15 @@
   padding: 5px 50px 20px 50px;
 }
 
-.isTyping {
+.isTypingContainer {
   color: var(--typingText);
   font-size: 0.7rem;
   height: 20px;
+}
+
+.isTypingWrapper {
+  display: flex;
+  gap: 5px;
 }
 
 .formInputContainer {
@@ -49,4 +54,54 @@
 }
 
 /* Typing indicator styling */
+
+.typingIndicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+  padding-top: 5px;
+}
+
+.dot {
+  height: 4px;
+  width: 4px;
+  background-color: var(--typingText);
+  border-radius: 50%;
+  display: inline-block;
+  animation: typing 0.8s infinite;
+}
+
+.dot:nth-child(1) {
+  animation-delay: 0ms;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 200ms;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 400ms;
+}
+
+@keyframes typing {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-2px);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+
+
+
+
+
 
