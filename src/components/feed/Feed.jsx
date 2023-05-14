@@ -70,27 +70,22 @@ export default function Feed({ user }) {
   return (
     <div className="feed">
       <div className="feedWrapper">
-        {isInitialLoading ? (
+        {isInitialLoading && (
           <div className="homeLoadingFixed">
             <CircularProgress className="loadingFixed" disableShrink />
           </div>
+        )}
+        <PostInput user={user} posts={posts} setPosts={setPosts} />
+        <Posts user={user} posts={posts} setPosts={setPosts} />
+        {isMorePostsLoading ? (
+          <CircularProgress className="homePostsLoading" disableShrink />
         ) : (
-          <>
-            <PostInput user={user} posts={posts} setPosts={setPosts} />
-            <Posts user={user} posts={posts} setPosts={setPosts} />
-            {isMorePostsLoading ? (
-              <CircularProgress className="homePostsLoading" disableShrink />
-            ) : (
-              hasNoMorePosts &&
-              (posts.length === 0 ? (
-                <span className="noMorePoststext">No posts available. </span>
-              ) : (
-                <span className="noMorePoststext">
-                  No more posts available.{" "}
-                </span>
-              ))
-            )}
-          </>
+          hasNoMorePosts &&
+          (posts.length === 0 ? (
+            <span className="noMorePoststext">No posts available. </span>
+          ) : (
+            <span className="noMorePoststext">No more posts available. </span>
+          ))
         )}
       </div>
     </div>
