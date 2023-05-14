@@ -71,7 +71,9 @@ export default function Feed({ user }) {
     <div className="feed">
       <div className="feedWrapper">
         {isInitialLoading ? (
-          <CircularProgress className="homePostsLoading" disableShrink />
+          <div className="homeLoadingFixed">
+            <CircularProgress className="loadingFixed" disableShrink />
+          </div>
         ) : (
           <>
             <PostInput user={user} posts={posts} setPosts={setPosts} />

@@ -6,6 +6,7 @@ import "./contacts.css";
 export default function Contacts({ user }) {
   const [onlineFnds, setOnlineFnds] = useState([]);
   const [offlineFnds, setOfflineFnds] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const serverRoot = process.env.REACT_APP_SERVERROOT;
 
@@ -33,6 +34,7 @@ export default function Contacts({ user }) {
     function onFndsStatus({ online, offline }) {
       setOnlineFnds(online);
       setOfflineFnds(offline);
+      setIsLoading(false);
     }
 
     function onUserStatus({ userId, status }) {
@@ -60,6 +62,7 @@ export default function Contacts({ user }) {
         setOnlineFnds(newOnlineFnds);
         setOfflineFnds([userToShift, ...offlineFnds]);
       }
+      setIsLoading(false);
     }
 
     socket.on("receiveFndsStatus", onFndsStatus);
@@ -69,7 +72,15 @@ export default function Contacts({ user }) {
       socket.off("receiveFndsStatus", onFndsStatus);
       socket.off("receiveUserStatus", onUserStatus);
     };
-  }, [onlineFnds, offlineFnds]);
+  }, [onlineFnds, offlineFnds, isLoading]);
+
+  useEffect(() => {
+    if (isLoading) {
+      console.log("Is loading true.");
+    } else {
+      console.log("Is loading false.");
+    }
+  }, [isLoading]);
 
   if (!user) {
     return (
@@ -86,27 +97,29 @@ export default function Contacts({ user }) {
 
   return (
     <div className="contacts">
-      <div className="contactsWrapper">
-        <h4 className="contactsTitle">Contacts</h4>
-        <div className="contactsList">
-          {onlineFnds.length > 0 &&
-            onlineFnds.map((fnd) => {
-              if (fnd) {
-                return <Contact key={fnd._id} fnd={fnd} status={true} />;
-              } else {
-                return null;
-              }
-            })}
-          {offlineFnds.length > 0 &&
-            offlineFnds.map((fnd) => {
-              if (fnd) {
-                return <Contact key={fnd._id} fnd={fnd} status={false} />;
-              } else {
-                return null;
-              }
-            })}
+      {isLoading ? null : (
+        <div className="contactsWrapper">
+          <h4 className="contactsTitle">Contacts</h4>
+          <div className="contactsList">
+            {onlineFnds.length > 0 &&
+              onlineFnds.map((fnd) => {
+                if (fnd) {
+                  return <Contact key={fnd._id} fnd={fnd} status={true} />;
+                } else {
+                  return null;
+                }
+              })}
+            {offlineFnds.length > 0 &&
+              offlineFnds.map((fnd) => {
+                if (fnd) {
+                  return <Contact key={fnd._id} fnd={fnd} status={false} />;
+                } else {
+                  return null;
+                }
+              })}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
