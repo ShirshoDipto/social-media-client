@@ -353,6 +353,7 @@ export default function ProfileContent({ user }) {
           user={userBio}
           token={user.token}
           setIsModalOpen={setIsModalOpen}
+          setUserBio={setUserBio}
         />
       )}
     </div>

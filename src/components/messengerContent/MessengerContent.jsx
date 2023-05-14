@@ -130,9 +130,32 @@ export default function MessengerContent({ user }) {
     setNewMsgs([]);
   }
 
+  async function fetchConversation(msg) {
+    try {
+      const res = await fetch(
+        `${serverRoot}/api/messenger/conversations/${msg.conversationId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      const resData = await res.json();
+      if (!res.ok) {
+        throw resData;
+      }
+
+      return resData.conversation;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   // eslint-disable-next-line
   async function updateConvsForNewMsg(newMessage) {
-    const newConversations = conversations.map((conv) => {
+    let hasUpdated = false;
+    let newConversations = conversations.map((conv) => {
       if (newMessage.conversationId === conv._id) {
         const newConv = JSON.parse(JSON.stringify(conv));
         newConv.lastMsg = newMessage.content;
@@ -146,11 +169,17 @@ export default function MessengerContent({ user }) {
           }
         }
 
+        hasUpdated = true;
         return newConv;
       }
 
       return conv;
     });
+
+    if (!hasUpdated) {
+      const conv = await fetchConversation(newMessage);
+      newConversations = [conv, ...newConversations];
+    }
 
     const sortedConv = newConversations.sort((a, b) => {
       if (b.updatedAt > a.updatedAt) {
@@ -290,14 +319,11 @@ export default function MessengerContent({ user }) {
 
     async function fetchConversations() {
       try {
-        const res = await fetch(
-          `${serverRoot}/api/messenger/conversations/${user.userInfo._id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          }
-        );
+        const res = await fetch(`${serverRoot}/api/messenger/conversations`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
 
         const resData = await res.json();
         if (!res.ok) {

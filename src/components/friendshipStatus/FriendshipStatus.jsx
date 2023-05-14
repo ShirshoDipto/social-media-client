@@ -113,7 +113,8 @@ export default function FriendshipStatus({
         throw resData;
       }
 
-      window.location.reload();
+      setFriendship(resData.friendship);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -137,7 +138,8 @@ export default function FriendshipStatus({
         throw resData;
       }
 
-      window.location.reload();
+      setFriendship(null);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }

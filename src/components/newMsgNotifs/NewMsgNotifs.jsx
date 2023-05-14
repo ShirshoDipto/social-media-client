@@ -176,7 +176,17 @@ export default function NewMsg({ user }) {
           )}
           <div className="notifOptions">
             <Link className="routerLink" to={`${clientRoot}/messenger`}>
-              <span>Open Messenger</span>
+              <span
+                onClick={() => {
+                  if (notifications.length > 0) {
+                    setNotifications([]);
+                    setNumNotif(0);
+                  }
+                  setDropdownStatus(false);
+                }}
+              >
+                Open Messenger
+              </span>
             </Link>
             <span onClick={fetchOldNotifications}>Show old notifications</span>
           </div>

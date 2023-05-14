@@ -6,12 +6,17 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import HouseIcon from "@mui/icons-material/House";
 import SchoolIcon from "@mui/icons-material/School";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
+import CircularProgress from "@mui/material/CircularProgress";
+import { grey } from "@mui/material/colors";
 import { useRef, useState } from "react";
 
-export default function ProfileUpdateModal({ user, token, setIsModalOpen }) {
+export default function ProfileUpdateModal({
+  user,
+  token,
+  setIsModalOpen,
+  setUserBio,
+}) {
   const profileEditModalContainer = useRef();
-  const serverRoot = process.env.REACT_APP_SERVERROOT;
-  const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const firstName = useRef();
   const lastName = useRef();
   const desc = useRef();
@@ -26,6 +31,10 @@ export default function ProfileUpdateModal({ user, token, setIsModalOpen }) {
   const [isCoverPicChanged, setIsCoverPicChanged] = useState(false);
   const [profilePicImg, setProfilePicImg] = useState(null);
   const [coverPicImg, setCoverPicImg] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const serverRoot = process.env.REACT_APP_SERVERROOT;
+  const clientRoot = process.env.REACT_APP_CLIENTROOT;
 
   function removeProfilePic() {
     if (!isProfilePicChanged) {
@@ -301,7 +310,7 @@ export default function ProfileUpdateModal({ user, token, setIsModalOpen }) {
 
   async function updateLocalStorage(updatedUser) {
     const nosebookUser = {
-      user: updatedUser,
+      userInfo: updatedUser,
       token: token,
     };
 
@@ -311,11 +320,15 @@ export default function ProfileUpdateModal({ user, token, setIsModalOpen }) {
   async function updateProfile(e) {
     try {
       e.preventDefault();
+      setIsLoading(true);
       const profilePicName = await updateProfilePic();
       const coverPicName = await updateCoverPic();
       const updatedUser = await updateUserBio(profilePicName, coverPicName);
       await updateLocalStorage(updatedUser);
-      window.location.reload();
+      updatedUser.friends = user.friends;
+      setUserBio(updatedUser);
+      setIsLoading(false);
+      setIsModalOpen(false);
     } catch (error) {
       return console.log(error);
     }
@@ -552,7 +565,18 @@ export default function ProfileUpdateModal({ user, token, setIsModalOpen }) {
             </div>
           </div>
           <div className="modalFormSubmitContainer">
-            <button className="modalFormSubmitButton">Update</button>
+            <button className="modalFormSubmitButton">
+              {isLoading ? (
+                <CircularProgress
+                  sx={{ color: grey[200] }}
+                  size={12}
+                  className="postSubmitLoading"
+                  disableShrink
+                />
+              ) : (
+                <span>Update</span>
+              )}
+            </button>
           </div>
         </form>
       </div>
