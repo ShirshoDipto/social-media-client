@@ -7,11 +7,11 @@ import { useEffect, useState } from "react";
 export default function Feed({ user }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
   const [posts, setPosts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isMorePostsLoading, setIsMorePostsLoading] = useState(false);
   const [hasNoMorePosts, setHasNoMorePosts] = useState(false);
 
   async function fetchPosts() {
-    setIsLoading(true);
     try {
       let uri = `${serverRoot}/api/posts/timeline?skip=${posts.length}`;
       if (!user) {
@@ -30,7 +30,8 @@ export default function Feed({ user }) {
       }
 
       setPosts([...posts, ...resData.posts]);
-      setIsLoading(false);
+      setIsInitialLoading(false);
+      setIsMorePostsLoading(false);
       if (resData.posts.length < 10) {
         setHasNoMorePosts(true);
       }
@@ -55,6 +56,7 @@ export default function Feed({ user }) {
 
       if (scrollTop + innerHeight + 1 >= offsetHeight) {
         if (!hasNoMorePosts) {
+          setIsMorePostsLoading(true);
           fetchPosts();
         }
       }
@@ -68,17 +70,25 @@ export default function Feed({ user }) {
   return (
     <div className="feed">
       <div className="feedWrapper">
-        <PostInput user={user} posts={posts} setPosts={setPosts} />
-        <Posts user={user} posts={posts} setPosts={setPosts} />
-        {isLoading ? (
+        {isInitialLoading ? (
           <CircularProgress className="homePostsLoading" disableShrink />
         ) : (
-          hasNoMorePosts &&
-          (posts.length === 0 ? (
-            <span className="noMorePoststext">No posts available. </span>
-          ) : (
-            <span className="noMorePoststext">No more posts available. </span>
-          ))
+          <>
+            <PostInput user={user} posts={posts} setPosts={setPosts} />
+            <Posts user={user} posts={posts} setPosts={setPosts} />
+            {isMorePostsLoading ? (
+              <CircularProgress className="homePostsLoading" disableShrink />
+            ) : (
+              hasNoMorePosts &&
+              (posts.length === 0 ? (
+                <span className="noMorePoststext">No posts available. </span>
+              ) : (
+                <span className="noMorePoststext">
+                  No more posts available.{" "}
+                </span>
+              ))
+            )}
+          </>
         )}
       </div>
     </div>

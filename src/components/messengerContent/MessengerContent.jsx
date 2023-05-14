@@ -120,7 +120,7 @@ export default function MessengerContent({ user }) {
     );
 
     if (numUnseenMsgs) {
-      markUnseenAsSeen(conv); // Happens asynchronously. Beacuse I don't have to wait for it to finish before rendering....
+      markUnseenAsSeen(conv); // Happens asynchronously. Don't have to wait for it to finish before rendering....
       updateNumUnseenToZero(conv._id);
       setHasUnseenMsgs(true);
     }

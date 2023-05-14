@@ -122,6 +122,7 @@ export default function ProfileContent({ user }) {
         if (results[1].length < 10) {
           setHasNoMorePosts(true);
         }
+
         setUserBio(results[0]);
         setUserPosts(results[1]);
         setFriendship(results[2]);
@@ -170,7 +171,7 @@ export default function ProfileContent({ user }) {
 
   return (
     <div className="profileContainer">
-      <div className="profile">
+      <div className="profileWrapper">
         <div className="profileTop">
           <div className="profileCover">
             {userBio.coverPic ? (
