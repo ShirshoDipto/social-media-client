@@ -7,10 +7,11 @@ import { useEffect, useState } from "react";
 export default function Feed({ user }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
   const [posts, setPosts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isNoMorePosts, setIsNoMorePosts] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasNoMorePosts, setHasNoMorePosts] = useState(false);
 
   async function fetchPosts() {
+    setIsLoading(true);
     try {
       let uri = `${serverRoot}/api/posts/timeline?skip=${posts.length}`;
       if (!user) {
@@ -31,7 +32,7 @@ export default function Feed({ user }) {
       setPosts([...posts, ...resData.posts]);
       setIsLoading(false);
       if (resData.posts.length < 10) {
-        setIsNoMorePosts(true);
+        setHasNoMorePosts(true);
       }
     } catch (error) {
       console.log(error);
@@ -46,6 +47,24 @@ export default function Feed({ user }) {
     // eslint-disable-next-line
   }, []);
 
+  useEffect(() => {
+    function onScroll() {
+      const scrollTop = document.documentElement.scrollTop;
+      const offsetHeight = document.documentElement.offsetHeight;
+      const innerHeight = window.innerHeight;
+
+      if (scrollTop + innerHeight + 1 >= offsetHeight) {
+        if (!hasNoMorePosts) {
+          fetchPosts();
+        }
+      }
+    }
+
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+    // eslint-disable-next-line
+  }, [posts]);
+
   return (
     <div className="feed">
       <div className="feedWrapper">
@@ -53,22 +72,13 @@ export default function Feed({ user }) {
         <Posts user={user} posts={posts} setPosts={setPosts} />
         {isLoading ? (
           <CircularProgress className="homePostsLoading" disableShrink />
-        ) : isNoMorePosts ? (
-          posts.length === 0 ? (
+        ) : (
+          hasNoMorePosts &&
+          (posts.length === 0 ? (
             <span className="noMorePoststext">No posts available. </span>
           ) : (
             <span className="noMorePoststext">No more posts available. </span>
-          )
-        ) : (
-          <button
-            className="postLoadMore"
-            onClick={() => {
-              setIsLoading(true);
-              fetchPosts();
-            }}
-          >
-            Load more...
-          </button>
+          ))
         )}
       </div>
     </div>

@@ -22,7 +22,7 @@ export default function ProfileContent({ user }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMorePostsLoading, setIsMorePostsLoading] = useState(false);
-  const [isNoMorePosts, setIsNoMorePosts] = useState(false);
+  const [hasNoMorePosts, setHasNoMorePosts] = useState(false);
 
   async function loadMorePosts() {
     try {
@@ -39,7 +39,7 @@ export default function ProfileContent({ user }) {
       }
 
       if (resData.posts.length < 10) {
-        setIsNoMorePosts(true);
+        setHasNoMorePosts(true);
       }
 
       setUserPosts([...userPosts, ...resData.posts]);
@@ -120,7 +120,7 @@ export default function ProfileContent({ user }) {
         ]);
 
         if (results[1].length < 10) {
-          setIsNoMorePosts(true);
+          setHasNoMorePosts(true);
         }
         setUserBio(results[0]);
         setUserPosts(results[1]);
@@ -137,10 +137,28 @@ export default function ProfileContent({ user }) {
 
     return () => {
       setIsLoading(true);
-      setIsNoMorePosts(false);
+      setHasNoMorePosts(false);
     };
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    function onScroll() {
+      const scrollTop = document.documentElement.scrollTop;
+      const offsetHeight = document.documentElement.offsetHeight;
+      const innerHeight = window.innerHeight;
+
+      if (scrollTop + innerHeight + 1 >= offsetHeight) {
+        if (!hasNoMorePosts) {
+          loadMorePosts();
+        }
+      }
+    }
+
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+    // eslint-disable-next-line
+  }, [userPosts]);
 
   if (isLoading) {
     return (
@@ -331,18 +349,15 @@ export default function ProfileContent({ user }) {
               <Posts user={user} posts={userPosts} setPosts={setUserPosts} />
               {isMorePostsLoading ? (
                 <CircularProgress className="postsLoading" disableShrink />
-              ) : isNoMorePosts ? (
-                userPosts.length === 0 ? (
+              ) : (
+                hasNoMorePosts &&
+                (userPosts.length === 0 ? (
                   <span className="noMorePoststext">No posts available. </span>
                 ) : (
                   <span className="noMorePoststext">
                     No more posts available.
                   </span>
-                )
-              ) : (
-                <button className="postLoadMore" onClick={loadMorePosts}>
-                  Load more...
-                </button>
+                ))
               )}
             </div>
           </div>
