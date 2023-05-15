@@ -73,6 +73,15 @@ export default function NewMsg({ user }) {
     }
   }
 
+  async function handleDropdownClosure() {
+    if (notifications.length > 0) {
+      setNotifications([]);
+      setNumNotif(0);
+    }
+
+    setDropdownStatus(false);
+  }
+
   useEffect(() => {
     async function fetchNewNotifications() {
       try {
@@ -111,6 +120,7 @@ export default function NewMsg({ user }) {
           setNotifications([]);
           setNumNotif(0);
         }
+
         setDropdownStatus(false);
       }
     }
@@ -164,7 +174,13 @@ export default function NewMsg({ user }) {
           ) : notifications.length > 0 ? (
             <div className="msgNotificationList">
               {notifications.map((notif) => {
-                return <Notification key={notif._id} notif={notif} />;
+                return (
+                  <Notification
+                    key={notif._id}
+                    notif={notif}
+                    handleDropdownClosure={handleDropdownClosure}
+                  />
+                );
               })}
             </div>
           ) : (

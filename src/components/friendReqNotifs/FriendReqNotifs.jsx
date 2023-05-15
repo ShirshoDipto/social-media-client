@@ -91,6 +91,10 @@ export default function FriendReqNotifs({ user }) {
     }
   }
 
+  async function handleDropdownClosure() {
+    setDropdownStatus(false);
+  }
+
   useEffect(() => {
     async function fetchFndReqNotifications() {
       try {
@@ -183,7 +187,7 @@ export default function FriendReqNotifs({ user }) {
                     notif={notif}
                     acceptFriendRequest={acceptFriendRequest}
                     rejectFriendRequest={rejectFriendRequest}
-                    setDropdownStatus={setDropdownStatus}
+                    handleDropdownClosure={handleDropdownClosure}
                   />
                 );
               })}

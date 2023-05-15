@@ -5,7 +5,7 @@ export default function Notification({
   notif,
   acceptFriendRequest,
   rejectFriendRequest,
-  setDropdownStatus,
+  handleDropdownClosure,
 }) {
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const serverRoot = process.env.REACT_APP_SERVERROOT;
@@ -31,7 +31,7 @@ export default function Notification({
           >
             <b
               className="notifSenderName"
-              onClick={() => setDropdownStatus(false)}
+              onClick={() => handleDropdownClosure()}
             >
               {fullname}
             </b>
