@@ -151,30 +151,33 @@ export default function PostContent({
 
   useEffect(() => {
     async function fetchUserLike() {
-      if (!user) {
-        return;
-      }
+      try {
+        if (!user) {
+          return;
+        }
 
-      const res = await fetch(`${serverRoot}/api/posts/${post._id}/likes`, {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
+        const res = await fetch(`${serverRoot}/api/posts/${post._id}/likes`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
 
-      const resData = await res.json();
-      if (!res.ok) {
-        throw resData;
-      }
+        const resData = await res.json();
+        if (!res.ok) {
+          throw resData;
+        }
 
-      if (resData.error) {
-        return;
+        if (resData.error) {
+          return;
+        }
+
+        setIsliked(resData.postLike);
+      } catch (error) {
+        console.log(error);
       }
-      setIsliked(resData.postLike);
     }
 
-    fetchUserLike().catch((err) => {
-      console.log(err);
-    });
+    fetchUserLike();
   }, [post._id, serverRoot, user]);
 
   useEffect(() => {

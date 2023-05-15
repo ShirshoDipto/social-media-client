@@ -1,7 +1,134 @@
 .messengerContainer {
   background-color: var(--profileBackground);
   color: var(--primaryText);
+  height: calc(100vh - 50px);
+  display: flex;
+  justify-content: center;
 }
+
+.messengerLoading {
+  margin: 50px;
+}
+
+.conversations {
+  width: 320px;
+}
+
+.conversationsWrapper {
+  padding: 10px;
+  border-right: thin solid var(--secondaryBorderBackground);
+}
+
+.coversationsInput {
+  width: 100%;
+  padding: 10px 0;
+  border: none;
+  border-bottom: 1px solid gray;
+  background: none;
+}
+
+.coversationsInput:focus {
+  outline: none;
+}
+
+.conversationContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px 0 10px 0;
+}
+
+.chatBox {
+  flex: 4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.selectChatText {
+  padding: 7px;
+  border-radius: 10px;
+  background-color: var(--searchBarDarkish);
+  color: var(--secondaryText);
+}
+
+.chatBoxWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.conversationsWrapper {
+  padding: 10px;
+  height: 100%;
+}
+
+.chatBoxWrapper {
+  height: 100%;
+}
+
+.chatBoxCenter {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 50px 10px 50px;
+  overflow: hidden;
+  flex: 1;
+}
+
+.chatBoxCenter:hover {
+  overflow: overlay;
+}
+
+.oldMsgs, .newMsgs, .unseenMsgs {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.showMoreMsg {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.showMoreMsg button {
+  background-color: var(--searchBarDarkish);
+  color: var(--secondaryText);
+  border: none;
+  padding: 8px;
+  border-radius: 15px;
+}
+
+.showMoreMsg button:hover {
+  cursor: pointer;
+  background-color: var(--searchBar);
+}
+
+.showMoreMsg button:focus {
+  outline: none;
+}
+
+.showMoreMsg div {
+  border-bottom: thin solid var(--secondaryBorderBackground);
+  flex: 1;
+}
+
+.unseenMsgsText {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.8rem;
+  color: var(--topbarBackground);
+}
+
+.unseenMsgsText div {
+  flex: 1;
+  border-bottom: thin solid var(--topbarBackground);
+}
+
 
 
 

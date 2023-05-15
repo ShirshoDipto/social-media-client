@@ -188,9 +188,7 @@ export default function CommentContent({
       }
     }
 
-    fetchUserLike().catch((err) => {
-      console.log(err);
-    });
+    fetchUserLike();
   }, [comment._id, serverRoot, user]);
 
   useEffect(() => {

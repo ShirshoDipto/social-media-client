@@ -16,18 +16,20 @@ export default function Contacts({ user }) {
     }
 
     async function fetchCurrUser() {
-      const res = await fetch(`${serverRoot}/api/users/${user.userInfo._id}`);
-      const resData = await res.json();
-      if (!res.ok) {
-        throw resData;
-      }
+      try {
+        const res = await fetch(`${serverRoot}/api/users/${user.userInfo._id}`);
+        const resData = await res.json();
+        if (!res.ok) {
+          throw resData;
+        }
 
-      socket.emit("getFndsStatus", resData.user);
+        socket.emit("getFndsStatus", resData.user);
+      } catch (error) {
+        console.log(error);
+      }
     }
 
-    fetchCurrUser().catch((err) => {
-      console.log(err);
-    });
+    fetchCurrUser();
   }, [user, serverRoot]);
 
   useEffect(() => {
@@ -73,14 +75,6 @@ export default function Contacts({ user }) {
       socket.off("receiveUserStatus", onUserStatus);
     };
   }, [onlineFnds, offlineFnds, isLoading]);
-
-  useEffect(() => {
-    if (isLoading) {
-      console.log("Is loading true.");
-    } else {
-      console.log("Is loading false.");
-    }
-  }, [isLoading]);
 
   if (!user) {
     return (

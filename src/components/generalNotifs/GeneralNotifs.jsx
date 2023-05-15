@@ -70,27 +70,29 @@ export default function GeneralNotifs({ user }) {
 
   useEffect(() => {
     async function fetchNewNotifications() {
-      const res = await fetch(
-        `${serverRoot}/api/notifications/newNotifications`,
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
+      try {
+        const res = await fetch(
+          `${serverRoot}/api/notifications/newNotifications`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+
+        const resData = await res.json();
+        if (!res.ok) {
+          throw resData;
         }
-      );
 
-      const resData = await res.json();
-      if (!res.ok) {
-        throw resData;
+        setNotifications(resData.notifications);
+        setNumNotif(resData.notifications.length);
+      } catch (error) {
+        console.log(error);
       }
-
-      setNotifications(resData.notifications);
-      setNumNotif(resData.notifications.length);
     }
 
-    fetchNewNotifications().catch((err) => {
-      console.log(err);
-    });
+    fetchNewNotifications();
   }, [user.token, serverRoot]);
 
   useEffect(() => {

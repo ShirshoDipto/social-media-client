@@ -41,9 +41,7 @@ export default function Feed({ user }) {
   }
 
   useEffect(() => {
-    fetchPosts().catch((err) => {
-      console.log(err);
-    });
+    fetchPosts();
 
     // eslint-disable-next-line
   }, []);

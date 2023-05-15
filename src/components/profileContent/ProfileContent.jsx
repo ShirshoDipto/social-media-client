@@ -24,21 +24,23 @@ export default function ProfileContent({ user }) {
 
   useEffect(() => {
     async function fetchProfileInfos() {
-      const res = await fetch(`${serverRoot}/api/users/${params.userId}`);
+      try {
+        const res = await fetch(`${serverRoot}/api/users/${params.userId}`);
 
-      const resData = await res.json();
+        const resData = await res.json();
 
-      if (!res.ok) {
-        throw resData;
+        if (!res.ok) {
+          throw resData;
+        }
+
+        setProfileInfos(resData.user);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
       }
-
-      setProfileInfos(resData.user);
-      setIsLoading(false);
     }
 
-    fetchProfileInfos().catch((err) => {
-      console.log(err);
-    });
+    fetchProfileInfos();
   }, [params.userId, serverRoot]);
 
   return (

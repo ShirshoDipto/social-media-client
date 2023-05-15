@@ -93,20 +93,25 @@ export default function FriendReqNotifs({ user }) {
 
   useEffect(() => {
     async function fetchFndReqNotifications() {
-      const res = await fetch(`${serverRoot}/api/notifications/fndReq`, {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
-      const resData = await res.json();
-      if (!res.ok) {
-        throw resData;
+      try {
+        const res = await fetch(`${serverRoot}/api/notifications/fndReq`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
+
+        const resData = await res.json();
+        if (!res.ok) {
+          throw resData;
+        }
+
+        setNotifications(resData.notifications);
+      } catch (error) {
+        console.log(error);
       }
-      setNotifications(resData.notifications);
     }
-    fetchFndReqNotifications().catch((err) => {
-      console.log(err);
-    });
+
+    fetchFndReqNotifications();
   }, [serverRoot, user.token]);
 
   useEffect(() => {

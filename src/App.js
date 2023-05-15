@@ -2,18 +2,18 @@ import Homepage from "./pages/hompage/Homepage";
 import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
 import Profile from "./pages/profile/Profile";
+import Messenger from "./pages/messenger/Messenger";
+import Topbar from "./components/topbar/Topbar";
 import ScrollToTop from "./ScrollToTop.jsx";
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
-import GoogleLogin from "./pages/GoogleLogin";
 import { socket } from "./socket";
 
 import TimeAgo from "javascript-time-ago";
 
 import en from "javascript-time-ago/locale/en.json";
 import ru from "javascript-time-ago/locale/ru.json";
-import Messenger from "./pages/messenger/Messenger";
-import Topbar from "./components/topbar/Topbar";
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
@@ -32,26 +32,24 @@ function App() {
           credentials: "include",
         });
 
-        if (!res.ok) {
-          return console.log(await res.json());
-        }
-
         const resData = await res.json();
+
+        if (!res.ok) {
+          throw console.log(resData);
+        }
 
         localStorage.setItem("nosebookUser", JSON.stringify(resData));
         setCurrentUser({
           userInfo: resData.userInfo,
           token: resData.token,
         });
-      } catch (err) {
-        throw err;
+      } catch (error) {
+        console.log(error);
       }
     }
 
     if (!currentUser && window.location.search) {
-      getUserFromGoogleAuth().catch((err) => {
-        return console.log(err);
-      });
+      getUserFromGoogleAuth();
     }
   }, [serverRoot, currentUser]);
 
@@ -89,7 +87,6 @@ function App() {
             path="/messenger"
             element={currentUser ? <Messenger user={currentUser} /> : <Login />}
           />
-          <Route path="/login/google/confirm" element={<GoogleLogin />} />
         </Routes>
       </div>
     </BrowserRouter>
