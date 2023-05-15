@@ -5,6 +5,7 @@ export default function Notification({
   notif,
   acceptFriendRequest,
   rejectFriendRequest,
+  setDropdownStatus,
 }) {
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const serverRoot = process.env.REACT_APP_SERVERROOT;
@@ -28,7 +29,12 @@ export default function Notification({
             className="routerLink"
             to={`${clientRoot}/users/${notif.sender._id}`}
           >
-            <b className="notifSenderName">{fullname}</b>
+            <b
+              className="notifSenderName"
+              onClick={() => setDropdownStatus(false)}
+            >
+              {fullname}
+            </b>
           </Link>{" "}
           {notif.notificationType === 0 && "has sent you a friend request"}
           {notif.notificationType === 1 && "has accepted your friend request"}

@@ -6,26 +6,24 @@ import SchoolIcon from "@mui/icons-material/School";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import CircularProgress from "@mui/material/CircularProgress";
 import EditIcon from "@mui/icons-material/Edit";
-import Posts from "../posts/Posts";
 import ProfileUpdateModal from "../profileUpdateModal/ProfileUpdateModal";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import FriendshipStatus from "../friendshipStatus/FriendshipStatus";
+import ProfilePosts from "../profilePosts/ProfilePosts";
+import ProfileFriends from "../profileFriends/ProfileFriends";
 
 export default function ProfileContent({ user }) {
+  const [profileInfos, setProfileInfos] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const serverRoot = process.env.REACT_APP_SERVERROOT;
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const params = useParams();
-  const [userBio, setUserBio] = useState({});
-  const [userPosts, setUserPosts] = useState([]);
-  const [friendship, setFriendship] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isMorePostsLoading, setIsMorePostsLoading] = useState(false);
-  const [hasNoMorePosts, setHasNoMorePosts] = useState(false);
 
-  async function fetchUserBio() {
-    try {
+  useEffect(() => {
+    async function fetchProfileInfos() {
       const res = await fetch(`${serverRoot}/api/users/${params.userId}`);
 
       const resData = await res.json();
@@ -34,128 +32,29 @@ export default function ProfileContent({ user }) {
         throw resData;
       }
 
-      return resData.user;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async function fetchUserFriendship() {
-    if (!user || user.userInfo._id.toString() === params.userId.toString()) {
-      return null;
+      setProfileInfos(resData.user);
+      setIsLoading(false);
     }
 
-    try {
-      const res = await fetch(
-        `${serverRoot}/api/users/${params.userId}/friendships`,
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
-
-      const resData = await res.json();
-
-      if (!res.ok) {
-        throw resData;
-      }
-
-      return resData.friendship;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async function fetchUserPosts() {
-    try {
-      const res = await fetch(
-        `${serverRoot}/api/users/${params.userId}/posts?skip=${userPosts.length}`
-      );
-
-      const resData = await res.json();
-
-      if (!res.ok) {
-        throw resData;
-      }
-
-      return resData.posts;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  useEffect(() => {
-    async function fetchUserInfos() {
-      try {
-        const results = await Promise.all([
-          fetchUserBio(),
-          fetchUserPosts(),
-          fetchUserFriendship(),
-        ]);
-
-        if (results[1].length < 10) {
-          setHasNoMorePosts(true);
-        }
-
-        setUserBio(results[0]);
-        setUserPosts(results[1]);
-        setFriendship(results[2]);
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    fetchUserInfos().catch((err) => {
+    fetchProfileInfos().catch((err) => {
       console.log(err);
     });
-    // eslint-disable-next-line
-  }, []);
-
-  useEffect(() => {
-    async function onScroll() {
-      const scrollTop = document.documentElement.scrollTop;
-      const offsetHeight = document.documentElement.offsetHeight;
-      const innerHeight = window.innerHeight;
-
-      if (scrollTop + innerHeight + 1 >= offsetHeight) {
-        if (!hasNoMorePosts) {
-          setIsMorePostsLoading(true);
-          const newPosts = await fetchUserPosts();
-
-          if (newPosts.length < 10) {
-            setHasNoMorePosts(true);
-          }
-
-          setUserPosts([...userPosts, ...newPosts]);
-          setIsMorePostsLoading(false);
-        }
-      }
-    }
-
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-    // eslint-disable-next-line
-  }, [userPosts]);
-
-  if (isLoading) {
-    return (
-      <div className="profileContainer">
-        <CircularProgress className="profileLoading" disableShrink />
-      </div>
-    );
-  }
+  }, [params.userId, serverRoot]);
 
   return (
     <div className="profileContainer">
+      {isLoading && (
+        <div className="homeLoadingFixed">
+          <CircularProgress className="loadingFixed" disableShrink />
+        </div>
+      )}
       <div className="profileWrapper">
         <div className="profileTop">
           <div className="profileCover">
-            {userBio.coverPic ? (
+            {profileInfos.coverPic ? (
               <img
                 className="profileCoverImg"
-                src={`${serverRoot}/images/${userBio.coverPic}`}
+                src={`${serverRoot}/images/${profileInfos.coverPic}`}
                 alt=""
               />
             ) : (
@@ -166,8 +65,8 @@ export default function ProfileContent({ user }) {
             <img
               className="profileUserImg"
               src={
-                userBio.profilePic
-                  ? `${serverRoot}/images/${userBio.profilePic}`
+                profileInfos.profilePic
+                  ? `${serverRoot}/images/${profileInfos.profilePic}`
                   : `${clientRoot}/assets/person/noAvatar.png`
               }
               alt=""
@@ -176,10 +75,10 @@ export default function ProfileContent({ user }) {
             <div className="profileSummary">
               <div className="profileNameDescContainer">
                 <h4 className="profileInfoName">
-                  {`${userBio.firstName} ${userBio.lastName}`}
+                  {`${profileInfos.firstName} ${profileInfos.lastName}`}
                 </h4>
-                {userBio.desc ? (
-                  <span className="profileInfoDesc">{userBio.desc}</span>
+                {profileInfos.desc ? (
+                  <span className="profileInfoDesc">{profileInfos.desc}</span>
                 ) : (
                   <span className="profileInfoDesc">
                     No description available
@@ -187,14 +86,10 @@ export default function ProfileContent({ user }) {
                 )}
               </div>
 
-              {user && user.userInfo._id !== userBio._id && (
-                <FriendshipStatus
-                  user={user}
-                  userBio={userBio}
-                  friendship={friendship}
-                />
+              {user && user.userInfo._id !== profileInfos._id && (
+                <FriendshipStatus user={user} profileInfos={profileInfos} />
               )}
-              {user && user.userInfo._id === userBio._id && (
+              {user && user.userInfo._id === profileInfos._id && (
                 <div
                   className="editProfileContainer"
                   onClick={() => {
@@ -217,9 +112,9 @@ export default function ProfileContent({ user }) {
                 <div className="profileInfoItemContainer">
                   <div className="profileInfoItem">
                     <BusinessCenterIcon className="profileInfoIcon" />
-                    {userBio.job ? (
+                    {profileInfos.job ? (
                       <span className="profileInfoItemDesc">
-                        Works at, <b>{userBio.job}</b>
+                        Works at, <b>{profileInfos.job}</b>
                       </span>
                     ) : (
                       <span className="profileInfoItemDesc">
@@ -229,9 +124,9 @@ export default function ProfileContent({ user }) {
                   </div>
                   <div className="profileInfoItem">
                     <SchoolIcon className="profileInfoIcon" />
-                    {userBio.edu ? (
+                    {profileInfos.edu ? (
                       <span className="profileInfoItemDesc">
-                        Studied at, <b>{userBio.edu}</b>
+                        Studied at, <b>{profileInfos.edu}</b>
                       </span>
                     ) : (
                       <span className="profileInfoItemDesc">
@@ -241,9 +136,9 @@ export default function ProfileContent({ user }) {
                   </div>
                   <div className="profileInfoItem">
                     <HouseIcon className="profileInfoIcon" />
-                    {userBio.city ? (
+                    {profileInfos.city ? (
                       <span className="profileInfoItemDesc">
-                        Lives in, <b>{userBio.city}</b>
+                        Lives in, <b>{profileInfos.city}</b>
                       </span>
                     ) : (
                       <span className="profileInfoItemDesc">
@@ -253,9 +148,9 @@ export default function ProfileContent({ user }) {
                   </div>
                   <div className="profileInfoItem">
                     <LocationOnIcon className="profileInfoIcon" />
-                    {userBio.from ? (
+                    {profileInfos.from ? (
                       <span className="profileInfoItemDesc">
-                        From, <b>{[userBio.from]}</b>
+                        From, <b>{[profileInfos.from]}</b>
                       </span>
                     ) : (
                       <span className="profileInfoItemDesc">
@@ -265,21 +160,27 @@ export default function ProfileContent({ user }) {
                   </div>
                   <div className="profileInfoItem">
                     <FavoriteIcon className="profileInfoIcon" />
-                    {userBio.relationship === 0 && (
+                    {profileInfos.relationship === 0 && (
                       <span className="profileInfoItemDesc">
                         No info available.
                       </span>
                     )}
 
-                    {userBio.relationship === 1 && (
+                    {profileInfos.relationship === 1 && (
                       <span className="profileInfoItemDesc">
-                        Relationship status, <b>In a realtoinship</b>
+                        Relationship status, <b>Single</b>
                       </span>
                     )}
 
-                    {userBio.relationship === 2 && (
+                    {profileInfos.relationship === 2 && (
                       <span className="profileInfoItemDesc">
                         Relationship status, <b>Married</b>
+                      </span>
+                    )}
+
+                    {profileInfos.relationship === 3 && (
+                      <span className="profileInfoItemDesc">
+                        Relationship status, <b>In a Relationship</b>
                       </span>
                     )}
                   </div>
@@ -289,64 +190,26 @@ export default function ProfileContent({ user }) {
                 <div className="profileSidebarTitle">Friends</div>
                 <hr />
                 <div className="profileFriendlist">
-                  {userBio.friends.length === 0 ? (
+                  {profileInfos.friends?.length === 0 ? (
                     <div className="noFriendsText">No friends available.</div>
                   ) : (
-                    userBio.friends.map((fnd) => {
-                      return (
-                        <div key={fnd._id} className="profileFriend">
-                          <img
-                            src={
-                              fnd.profilePic
-                                ? `${serverRoot}/images/${fnd.profilePic}`
-                                : `${clientRoot}/assets/person/noAvatar.png`
-                            }
-                            alt=""
-                            className="profileFriendImg"
-                          />
-
-                          <span className="profileFriendName">
-                            <Link
-                              className="routerLink"
-                              to={`${clientRoot}/users/${fnd._id}`}
-                            >
-                              {`${fnd.firstName} ${fnd.lastName}`}
-                            </Link>
-                          </span>
-                        </div>
-                      );
+                    profileInfos.friends?.map((fnd) => {
+                      return <ProfileFriends key={fnd._id} fnd={fnd} />;
                     })
                   )}
                 </div>
               </div>
             </div>
           </div>
-          <div className="profilePosts">
-            <div className="profilePostsWrapper">
-              <div className="profilePostsTitle">Posts</div>
-              <Posts user={user} posts={userPosts} setPosts={setUserPosts} />
-              {isMorePostsLoading ? (
-                <CircularProgress className="postsLoading" disableShrink />
-              ) : (
-                hasNoMorePosts &&
-                (userPosts.length === 0 ? (
-                  <span className="noMorePoststext">No posts available. </span>
-                ) : (
-                  <span className="noMorePoststext">
-                    No more posts available.
-                  </span>
-                ))
-              )}
-            </div>
-          </div>
+          <ProfilePosts user={user} />
         </div>
       </div>
       {isModalOpen && (
         <ProfileUpdateModal
-          user={userBio}
+          user={profileInfos}
           token={user.token}
           setIsModalOpen={setIsModalOpen}
-          setUserBio={setUserBio}
+          setProfileInfos={setProfileInfos}
         />
       )}
     </div>

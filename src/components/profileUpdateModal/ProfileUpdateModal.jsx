@@ -14,7 +14,7 @@ export default function ProfileUpdateModal({
   user,
   token,
   setIsModalOpen,
-  setUserBio,
+  setProfileInfos,
 }) {
   const profileEditModalContainer = useRef();
   const firstName = useRef();
@@ -326,7 +326,7 @@ export default function ProfileUpdateModal({
       const updatedUser = await updateUserBio(profilePicName, coverPicName);
       await updateLocalStorage(updatedUser);
       updatedUser.friends = user.friends;
-      setUserBio(updatedUser);
+      setProfileInfos(updatedUser);
       setIsLoading(false);
       setIsModalOpen(false);
     } catch (error) {

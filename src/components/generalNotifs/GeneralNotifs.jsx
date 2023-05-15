@@ -136,8 +136,9 @@ export default function GeneralNotifs({ user }) {
 
     return () => {
       socket.off("getPost", onNewPost);
+      socket.off("getFndReq", onFndReq);
     };
-  }, []);
+  }, [notifications]);
 
   return (
     <div className="notifContainer">

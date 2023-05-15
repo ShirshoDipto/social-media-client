@@ -66,6 +66,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px 15px 200px;
+  height: 90px;
 }
 
 .profileNameDescContainer {
@@ -173,76 +174,6 @@
   color: var(--primaryText);
 }
 
-.profileFriend {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  width: 70px;
-}
-
-.profileFriendImg {
-  width: 100%;
-  height: 70px;
-  object-fit: cover;
-  border-radius: 5px;
-}
-
-.profileFriendName {
-  color: var(--primaryText);
-  font-weight: 500;
-  font-size: 0.7rem;
-  text-align: center;
-}
-
-.profileFriendName:hover {
-  text-decoration: underline;
-}
-
-.profilePosts {
-  flex: 3;
-}
-
-.profilePostsWrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
 .profileLoading {
   margin: 50px;
-}
-
-.profilePostsTitle {
-  font-size: 1.4rem;
-  background-color: var(--profileTop);
-  color: var(--primaryText);
-  border-radius: 10px;
-  padding: 10px;
-  font-weight: 300;
-}
-
-/* Loading styles */
-.postsLoading {
-  align-self: center;
-  margin: 30px 0 30px 0;
-}
-
-.noMorePoststext {
-  color: var(--secondaryText);
-  text-align: center;
-  margin: 20px 0 20px 0;
-}
-
-.postLoadMore {
-  background-color: var(--searchBar);
-  height: 50px;
-  margin: 20px 0 20px 0;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  color: var(--primaryText);
-}
-
-.postLoadMore:active {
-  background-color: var(--secondaryBorderBackground);
 }

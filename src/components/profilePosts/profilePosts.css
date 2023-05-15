@@ -1,0 +1,29 @@
+.profilePosts {
+  flex: 3;
+}
+
+.profilePostsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profilePostsTitle {
+  font-size: 1.4rem;
+  background-color: var(--profileTop);
+  color: var(--primaryText);
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: 300;
+}
+
+.postsLoading {
+  align-self: center;
+  margin: 30px 0 30px 0;
+}
+
+.noMorePoststext {
+  color: var(--secondaryText);
+  text-align: center;
+  margin: 20px 0 20px 0;
+}

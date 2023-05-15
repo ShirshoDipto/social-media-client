@@ -7,6 +7,8 @@
   padding: 5px;
   background-color: var(--searchBarDarkish);
   border-radius: 5px;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .notifDropDown { 
@@ -15,8 +17,6 @@
   right: 0;
   background-color: var(--searchBarDarkish);
   border-radius: 5px;
-  max-height: 400px;
-  overflow-y: auto;
 }
 
 .noNotifications {

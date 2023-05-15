@@ -4,18 +4,19 @@ import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Link, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { socket } from "../../socket";
 
-export default function FriendshipStatus({ user, userBio, friendship }) {
+export default function FriendshipStatus({ user, profileInfos }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const params = useParams();
   const [isLoading, setIsLoading] = useState(false);
-  const [fndshipState, setFndshipState] = useState(friendship);
+  const [friendship, setFriendship] = useState(null);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   let friendshipStatusText;
-  const fullname = userBio.firstName + " " + userBio.lastName;
+  const fullname = profileInfos?.firstName + " " + profileInfos?.lastName;
 
   async function sendFriendRequest() {
     try {
@@ -35,7 +36,7 @@ export default function FriendshipStatus({ user, userBio, friendship }) {
         throw resData;
       }
 
-      setFndshipState(resData.friendship);
+      setFriendship(resData.friendship);
       setIsLoading(false);
       socket.emit("sendFndReq", resData.notification);
     } catch (error) {
@@ -47,7 +48,7 @@ export default function FriendshipStatus({ user, userBio, friendship }) {
     try {
       setIsLoading(true);
       const res = await fetch(
-        `${serverRoot}/api/users/${params.userId}/friendships/${fndshipState._id}/cancel`,
+        `${serverRoot}/api/users/${params.userId}/friendships/${friendship._id}/cancel`,
         {
           method: "DELETE",
           headers: {
@@ -61,7 +62,7 @@ export default function FriendshipStatus({ user, userBio, friendship }) {
         throw resData;
       }
 
-      setFndshipState(resData.friendship);
+      setFriendship(resData.friendship);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -72,7 +73,7 @@ export default function FriendshipStatus({ user, userBio, friendship }) {
     try {
       setIsLoading(true);
       const res = await fetch(
-        `${serverRoot}/api/users/${params.userId}/friendships/${fndshipState._id}`,
+        `${serverRoot}/api/users/${params.userId}/friendships/${friendship._id}`,
         {
           method: "DELETE",
           headers: {
@@ -86,7 +87,7 @@ export default function FriendshipStatus({ user, userBio, friendship }) {
         throw resData;
       }
 
-      setFndshipState(null);
+      setFriendship(null);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -97,7 +98,7 @@ export default function FriendshipStatus({ user, userBio, friendship }) {
     try {
       setIsLoading(true);
       const res = await fetch(
-        `${serverRoot}/api/users/${params.userId}/friendships/${fndshipState._id}`,
+        `${serverRoot}/api/users/${params.userId}/friendships/${friendship._id}`,
         {
           method: "PUT",
           headers: {
@@ -111,9 +112,10 @@ export default function FriendshipStatus({ user, userBio, friendship }) {
         throw resData;
       }
 
-      setFndshipState(resData.friendship);
+      setFriendship(resData.friendship);
       setIsLoading(false);
-      // socket.emit("sendFndReq", )
+      socket.emit("sendFndReq", resData.notification);
+      socket.emit("acceptedFndReq", resData.notification);
     } catch (error) {
       console.log(error);
     }
@@ -137,7 +139,7 @@ export default function FriendshipStatus({ user, userBio, friendship }) {
         throw resData;
       }
 
-      setFndshipState(null);
+      setFriendship(null);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -145,7 +147,7 @@ export default function FriendshipStatus({ user, userBio, friendship }) {
   }
 
   function getFriendshipUI() {
-    if (!fndshipState) {
+    if (!friendship) {
       return (
         <div className="friendshipStatus" onClick={sendFriendRequest}>
           <PersonAddIcon />
@@ -154,7 +156,7 @@ export default function FriendshipStatus({ user, userBio, friendship }) {
       );
     }
 
-    if (fndshipState.status === 1) {
+    if (friendship.status === 1) {
       friendshipStatusText = `You are friends with ${fullname}`;
       return (
         <div className="friendshipStatus" onClick={removeFromFriendList}>
@@ -165,8 +167,8 @@ export default function FriendshipStatus({ user, userBio, friendship }) {
     }
 
     if (
-      fndshipState.status === 0 &&
-      fndshipState.requester.toString() === user.userInfo._id.toString()
+      friendship.status === 0 &&
+      friendship.requester.toString() === user.userInfo._id.toString()
     ) {
       friendshipStatusText = `You sent a friend request to ${fullname}`;
       return (
@@ -178,8 +180,8 @@ export default function FriendshipStatus({ user, userBio, friendship }) {
     }
 
     if (
-      fndshipState.status === 0 &&
-      fndshipState.recipient.toString() === user.userInfo._id.toString()
+      friendship.status === 0 &&
+      friendship.recipient.toString() === user.userInfo._id.toString()
     ) {
       friendshipStatusText = `${fullname} sent you a friend request`;
       return (
@@ -198,6 +200,42 @@ export default function FriendshipStatus({ user, userBio, friendship }) {
   }
 
   let friendshipStatusUi = getFriendshipUI();
+
+  useEffect(() => {
+    async function fetchFriendship() {
+      if (!user || user.userInfo._id.toString() === params.userId.toString()) {
+        return null;
+      }
+
+      try {
+        const res = await fetch(
+          `${serverRoot}/api/users/${params.userId}/friendships`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+
+        const resData = await res.json();
+
+        if (!res.ok) {
+          throw resData;
+        }
+
+        setFriendship(resData.friendship);
+        setIsInitialLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchFriendship();
+  }, [params.userId, serverRoot, user]);
+
+  if (isInitialLoading) {
+    return null;
+  }
 
   return (
     <div className="friendshipContainer">

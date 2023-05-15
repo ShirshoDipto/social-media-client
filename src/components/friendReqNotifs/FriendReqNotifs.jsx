@@ -140,10 +140,17 @@ export default function FriendReqNotifs({ user }) {
       }
     }
 
+    function onDeleteNotif(notifId) {
+      const newNotifications = notifications.filter((n) => n._id !== notifId);
+      setNotifications(newNotifications);
+    }
+
     socket.on("getFndReq", onFndReq);
+    socket.on("deleteNotif", onDeleteNotif);
 
     return () => {
       socket.off("getFndReq", onFndReq);
+      socket.off("deleteNotif", onDeleteNotif);
     };
   }, [notifications]);
 
@@ -171,6 +178,7 @@ export default function FriendReqNotifs({ user }) {
                     notif={notif}
                     acceptFriendRequest={acceptFriendRequest}
                     rejectFriendRequest={rejectFriendRequest}
+                    setDropdownStatus={setDropdownStatus}
                   />
                 );
               })}

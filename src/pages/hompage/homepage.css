@@ -1,13 +1,6 @@
-.home {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--profileBackground);
-}
-
 .homepageContainer {
   display: flex;
   justify-content: space-between;
   width: 100%;
+  background-color: var(--profileBackground);
 }
