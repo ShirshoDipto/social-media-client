@@ -104,14 +104,14 @@
 }
 
 .topbarIconBadge {
-  width: 15px;
-  height: 15px;
+  width: 18px;
+  height: 18px;
   background-color: red;
   border-radius: 50%;
   color: white;
   position: absolute;
-  top: -5px;
-  right: -5px;
+  top: -6px;
+  right: -6px;
   display: flex;
   align-items: center;
   justify-content: center;
