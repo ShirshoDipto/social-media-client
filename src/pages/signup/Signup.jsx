@@ -1,6 +1,6 @@
+import "./signup.css";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import "./signup.css";
 import GoogleIcon from "@mui/icons-material/Google";
 
 export default function Signup() {
