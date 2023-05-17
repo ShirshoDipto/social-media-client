@@ -1,19 +1,24 @@
 import "./topbar.css";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link, useLocation } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import SearchBar from "../searchBar/SearchBar";
 import NewMsgNotifs from "../newMsgNotifs/NewMsgNotifs";
 import GeneralNotifs from "../generalNotifs/GeneralNotifs";
 import FriendReqNotifs from "../friendReqNotifs/FriendReqNotifs";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function Topbar({ user }) {
-  const serverRoot = process.env.REACT_APP_SERVERROOT;
-  const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const [dropdownStatus, setDropdownStatus] = useState(false);
+  const { dispatch } = useContext(AuthContext);
   const dropdown = useRef();
   const dropdownTrigger = useRef();
   const location = useLocation();
+
+  const serverRoot = process.env.REACT_APP_SERVERROOT;
+  const clientRoot = process.env.REACT_APP_CLIENTROOT;
+
+  const fullname = user?.userInfo.firstName + " " + user?.userInfo.lastName;
 
   async function handleLogout() {
     try {
@@ -22,12 +27,12 @@ export default function Topbar({ user }) {
         credentials: "include",
       });
 
+      const resData = await res.json();
       if (!res.ok) {
-        console.log(await res.json());
+        throw resData;
       }
 
-      localStorage.removeItem("nosebookUser");
-      window.location.replace("/");
+      dispatch({ type: "logout" });
     } catch (error) {
       console.log(error);
     }
@@ -51,7 +56,10 @@ export default function Topbar({ user }) {
     };
   }, []);
 
-  if (location.pathname === "/login" || location.pathname === "/signup") {
+  if (
+    (location.pathname === "/login" || location.pathname === "/signup") &&
+    !user
+  ) {
     return null;
   }
 
@@ -123,11 +131,17 @@ export default function Topbar({ user }) {
                           className="topbarImg"
                         />
                       )}
-                      <span className="dropdownProfileName">{`${user.userInfo.firstName} ${user.userInfo.lastName}`}</span>
+                      <span className="dropdownProfileName">{fullname}</span>
                     </li>
                   </Link>
                   <hr className="dropdownHr" />
-                  <li className="topbarDropdownLogout" onClick={handleLogout}>
+                  <li
+                    className="topbarDropdownLogout"
+                    onClick={() => {
+                      handleLogout();
+                      setDropdownStatus(false);
+                    }}
+                  >
                     <LogoutIcon className="logoutIcon" />
                     <span className="logoutText">Logout</span>
                   </li>

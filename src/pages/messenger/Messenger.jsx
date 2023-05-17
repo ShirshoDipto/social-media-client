@@ -270,6 +270,7 @@ export default function Messenger({ user }) {
   }, [currentChat, updateConvsForNewMsg]);
 
   useEffect(() => {
+    // CAREFUL!! This effect will run twice on developement. Hence, two conversations.
     async function createNewConv(userId) {
       const res = await fetch(`${serverRoot}/api/messenger/conversations`, {
         method: "POST",
@@ -292,15 +293,10 @@ export default function Messenger({ user }) {
       if (window.location.search) {
         const url = new URL(window.location.href);
         const userId = url.searchParams.get("userId");
-        let chatToActive = converses.find((conv) => {
-          if (
-            conv.members[0]._id === userId ||
-            conv.members[1]._id === userId
-          ) {
-            return true;
-          }
-          return false;
-        });
+        let chatToActive = converses.find(
+          (conv) =>
+            conv.members[0]._id === userId || conv.members[1]._id === userId
+        );
 
         if (!chatToActive) {
           chatToActive = await createNewConv(userId);
@@ -340,7 +336,7 @@ export default function Messenger({ user }) {
 
     fetchConversations();
     // eslint-disable-next-line
-  }, [serverRoot, user]);
+  }, []);
 
   useEffect(() => {
     socket.emit("messengerActive", user.userInfo._id);

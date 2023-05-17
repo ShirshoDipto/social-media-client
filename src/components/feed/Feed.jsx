@@ -11,11 +11,14 @@ export default function Feed({ user }) {
   const [isMorePostsLoading, setIsMorePostsLoading] = useState(false);
   const [hasNoMorePosts, setHasNoMorePosts] = useState(false);
 
+  const postsLength = posts.length;
+
   async function fetchPosts() {
+    setIsInitialLoading(true);
     try {
-      let uri = `${serverRoot}/api/posts/timeline?skip=${posts.length}`;
+      let uri = `${serverRoot}/api/posts/timeline?skip=${postsLength}`;
       if (!user) {
-        uri = `${serverRoot}/api/posts?skip=${posts.length}`;
+        uri = `${serverRoot}/api/posts?skip=${postsLength}`;
       }
 
       const res = await fetch(uri, {
@@ -44,7 +47,7 @@ export default function Feed({ user }) {
     fetchPosts();
 
     // eslint-disable-next-line
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     function onScroll() {

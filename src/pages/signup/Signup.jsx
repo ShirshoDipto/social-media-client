@@ -1,12 +1,15 @@
 import "./signup.css";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import GoogleIcon from "@mui/icons-material/Google";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function Signup() {
-  const serverRoot = process.env.REACT_APP_SERVERROOT;
   const [errors, setErrors] = useState([]);
   const [userExistError, setUserExistError] = useState("");
+  const { dispatch } = useContext(AuthContext);
+
+  const serverRoot = process.env.REACT_APP_SERVERROOT;
 
   async function handleSignup(e) {
     e.preventDefault();
@@ -19,7 +22,7 @@ export default function Signup() {
       body: data,
     });
 
-    let resData;
+    const resData = await res.json();
 
     if (!res.ok) {
       setErrors([]);
@@ -29,17 +32,14 @@ export default function Signup() {
         return setUserExistError("Invalid User. Create a new account. ");
       }
 
-      resData = await res.json();
       if (resData.error) {
         return setUserExistError(resData.error);
       }
 
       return setErrors(resData.errors);
-    } else {
-      resData = await res.json();
-      localStorage.setItem("nosebookUser", JSON.stringify(resData));
-      window.location.replace("/");
     }
+
+    dispatch({ type: "login", payload: resData });
   }
 
   async function handleGoogleLogin() {

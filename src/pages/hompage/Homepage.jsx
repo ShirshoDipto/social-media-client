@@ -6,7 +6,7 @@ import Contacts from "../../components/contacts/Contacts";
 export default function Homepage({ user }) {
   return (
     <div className="homepageContainer">
-      <Sidebar user={user} />
+      <Sidebar />
       <Feed user={user} />
       <Contacts user={user} />
     </div>

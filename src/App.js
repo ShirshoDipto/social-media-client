@@ -7,23 +7,23 @@ import Topbar from "./components/topbar/Topbar";
 import ScrollToTop from "./ScrollToTop.jsx";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { socket } from "./socket";
 
 import TimeAgo from "javascript-time-ago";
 
 import en from "javascript-time-ago/locale/en.json";
 import ru from "javascript-time-ago/locale/ru.json";
+import { AuthContext } from "./context/AuthContext";
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
 
 function App() {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
-  const userFromLocalStorage = localStorage.getItem("nosebookUser");
-  const [currentUser, setCurrentUser] = useState(
-    JSON.parse(userFromLocalStorage)
-  );
+  // const userFromLocalStorage = localStorage.getItem("nosebookUser");
+  // const [user, setUser] = useState(JSON.parse(userFromLocalStorage));
+  const { user, dispatch } = useContext(AuthContext);
 
   useEffect(() => {
     async function getUserFromGoogleAuth() {
@@ -38,54 +38,62 @@ function App() {
           throw console.log(resData);
         }
 
-        localStorage.setItem("nosebookUser", JSON.stringify(resData));
-        setCurrentUser({
-          userInfo: resData.userInfo,
-          token: resData.token,
-        });
+        dispatch({ type: "login", payload: resData });
       } catch (error) {
         console.log(error);
       }
     }
 
-    if (!currentUser && window.location.search) {
+    if (!user && window.location.search) {
       getUserFromGoogleAuth();
     }
-  }, [serverRoot, currentUser]);
+  }, [serverRoot, user, dispatch]);
 
   useEffect(() => {
-    if (currentUser) {
-      socket.auth = { user: currentUser && currentUser };
+    if (user) {
+      socket.auth = { user: user && user };
       socket.connect();
     }
 
     return () => {
       socket.disconnect();
     };
-  }, [currentUser]);
+  }, [user]);
 
   return (
     <BrowserRouter>
       <ScrollToTop />
       <div className="App">
-        <Topbar user={currentUser} />
+        <Topbar user={user} />
         <Routes>
-          <Route path="/" element={<Homepage user={currentUser} />} />
+          <Route
+            path="/"
+            element={<Homepage key={user?.userInfo._id} user={user} />}
+          />
           <Route
             path="/signup"
-            element={currentUser ? <Homepage user={currentUser} /> : <Signup />}
+            element={
+              user ? (
+                <Homepage key={user.userInfo._id} user={user} />
+              ) : (
+                <Signup />
+              )
+            }
           />
           <Route
             path="/login"
-            element={currentUser ? <Homepage user={currentUser} /> : <Login />}
+            element={
+              user ? (
+                <Homepage key={user.userInfo._id} user={user} />
+              ) : (
+                <Login />
+              )
+            }
           />
-          <Route
-            path="/users/:userId"
-            element={<Profile user={currentUser} />}
-          />
+          <Route path="/users/:userId" element={<Profile user={user} />} />
           <Route
             path="/messenger"
-            element={currentUser ? <Messenger user={currentUser} /> : <Login />}
+            element={user ? <Messenger user={user} /> : <Login />}
           />
         </Routes>
       </div>

@@ -1,7 +1,7 @@
+import "./contacts.css";
 import { useEffect, useState } from "react";
 import { socket } from "../../socket";
 import Contact from "../contact/Contact";
-import "./contacts.css";
 
 export default function Contacts({ user }) {
   const [onlineFnds, setOnlineFnds] = useState([]);
@@ -11,10 +11,6 @@ export default function Contacts({ user }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
 
   useEffect(() => {
-    if (!user) {
-      return;
-    }
-
     async function fetchCurrUser() {
       try {
         const res = await fetch(`${serverRoot}/api/users/${user.userInfo._id}`);
@@ -29,7 +25,9 @@ export default function Contacts({ user }) {
       }
     }
 
-    fetchCurrUser();
+    if (user) {
+      fetchCurrUser();
+    }
   }, [user, serverRoot]);
 
   useEffect(() => {
@@ -95,6 +93,9 @@ export default function Contacts({ user }) {
         <div className="contactsWrapper">
           <h4 className="contactsTitle">Contacts</h4>
           <div className="contactsList">
+            {onlineFnds.length === 0 && offlineFnds.length === 0 && (
+              <span className="noFndsText">No friends available</span>
+            )}
             {onlineFnds.length > 0 &&
               onlineFnds.map((fnd) => {
                 if (fnd) {

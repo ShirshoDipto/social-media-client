@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./login.css";
 import GoogleIcon from "@mui/icons-material/Google";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function Login() {
-  const serverRoot = process.env.REACT_APP_SERVERROOT;
   const [errors, setErrors] = useState([]);
   const [userExistError, setUserExistError] = useState("");
+  const { dispatch } = useContext(AuthContext);
+  const serverRoot = process.env.REACT_APP_SERVERROOT;
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -14,31 +16,32 @@ export default function Login() {
     const formData = new FormData(form);
     const data = new URLSearchParams(formData);
 
-    const res = await fetch(`${serverRoot}/api/login`, {
-      method: "POST",
-      body: data,
-    });
+    try {
+      const res = await fetch(`${serverRoot}/api/login`, {
+        method: "POST",
+        body: data,
+      });
 
-    let resData;
+      const resData = await res.json();
 
-    if (!res.ok) {
-      setErrors([]);
-      setUserExistError("");
+      if (!res.ok) {
+        setErrors([]);
+        setUserExistError("");
 
-      if (res.status === 401) {
-        return setUserExistError("Invalid User. Create a new account. ");
+        if (res.status === 401) {
+          return setUserExistError("Invalid User. Create a new account. ");
+        }
+
+        if (resData.error) {
+          return setUserExistError(resData.error);
+        }
+
+        return setErrors(resData.errors);
       }
 
-      resData = await res.json();
-      if (resData.error) {
-        return setUserExistError(resData.error);
-      }
-
-      return setErrors(resData.errors);
-    } else {
-      resData = await res.json();
-      localStorage.setItem("nosebookUser", JSON.stringify(resData));
-      window.location.replace("/");
+      dispatch({ type: "login", payload: resData });
+    } catch (error) {
+      console.log(error);
     }
   }
 
