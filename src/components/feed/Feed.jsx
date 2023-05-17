@@ -1,8 +1,8 @@
 import PostInput from "../postInput/PostInput";
-import Posts from "../posts/Posts";
 import CircularProgress from "@mui/material/CircularProgress";
 import "./feed.css";
 import { useEffect, useState } from "react";
+import Post from "../post/Post";
 
 export default function Feed({ user }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
@@ -11,14 +11,11 @@ export default function Feed({ user }) {
   const [isMorePostsLoading, setIsMorePostsLoading] = useState(false);
   const [hasNoMorePosts, setHasNoMorePosts] = useState(false);
 
-  const postsLength = posts.length;
-
   async function fetchPosts() {
-    setIsInitialLoading(true);
     try {
-      let uri = `${serverRoot}/api/posts/timeline?skip=${postsLength}`;
+      let uri = `${serverRoot}/api/posts/timeline?skip=${posts.length}`;
       if (!user) {
-        uri = `${serverRoot}/api/posts?skip=${postsLength}`;
+        uri = `${serverRoot}/api/posts?skip=${posts.length}`;
       }
 
       const res = await fetch(uri, {
@@ -77,7 +74,21 @@ export default function Feed({ user }) {
           </div>
         )}
         <PostInput user={user} posts={posts} setPosts={setPosts} />
-        <Posts user={user} posts={posts} setPosts={setPosts} />
+        {posts.length > 0 && (
+          <div className="allPosts">
+            {posts.map((post) => {
+              return (
+                <Post
+                  key={post._id}
+                  user={user}
+                  post={post}
+                  posts={posts}
+                  setPosts={setPosts}
+                />
+              );
+            })}
+          </div>
+        )}
         {isMorePostsLoading ? (
           <CircularProgress className="homePostsLoading" disableShrink />
         ) : (

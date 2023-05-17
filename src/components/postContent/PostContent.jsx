@@ -17,15 +17,18 @@ export default function PostContent({
   posts,
   setPosts,
 }) {
-  const serverRoot = process.env.REACT_APP_SERVERROOT;
-  const clientRoot = process.env.REACT_APP_CLIENTROOT;
-  const [dropdownStatus, setDropdownStatus] = useState(false);
   const dropdown = useRef();
   const dropdownTrigger = useRef();
   const updatedPostContent = useRef();
+
+  const [dropdownStatus, setDropdownStatus] = useState(false);
   const [numLikes, setNumLikes] = useState(post.numLikes);
   const [isLiked, setIsliked] = useState({});
   const [isUpdating, setIsUpdating] = useState(false);
+
+  const serverRoot = process.env.REACT_APP_SERVERROOT;
+  const clientRoot = process.env.REACT_APP_CLIENTROOT;
+
   const fullname = `${post.author.firstName} ${post.author.lastName}`;
 
   async function handleDeletePost() {
@@ -120,6 +123,7 @@ export default function PostContent({
       newPost.content = postContent;
       return newPost;
     });
+
     return newPosts;
   }
 
@@ -137,8 +141,9 @@ export default function PostContent({
         body: data,
       });
 
+      const resData = await res.json();
       if (!res.ok) {
-        console.log(await res.json());
+        throw resData;
       }
 
       const newPosts = await replacePost(updatedPostContent.current.value);

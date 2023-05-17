@@ -1,15 +1,16 @@
 import "./commentContainer.css";
 import CommentInput from "../commentInput/CommentInput";
-import Comments from "../comments/Comments";
 import { useEffect, useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
+import CommentContent from "../commentContent/CommentContent";
 
 export default function CommentContainer({ user, post, setNumComments }) {
-  const serverRoot = process.env.REACT_APP_SERVERROOT;
   const [commentsState, setCommentsState] = useState({
     comments: [],
     isLoading: true,
   });
+
+  const serverRoot = process.env.REACT_APP_SERVERROOT;
 
   async function addNewComment(newComment) {
     newComment.author = {
@@ -20,7 +21,7 @@ export default function CommentContainer({ user, post, setNumComments }) {
     };
 
     setCommentsState({
-      comments: [newComment].concat(...commentsState.comments),
+      comments: [newComment, ...commentsState.comments],
       isLoading: false,
     });
   }
@@ -28,15 +29,15 @@ export default function CommentContainer({ user, post, setNumComments }) {
   useEffect(() => {
     async function fetchComments() {
       const res = await fetch(`${serverRoot}/api/posts/${post._id}/comments`);
+
+      const resData = await res.json();
       if (!res.ok) {
-        console.log(await res.json());
         return setCommentsState({
           comments: commentsState.comments,
           isLoading: false,
         });
       }
 
-      const resData = await res.json();
       if (resData.length !== 0) {
         return setCommentsState({
           comments: resData.comments,
@@ -71,12 +72,23 @@ export default function CommentContainer({ user, post, setNumComments }) {
           disableShrink
         />
       ) : (
-        <Comments
-          user={user}
-          post={post}
-          comments={commentsState.comments}
-          setNumComments={setNumComments}
-        />
+        <div className="allComments">
+          {commentsState.comments.length > 0 ? (
+            commentsState.comments.map((comment) => {
+              return (
+                <CommentContent
+                  key={comment._id}
+                  user={user}
+                  post={post}
+                  comment={comment}
+                  setNumComments={setNumComments}
+                />
+              );
+            })
+          ) : (
+            <span className="noCommentsText">No comments available.</span>
+          )}
+        </div>
       )}
     </div>
   );

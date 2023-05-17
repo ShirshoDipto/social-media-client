@@ -32,6 +32,12 @@
   margin: 50px;
 }
 
+.allPosts {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 .noMorePoststext {
   color: var(--secondaryText);
   text-align: center;

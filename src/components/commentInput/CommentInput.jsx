@@ -9,6 +9,7 @@ export default function CommentInput({
 }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
+
   const content = useRef();
 
   async function handleCommentSubmit(e) {

@@ -13,16 +13,18 @@ export default function CommentContent({
   post,
   setNumComments,
 }) {
-  const serverRoot = process.env.REACT_APP_SERVERROOT;
-  const clientRoot = process.env.REACT_APP_CLIENTROOT;
-  const [dropdownStatus, setDropdownStatus] = useState(false);
   const dropdown = useRef();
   const dropdownTrigger = useRef();
   const updatedCommentContent = useRef();
+
+  const [dropdownStatus, setDropdownStatus] = useState(false);
   const [commentState, setCommentState] = useState(comment);
   const [isLiked, setIsLiked] = useState({});
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
+
+  const serverRoot = process.env.REACT_APP_SERVERROOT;
+  const clientRoot = process.env.REACT_APP_CLIENTROOT;
 
   const fullname = `${commentState.author.firstName} ${commentState.author.lastName}`;
 

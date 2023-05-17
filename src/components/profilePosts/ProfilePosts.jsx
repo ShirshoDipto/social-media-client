@@ -2,7 +2,7 @@ import "./profilePosts.css";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Posts from "../posts/Posts";
+import Post from "../post/Post";
 
 export default function ProfilePosts({ user }) {
   const [posts, setPosts] = useState([]);
@@ -63,7 +63,21 @@ export default function ProfilePosts({ user }) {
     <div className="profilePosts">
       <div className="profilePostsWrapper">
         <div className="profilePostsTitle">Posts</div>
-        <Posts user={user} posts={posts} setPosts={setPosts} />
+        {posts.length > 0 && (
+          <div className="allPosts">
+            {posts.map((post) => {
+              return (
+                <Post
+                  key={post._id}
+                  user={user}
+                  post={post}
+                  posts={posts}
+                  setPosts={setPosts}
+                />
+              );
+            })}
+          </div>
+        )}
         {isLoading ? (
           <CircularProgress className="postsLoading" disableShrink />
         ) : (

@@ -72,9 +72,15 @@ export default function ChatBoxForm({ user, currentChat, handleSubmit }) {
           <div className="isTypingWrapper">
             <div>{contact.firstName} is typing</div>
             <div className="typingIndicator">
-              <span className="dot"></span>
-              <span className="dot"></span>
-              <span className="dot"></span>
+              <div className="dotContainer">
+                <span className="dot dot1"></span>
+              </div>
+              <div className="dotContainer">
+                <span className="dot dot2"></span>
+              </div>
+              <div className="dotContainer">
+                <span className="dot dot3"></span>
+              </div>
             </div>
           </div>
         )}
