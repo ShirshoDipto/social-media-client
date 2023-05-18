@@ -11,7 +11,7 @@ import * as apiCalls from "../../messengerApiCalls";
 export default function Messenger({ user }) {
   const [conversations, setConversations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isFetchingMsgs, setIsfetchingMsgs] = useState(false);
+  const [isFetchingMsgs, setIsFetchingMsgs] = useState(false);
   const [currentChat, setCurrentChat] = useState(null);
   const [unseenMsgs, setUnseenMsgs] = useState([]);
   const [newMsgs, setNewMsgs] = useState([]);
@@ -139,15 +139,15 @@ export default function Messenger({ user }) {
       return;
     }
 
-    setIsfetchingMsgs(true);
+    setIsFetchingMsgs(true);
     socket.emit("currentChatActive", {
       userId: user.userInfo._id,
       activeChat: conv,
     });
 
-    getMessages(conv);
     setCurrentChat(conv);
-    setIsfetchingMsgs(false);
+    await getMessages(conv);
+    setIsFetchingMsgs(false);
   }
 
   useEffect(() => {
@@ -187,8 +187,8 @@ export default function Messenger({ user }) {
           activeChat: chatToActive,
         });
 
-        getMessages(chatToActive);
         setCurrentChat(chatToActive);
+        await getMessages(chatToActive);
       }
     }
 
@@ -282,10 +282,10 @@ export default function Messenger({ user }) {
         ) : (
           <div className="chatBoxWrapper">
             <div className="chatBoxCenter">
-              {oldMsgs.length === 0 &&
+              {!isFetchingMsgs &&
+                oldMsgs.length === 0 &&
                 newMsgs.length === 0 &&
-                unseenMsgs.length === 0 &&
-                !isFetchingMsgs && (
+                unseenMsgs.length === 0 && (
                   <div className="noMsgContainer">
                     <div className="selectChatText">
                       Write something to start a conversation
