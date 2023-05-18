@@ -48,7 +48,7 @@ export default function GeneralNotifs({ user }) {
 
     setIsMarkingAsSeen(true);
     try {
-      const res = await fetch(`${serverRoot}/api/notifications/markAllAsRead`, {
+      const res = await fetch(`${serverRoot}/api/notifications/allNotifs`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${user.token}`,

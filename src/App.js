@@ -27,9 +27,12 @@ function App() {
   useEffect(() => {
     async function getUserFromGoogleAuth() {
       try {
-        const res = await fetch(`${serverRoot}/api/login/google/success`, {
-          credentials: "include",
-        });
+        const res = await fetch(
+          `${serverRoot}/api/users/login/google/success`,
+          {
+            credentials: "include",
+          }
+        );
 
         const resData = await res.json();
 

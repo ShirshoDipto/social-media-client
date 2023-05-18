@@ -67,7 +67,7 @@ export default function Messenger({ user }) {
   async function markUnseenAsSeen(conv) {
     try {
       const res = await fetch(
-        `${serverRoot}/api/messenger/conversations/${conv._id}/messages/markAsSeen`,
+        `${serverRoot}/api/messenger/conversations/${conv._id}/messages`,
 
         {
           method: "PUT",

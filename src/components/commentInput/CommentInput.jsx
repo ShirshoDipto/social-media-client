@@ -19,24 +19,26 @@ export default function CommentInput({
     }
 
     try {
-      const res = await fetch(`${serverRoot}/api/posts/${post._id}/comments`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ content: content.current.value }),
-      });
-
-      if (!res.ok) {
-        console.log(await res.json());
-      }
+      const res = await fetch(
+        `${serverRoot}/api/home/posts/${post._id}/comments`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ content: content.current.value }),
+        }
+      );
 
       const resData = await res.json();
+      if (!res.ok) {
+        throw resData;
+      }
 
-      e.target.reset();
       await addNewComment(resData.comment);
       setNumComments(resData.numComments);
+      e.target.reset();
     } catch (err) {
       console.log(err);
     }

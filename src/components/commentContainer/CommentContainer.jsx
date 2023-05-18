@@ -5,10 +5,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import CommentContent from "../commentContent/CommentContent";
 
 export default function CommentContainer({ user, post, setNumComments }) {
-  const [commentsState, setCommentsState] = useState({
-    comments: [],
-    isLoading: true,
-  });
+  const [comments, setComments] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const serverRoot = process.env.REACT_APP_SERVERROOT;
 
@@ -20,40 +18,36 @@ export default function CommentContainer({ user, post, setNumComments }) {
       profilePic: user.userInfo.profilePic,
     };
 
-    setCommentsState({
-      comments: [newComment, ...commentsState.comments],
-      isLoading: false,
-    });
+    setComments([newComment, ...comments]);
+    setIsLoading(false);
   }
 
   useEffect(() => {
     async function fetchComments() {
-      const res = await fetch(`${serverRoot}/api/posts/${post._id}/comments`);
+      try {
+        const res = await fetch(
+          `${serverRoot}/api/home/posts/${post._id}/comments`
+        );
 
-      const resData = await res.json();
-      if (!res.ok) {
-        return setCommentsState({
-          comments: commentsState.comments,
-          isLoading: false,
-        });
+        const resData = await res.json();
+        if (!res.ok) {
+          return setIsLoading(false);
+        }
+
+        if (resData.length !== 0) {
+          setComments(resData.comments);
+          setIsLoading(false);
+          return;
+        }
+
+        setComments(resData.comments);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
       }
-
-      if (resData.length !== 0) {
-        return setCommentsState({
-          comments: resData.comments,
-          isLoading: false,
-        });
-      }
-
-      return setCommentsState({
-        comments: resData.comments,
-        isLoading: false,
-      });
     }
 
-    fetchComments().catch((err) => {
-      console.log(err);
-    });
+    fetchComments();
     // eslint-disable-next-line
   }, [serverRoot, post._id]);
 
@@ -65,7 +59,7 @@ export default function CommentContainer({ user, post, setNumComments }) {
         addNewComment={addNewComment}
         setNumComments={setNumComments}
       />
-      {commentsState.isLoading ? (
+      {isLoading ? (
         <CircularProgress
           size={25}
           className="postCommentsLoading"
@@ -73,8 +67,8 @@ export default function CommentContainer({ user, post, setNumComments }) {
         />
       ) : (
         <div className="allComments">
-          {commentsState.comments.length > 0 ? (
-            commentsState.comments.map((comment) => {
+          {comments.length > 0 ? (
+            comments.map((comment) => {
               return (
                 <CommentContent
                   key={comment._id}
@@ -82,6 +76,8 @@ export default function CommentContainer({ user, post, setNumComments }) {
                   post={post}
                   comment={comment}
                   setNumComments={setNumComments}
+                  comments={comments}
+                  setComments={setComments}
                 />
               );
             })

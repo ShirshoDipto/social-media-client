@@ -17,7 +17,7 @@ export default function Login() {
     const data = new URLSearchParams(formData);
 
     try {
-      const res = await fetch(`${serverRoot}/api/login`, {
+      const res = await fetch(`${serverRoot}/api/users/login`, {
         method: "POST",
         body: data,
       });
@@ -109,7 +109,10 @@ export default function Login() {
               type="button"
               className="loginGoogleButton"
               onClick={() => {
-                window.open("http://localhost:5000/api/login/google", "_self");
+                window.open(
+                  "http://localhost:5000/api/users/login/google",
+                  "_self"
+                );
               }}
             >
               <GoogleIcon color="action" />

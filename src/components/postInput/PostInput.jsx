@@ -8,12 +8,13 @@ import { grey } from "@mui/material/colors";
 import { socket } from "../../socket";
 
 export default function PostInput({ user, posts, setPosts }) {
-  const serverRoot = process.env.REACT_APP_SERVERROOT;
-  const clientRoot = process.env.REACT_APP_CLIENTROOT;
   const [image, setImage] = useState(null);
   const imgRef = useRef();
   const content = useRef();
   const [isLoading, setIsLoading] = useState(false);
+
+  const serverRoot = process.env.REACT_APP_SERVERROOT;
+  const clientRoot = process.env.REACT_APP_CLIENTROOT;
 
   async function addPostAndSendEvent(newPost) {
     newPost.author = {
@@ -49,7 +50,7 @@ export default function PostInput({ user, posts, setPosts }) {
     formData.append("content", content.current.value);
 
     try {
-      const res = await fetch(`${serverRoot}/api/posts`, {
+      const res = await fetch(`${serverRoot}/api/home/posts`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${user.token}`,

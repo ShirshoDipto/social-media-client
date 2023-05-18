@@ -50,15 +50,12 @@ export default function NewMsg({ user }) {
 
     setIsMarkingAsSeen(true);
     try {
-      const res = await fetch(
-        `${serverRoot}/api/notifications/markUnseenMsgsAsSeen`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
+      const res = await fetch(`${serverRoot}/api/notifications/unseenMsgs`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
 
       const resData = await res.json();
       if (!res.ok) {

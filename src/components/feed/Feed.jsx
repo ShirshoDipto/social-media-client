@@ -13,9 +13,9 @@ export default function Feed({ user }) {
 
   async function fetchPosts() {
     try {
-      let uri = `${serverRoot}/api/posts/timeline?skip=${posts.length}`;
+      let uri = `${serverRoot}/api/home/posts/timeline?skip=${posts.length}`;
       if (!user) {
-        uri = `${serverRoot}/api/posts?skip=${posts.length}`;
+        uri = `${serverRoot}/api/home/posts?skip=${posts.length}`;
       }
 
       const res = await fetch(uri, {

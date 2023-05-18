@@ -17,7 +17,7 @@ export default function Signup() {
     const formData = new FormData(form);
     const data = new URLSearchParams(formData);
 
-    const res = await fetch(`${serverRoot}/api/signup`, {
+    const res = await fetch(`${serverRoot}/api/users/signup`, {
       method: "POST",
       body: data,
     });
@@ -43,7 +43,7 @@ export default function Signup() {
   }
 
   async function handleGoogleLogin() {
-    window.open("http://localhost:5000/api/login/google", "_self");
+    window.open("http://localhost:5000/api/users/login/google", "_self");
   }
 
   return (

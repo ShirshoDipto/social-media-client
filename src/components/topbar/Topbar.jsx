@@ -22,7 +22,7 @@ export default function Topbar({ user }) {
 
   async function handleLogout() {
     try {
-      const res = await fetch(`${serverRoot}/api/logout`, {
+      const res = await fetch(`${serverRoot}/api/users/logout`, {
         method: "POST",
         credentials: "include",
       });

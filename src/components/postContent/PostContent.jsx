@@ -33,7 +33,7 @@ export default function PostContent({
 
   async function handleDeletePost() {
     try {
-      const res = await fetch(`${serverRoot}/api/posts/${post._id}`, {
+      const res = await fetch(`${serverRoot}/api/home/posts/${post._id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -54,18 +54,21 @@ export default function PostContent({
 
   async function addLike() {
     try {
-      const res = await fetch(`${serverRoot}/api/posts/${post._id}/likes`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
-
-      if (!res.ok) {
-        return console.log(await res.json());
-      }
+      const res = await fetch(
+        `${serverRoot}/api/home/posts/${post._id}/likes`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
 
       const resData = await res.json();
+      if (!res.ok) {
+        throw resData;
+      }
+
       setNumLikes(numLikes + 1);
       setIsliked(resData.postLike);
     } catch (error) {
@@ -76,7 +79,7 @@ export default function PostContent({
   async function deleteLike() {
     try {
       const res = await fetch(
-        `${serverRoot}/api/posts/${post._id}/likes/${isLiked._id}`,
+        `${serverRoot}/api/home/posts/${post._id}/likes/${isLiked._id}`,
         {
           method: "DELETE",
           headers: {
@@ -85,8 +88,9 @@ export default function PostContent({
         }
       );
 
+      const resData = await res.json();
       if (!res.ok) {
-        return console.log(await res.json());
+        throw resData;
       }
 
       setNumLikes(numLikes - 1);
@@ -106,11 +110,6 @@ export default function PostContent({
     } else {
       await addLike();
     }
-  }
-
-  async function toggleIsUpdating() {
-    setDropdownStatus(false);
-    setIsUpdating(true);
   }
 
   async function replacePost(postContent) {
@@ -133,7 +132,7 @@ export default function PostContent({
       const formData = new FormData(e.target);
       const data = new URLSearchParams(formData);
 
-      const res = await fetch(`${serverRoot}/api/posts/${post._id}`, {
+      const res = await fetch(`${serverRoot}/api/home/posts/${post._id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -157,15 +156,14 @@ export default function PostContent({
   useEffect(() => {
     async function fetchUserLike() {
       try {
-        if (!user) {
-          return;
-        }
-
-        const res = await fetch(`${serverRoot}/api/posts/${post._id}/likes`, {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
+        const res = await fetch(
+          `${serverRoot}/api/home/posts/${post._id}/likes`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
 
         const resData = await res.json();
         if (!res.ok) {
@@ -182,7 +180,9 @@ export default function PostContent({
       }
     }
 
-    fetchUserLike();
+    if (user) {
+      fetchUserLike();
+    }
   }, [post._id, serverRoot, user]);
 
   useEffect(() => {
@@ -244,7 +244,13 @@ export default function PostContent({
               </div>
               {dropdownStatus && (
                 <ul className="postDropdown" ref={dropdown}>
-                  <li className="postDropdownItem" onClick={toggleIsUpdating}>
+                  <li
+                    className="postDropdownItem"
+                    onClick={() => {
+                      setDropdownStatus(false);
+                      setIsUpdating(true);
+                    }}
+                  >
                     <EditIcon className="postDropdownIcon" />
                     <span className="postDropdownItemText">Update</span>
                   </li>
