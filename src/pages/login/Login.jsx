@@ -1,13 +1,15 @@
-import { useContext, useState } from "react";
 import "./login.css";
+import { useContext, useState } from "react";
 import GoogleIcon from "@mui/icons-material/Google";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import GuestUser from "../../components/guestUser/GuestUser";
 
 export default function Login() {
   const [errors, setErrors] = useState([]);
   const [userExistError, setUserExistError] = useState("");
   const { dispatch } = useContext(AuthContext);
+
   const serverRoot = process.env.REACT_APP_SERVERROOT;
 
   async function handleLogin(e) {
@@ -47,6 +49,7 @@ export default function Login() {
 
   return (
     <div className="login">
+      <GuestUser />
       <div className="loginWrapper">
         <div className="loginLeft">
           <Link to={"/"} className="routerLink">

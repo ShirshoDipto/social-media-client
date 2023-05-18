@@ -1,0 +1,18 @@
+.guestUser {
+  position: fixed;
+  top: 25px;
+  right: 25px;
+}
+
+.guestUser button {
+  padding: 10px;
+  background-color: orange;
+  font-size: 0.7rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.guestUser button:hover {
+  background-color: rgb(228, 157, 26);
+}

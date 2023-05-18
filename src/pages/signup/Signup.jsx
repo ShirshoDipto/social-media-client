@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import GoogleIcon from "@mui/icons-material/Google";
 import { AuthContext } from "../../context/AuthContext";
+import GuestUser from "../../components/guestUser/GuestUser";
 
 export default function Signup() {
   const [errors, setErrors] = useState([]);
@@ -48,6 +49,7 @@ export default function Signup() {
 
   return (
     <div className="signup">
+      <GuestUser />
       <div className="signupWrapper">
         <div className="signupLeft">
           <Link to={"/"} className="routerLink">
