@@ -7,13 +7,6 @@ export default function AuthReducer(state, action) {
         error: false,
       };
 
-    case "signup":
-      return {
-        user: action.payload,
-        isFetching: false,
-        error: false,
-      };
-
     case "logout":
       return {
         user: null,
@@ -22,8 +15,10 @@ export default function AuthReducer(state, action) {
       };
 
     case "userUpdate":
+      const newUser = { ...state.user };
+      newUser.userInfo = action.payload;
       return {
-        user: null,
+        user: newUser,
         isFetching: false,
         error: false,
       };

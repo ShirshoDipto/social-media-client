@@ -8,7 +8,8 @@ import SchoolIcon from "@mui/icons-material/School";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import CircularProgress from "@mui/material/CircularProgress";
 import { grey } from "@mui/material/colors";
-import { useRef, useState } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import { useContext, useRef, useState } from "react";
 
 export default function ProfileUpdateModal({
   user,
@@ -32,6 +33,8 @@ export default function ProfileUpdateModal({
   const [profilePicImg, setProfilePicImg] = useState(null);
   const [coverPicImg, setCoverPicImg] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const { dispatch } = useContext(AuthContext);
 
   const serverRoot = process.env.REACT_APP_SERVERROOT;
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
@@ -308,23 +311,16 @@ export default function ProfileUpdateModal({
     }
   }
 
-  async function updateLocalStorage(updatedUser) {
-    const nosebookUser = {
-      userInfo: updatedUser,
-      token: token,
-    };
-
-    localStorage.setItem("nosebookUser", JSON.stringify(nosebookUser));
-  }
-
   async function updateProfile(e) {
     try {
       e.preventDefault();
       setIsLoading(true);
+
       const profilePicName = await updateProfilePic();
       const coverPicName = await updateCoverPic();
       const updatedUser = await updateUserBio(profilePicName, coverPicName);
-      await updateLocalStorage(updatedUser);
+
+      dispatch({ type: "userUpdate", payload: updatedUser });
       updatedUser.friends = user.friends;
       setProfileInfos(updatedUser);
       setIsLoading(false);

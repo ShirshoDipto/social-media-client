@@ -21,8 +21,7 @@ TimeAgo.addLocale(ru);
 
 function App() {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
-  // const userFromLocalStorage = localStorage.getItem("nosebookUser");
-  // const [user, setUser] = useState(JSON.parse(userFromLocalStorage));
+
   const { user, dispatch } = useContext(AuthContext);
 
   useEffect(() => {
