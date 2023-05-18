@@ -143,19 +143,19 @@ export default function NewMsg({ user }) {
   }, []);
 
   return (
-    <div className="notifContainer">
-      <ChatIcon
-        className="notificationIcon"
-        ref={dropdownTrigger}
-        onClick={() => {
-          if (dropdownStatus && notifications.length > 0) {
-            setNotifications([]);
-            setNumNotif(0);
-          }
-          setDropdownStatus(!dropdownStatus);
-          markAllAsRead();
-        }}
-      />
+    <div
+      className="notifContainer"
+      ref={dropdownTrigger}
+      onClick={() => {
+        if (dropdownStatus && notifications.length > 0) {
+          setNotifications([]);
+          setNumNotif(0);
+        }
+        setDropdownStatus(!dropdownStatus);
+        markAllAsRead();
+      }}
+    >
+      <ChatIcon className="notificationIcon" />
 
       {numNotif > 0 && <span className="topbarIconBadge">{numNotif}</span>}
       {dropdownStatus && (

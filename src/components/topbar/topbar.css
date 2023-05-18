@@ -24,6 +24,10 @@
   cursor: pointer;
 }
 
+.topbarLogo:hover {
+  color: var(--topbarBackgroundDarkish);
+}
+
 .topbarLinks{
   display: flex;
   justify-content: center;
@@ -46,7 +50,7 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
-  gap: 10px;
+  gap: 30px;
   color: white;
 }
 
@@ -92,10 +96,10 @@
 .topbarIcons {
   display: flex;
   align-items: center;
+  gap: 5px;
 }
 
 .topbarIconItem {
-  margin-right: 15px;
   position: relative;
   height: 100%;
   display: flex;

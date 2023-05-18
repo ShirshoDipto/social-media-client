@@ -57,7 +57,19 @@ function App() {
       socket.connect();
     }
 
+    function onConnectError(error) {
+      console.log(error);
+    }
+
+    function onInternalError(error) {
+      console.log(error);
+    }
+
+    socket.on("connect_error", onConnectError);
+    socket.on("internalError", onInternalError);
     return () => {
+      socket.off("connect_error", onConnectError);
+      socket.off("internalError", onInternalError);
       socket.disconnect();
     };
   }, [user]);

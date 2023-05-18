@@ -6,10 +6,12 @@ import ChatBoxForm from "../../components/chatBoxForm/ChatBoxForm";
 import { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { socket } from "../../socket";
+import * as apiCalls from "../../messengerApiCalls";
 
 export default function Messenger({ user }) {
   const [conversations, setConversations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isFetchingMsgs, setIsfetchingMsgs] = useState(false);
   const [currentChat, setCurrentChat] = useState(null);
   const [unseenMsgs, setUnseenMsgs] = useState([]);
   const [newMsgs, setNewMsgs] = useState([]);
@@ -17,80 +19,6 @@ export default function Messenger({ user }) {
   const oldMsgRef = useRef();
   const newMsgRef = useRef();
   const [hasUnseenMsgs, setHasUnseenMsgs] = useState(false);
-
-  const serverRoot = process.env.REACT_APP_SERVERROOT;
-
-  async function getUnseenMsgs(convId) {
-    try {
-      const res = await fetch(
-        `${serverRoot}/api/messenger/conversations/${convId}/messages/unseen`,
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
-
-      const resData = await res.json();
-      if (!res.ok) {
-        throw resData;
-      }
-
-      return resData.messages;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async function getOldMsgs(convId, skipMsgs) {
-    try {
-      const res = await fetch(
-        `${serverRoot}/api/messenger/conversations/${convId}/messages/seen?skip=${skipMsgs}`,
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
-
-      const resData = await res.json();
-      if (!res.ok) {
-        throw resData;
-      }
-
-      return resData.messages;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async function markUnseenAsSeen(conv) {
-    try {
-      const res = await fetch(
-        `${serverRoot}/api/messenger/conversations/${conv._id}/messages`,
-
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            seenBy: [conv.members[0]._id, conv.members[1]._id],
-          }),
-        }
-      );
-
-      const resData = await res.json();
-      if (!res.ok) {
-        throw resData;
-      }
-
-      return resData.messages;
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   async function updateNumUnseenToZero(convId) {
     const newConvs = conversations.map((conv) => {
@@ -111,8 +39,8 @@ export default function Messenger({ user }) {
 
   async function getMessages(conv) {
     const [unseen, old] = await Promise.all([
-      getUnseenMsgs(conv._id),
-      getOldMsgs(conv._id, 0),
+      apiCalls.getUnseenMsgs(conv._id, user.token),
+      apiCalls.getOldMsgs(conv._id, 0, user.token),
     ]);
 
     const numUnseenMsgs = conv.unseenMsgs.find(
@@ -120,7 +48,7 @@ export default function Messenger({ user }) {
     );
 
     if (numUnseenMsgs) {
-      markUnseenAsSeen(conv); // Asynchronous. Don't have to wait for it to finish before rendering....
+      apiCalls.markUnseenAsSeen(conv, user.token); // Asynchronous. Don't have to wait for it to finish before rendering....
       updateNumUnseenToZero(conv._id);
       setHasUnseenMsgs(true);
     }
@@ -128,28 +56,6 @@ export default function Messenger({ user }) {
     setUnseenMsgs(unseen);
     setOldMsgs(old);
     setNewMsgs([]);
-  }
-
-  async function fetchConversation(msg) {
-    try {
-      const res = await fetch(
-        `${serverRoot}/api/messenger/conversations/${msg.conversationId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
-
-      const resData = await res.json();
-      if (!res.ok) {
-        throw resData;
-      }
-
-      return resData.conversation;
-    } catch (error) {
-      console.log(error);
-    }
   }
 
   // eslint-disable-next-line
@@ -177,7 +83,7 @@ export default function Messenger({ user }) {
     });
 
     if (!hasUpdated) {
-      const conv = await fetchConversation(newMessage);
+      const conv = await apiCalls.fetchSingleConv(newMessage, user.token);
       newConversations = [conv, ...newConversations];
     }
 
@@ -233,6 +139,7 @@ export default function Messenger({ user }) {
       return;
     }
 
+    setIsfetchingMsgs(true);
     socket.emit("currentChatActive", {
       userId: user.userInfo._id,
       activeChat: conv,
@@ -240,17 +147,10 @@ export default function Messenger({ user }) {
 
     getMessages(conv);
     setCurrentChat(conv);
+    setIsfetchingMsgs(false);
   }
 
   useEffect(() => {
-    function onConnectError(error) {
-      console.log(error);
-    }
-
-    function onInternalError(error) {
-      console.log(error);
-    }
-
     function onGetMsg(msg) {
       updateConvsForNewMsg(msg);
       if (msg.conversationId === currentChat?._id) {
@@ -259,35 +159,14 @@ export default function Messenger({ user }) {
     }
 
     socket.on("getMsg", onGetMsg);
-    socket.on("internalError", onInternalError);
-    socket.on("connect_error", onConnectError);
 
     return () => {
-      socket.off("connect_error", onConnectError);
       socket.off("getMsg", onGetMsg);
-      socket.off("internalError", onInternalError);
     };
   }, [currentChat, updateConvsForNewMsg]);
 
   useEffect(() => {
     // CAREFUL!! This effect will run twice on developement. Hence, two conversations.
-    async function createNewConv(userId) {
-      const res = await fetch(`${serverRoot}/api/messenger/conversations`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId }),
-      });
-
-      const resData = await res.json();
-      if (!res.ok) {
-        throw resData;
-      }
-
-      return resData.conversation;
-    }
 
     async function handleCurrentChat(converses) {
       if (window.location.search) {
@@ -299,7 +178,7 @@ export default function Messenger({ user }) {
         );
 
         if (!chatToActive) {
-          chatToActive = await createNewConv(userId);
+          chatToActive = await apiCalls.createNewConv(userId, user.token);
           setConversations([chatToActive, ...converses]);
         }
 
@@ -313,28 +192,19 @@ export default function Messenger({ user }) {
       }
     }
 
-    async function fetchConversations() {
+    async function setUpMessenger() {
       try {
-        const res = await fetch(`${serverRoot}/api/messenger/conversations`, {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
+        const conversations = await apiCalls.fetchConversations(user.token);
 
-        const resData = await res.json();
-        if (!res.ok) {
-          throw resData;
-        }
-
-        setConversations(resData.conversations);
-        await handleCurrentChat(resData.conversations);
+        setConversations(conversations);
+        await handleCurrentChat(conversations);
         setIsLoading(false);
       } catch (error) {
         console.log(error);
       }
     }
 
-    fetchConversations();
+    setUpMessenger();
     // eslint-disable-next-line
   }, []);
 
@@ -371,6 +241,11 @@ export default function Messenger({ user }) {
       <div className="conversations">
         <div className="conversationsWrapper">
           <div className="conversationContainer">
+            {conversations.length === 0 && (
+              <div className="noMsgContainer">
+                <div className="selectChatText">No conversation available</div>
+              </div>
+            )}
             {conversations.map((conv) => {
               return (
                 <div
@@ -399,19 +274,34 @@ export default function Messenger({ user }) {
         }}
       >
         {!currentChat ? (
-          <div className="selectChatText">Select a chat to start messaging</div>
+          conversations.length > 0 && (
+            <div className="selectChatText">
+              Select a conversation to start messaging
+            </div>
+          )
         ) : (
           <div className="chatBoxWrapper">
             <div className="chatBoxCenter">
+              {oldMsgs.length === 0 &&
+                newMsgs.length === 0 &&
+                unseenMsgs.length === 0 &&
+                !isFetchingMsgs && (
+                  <div className="noMsgContainer">
+                    <div className="selectChatText">
+                      Write something to start a conversation
+                    </div>
+                  </div>
+                )}
               {oldMsgs.length > 0 && (
                 <div className="oldMsgs">
                   <div className="showMoreMsg">
                     <div></div>
                     <button
                       onClick={async () => {
-                        const msgs = await getOldMsgs(
+                        const msgs = await apiCalls.getOldMsgs(
                           currentChat._id,
-                          oldMsgs.length + unseenMsgs.length + newMsgs.length
+                          oldMsgs.length + unseenMsgs.length + newMsgs.length,
+                          user.token
                         );
                         setOldMsgs([...msgs, ...oldMsgs]);
                       }}

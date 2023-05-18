@@ -1,5 +1,22 @@
 /* Notification styles in general*/
 
+.notifContainer {
+  padding: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.notifContainer:hover {
+  background-color: var(--searchBarDarkish);
+}
+
+.notifContainer:active {
+  background-color: var(--searchBar);
+}
+
 .msgNotificationList {
   display: flex;
   flex-direction: column;
@@ -13,7 +30,7 @@
 
 .msgNotifDropDown { 
   position: absolute;
-  top: 45px;
+  top: 50px;
   right: 0;
   background-color: var(--searchBarDarkish);
   border-radius: 5px;
