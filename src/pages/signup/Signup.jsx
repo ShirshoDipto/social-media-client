@@ -43,10 +43,6 @@ export default function Signup() {
     dispatch({ type: "login", payload: resData });
   }
 
-  async function handleGoogleLogin() {
-    window.open("http://localhost:5000/api/users/login/google", "_self");
-  }
-
   return (
     <div className="signup">
       <GuestUser />
@@ -163,7 +159,9 @@ export default function Signup() {
             <button
               type="button"
               className="signupGoogleButton"
-              onClick={handleGoogleLogin}
+              onClick={() =>
+                window.open(`${serverRoot}/api/users/login/google`, "_self")
+              }
             >
               <GoogleIcon color="action" />
               <span>Continue with Google</span>

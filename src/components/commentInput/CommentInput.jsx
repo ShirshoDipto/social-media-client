@@ -47,19 +47,15 @@ export default function CommentInput({
   return (
     <div className="commentInput">
       <div className="commentInputWrapper">
-        {user && user.userInfo.profilePic ? (
-          <img
-            src={`${serverRoot}/images/${user.userInfo.profilePic}`}
-            alt=""
-            className="commentInputUserImg"
-          />
-        ) : (
-          <img
-            src={`${clientRoot}/assets/person/noAvatar.png`}
-            alt=""
-            className="commentInputUserImg"
-          />
-        )}
+        <img
+          src={
+            user && user.userInfo.profilePic
+              ? user.userInfo.profilePic
+              : `${clientRoot}/assets/person/noAvatar.png`
+          }
+          alt=""
+          className="commentInputUserImg"
+        />
         <form className="commentInputForm" onSubmit={handleCommentSubmit}>
           <textarea
             autoFocus={true}

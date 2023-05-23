@@ -18,6 +18,9 @@ export default function Topbar({ user }) {
   const serverRoot = process.env.REACT_APP_SERVERROOT;
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
 
+  const url = new URL(window.location.href);
+  const userId = url.searchParams.get("google");
+
   const fullname = user?.userInfo.firstName + " " + user?.userInfo.lastName;
 
   async function handleLogout() {
@@ -86,27 +89,19 @@ export default function Topbar({ user }) {
               </div>
             </div>
             <div className="topbarDropdownContainer">
-              {user.userInfo.profilePic ? (
-                <img
-                  src={`${serverRoot}/images/${user.userInfo.profilePic}`}
-                  alt=""
-                  className="topbarImg"
-                  onClick={() => {
-                    setDropdownStatus(!dropdownStatus);
-                  }}
-                  ref={dropdownTrigger}
-                />
-              ) : (
-                <img
-                  src={`${clientRoot}/assets/person/noAvatar.png`}
-                  alt=""
-                  className="topbarImg"
-                  onClick={() => {
-                    setDropdownStatus(!dropdownStatus);
-                  }}
-                  ref={dropdownTrigger}
-                />
-              )}
+              <img
+                src={
+                  user.userInfo.profilePic
+                    ? user.userInfo.profilePic
+                    : `${clientRoot}/assets/person/noAvatar.png`
+                }
+                alt=""
+                className="topbarImg"
+                onClick={() => {
+                  setDropdownStatus(!dropdownStatus);
+                }}
+                ref={dropdownTrigger}
+              />
 
               {dropdownStatus && (
                 <ul className="topbarDropdown" ref={dropdown}>
@@ -118,19 +113,15 @@ export default function Topbar({ user }) {
                       className="topbarDropdownProfile"
                       onClick={() => setDropdownStatus(!dropdownStatus)}
                     >
-                      {user.userInfo.profilePic ? (
-                        <img
-                          src={`${serverRoot}/images/${user.userInfo.profilePic}`}
-                          alt=""
-                          className="topbarImg"
-                        />
-                      ) : (
-                        <img
-                          src={`${clientRoot}/assets/person/noAvatar.png`}
-                          alt=""
-                          className="topbarImg"
-                        />
-                      )}
+                      <img
+                        src={
+                          user.userInfo.profilePic
+                            ? user.userInfo.profilePic
+                            : `${clientRoot}/assets/person/noAvatar.png`
+                        }
+                        alt=""
+                        className="topbarImg"
+                      />
                       <span className="dropdownProfileName">{fullname}</span>
                     </li>
                   </Link>
@@ -150,18 +141,20 @@ export default function Topbar({ user }) {
             </div>
           </div>
         ) : (
-          <ul className="topbarRightList">
-            <li className="topbarRightListItem">
-              <Link to={"/login"} className="routerLink">
-                <span className="topbarRightLogin">Log In</span>
-              </Link>
-            </li>
-            <li className="topbarRightListItem">
-              <Link to={"/signup"}>
-                <button className="topbarRightSignup">Sign Up</button>
-              </Link>
-            </li>
-          </ul>
+          !userId && (
+            <ul className="topbarRightList">
+              <li className="topbarRightListItem">
+                <Link to={"/login"} className="routerLink">
+                  <span className="topbarRightLogin">Log In</span>
+                </Link>
+              </li>
+              <li className="topbarRightListItem">
+                <Link to={"/signup"}>
+                  <button className="topbarRightSignup">Sign Up</button>
+                </Link>
+              </li>
+            </ul>
+          )
         )}
       </div>
     </div>

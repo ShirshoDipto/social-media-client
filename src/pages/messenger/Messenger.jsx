@@ -281,17 +281,22 @@ export default function Messenger({ user }) {
           )
         ) : (
           <div className="chatBoxWrapper">
-            <div className="chatBoxCenter">
-              {!isFetchingMsgs &&
-                oldMsgs.length === 0 &&
-                newMsgs.length === 0 &&
-                unseenMsgs.length === 0 && (
-                  <div className="noMsgContainer">
-                    <div className="selectChatText">
-                      Write something to start a conversation
-                    </div>
+            {isFetchingMsgs ? (
+              <div className="msgsLoadingContainer">
+                <CircularProgress className="msgsLoading" disableShrink />
+              </div>
+            ) : (
+              oldMsgs.length === 0 &&
+              newMsgs.length === 0 &&
+              unseenMsgs.length === 0 && (
+                <div className="noMsgContainer">
+                  <div className="selectChatText">
+                    Write something to start a conversation
                   </div>
-                )}
+                </div>
+              )
+            )}
+            <div className="chatBoxCenter">
               {oldMsgs.length > 0 && (
                 <div className="oldMsgs">
                   <div className="showMoreMsg">

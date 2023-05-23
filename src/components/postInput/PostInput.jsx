@@ -6,12 +6,17 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import CircularProgress from "@mui/material/CircularProgress";
 import { grey } from "@mui/material/colors";
 import { socket } from "../../socket";
+import ErrorComponent from "../ErrorComponent";
 
 export default function PostInput({ user, posts, setPosts }) {
   const [image, setImage] = useState(null);
   const imgRef = useRef();
   const content = useRef();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState({
+    msg: "",
+    open: false,
+  });
 
   const serverRoot = process.env.REACT_APP_SERVERROOT;
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
@@ -24,6 +29,8 @@ export default function PostInput({ user, posts, setPosts }) {
       profilePic: user.userInfo.profilePic,
     };
 
+    newPost.isNew = true;
+
     setPosts([newPost, ...posts]);
     socket.emit("sendPost", user.userInfo._id);
   }
@@ -33,17 +40,30 @@ export default function PostInput({ user, posts, setPosts }) {
     imgRef.current.value = "";
   }
 
-  async function handlePostSubmit(e) {
-    e.preventDefault();
-    if (!user) {
-      return alert("Log in to Like and Comment");
+  async function handleErrorClose() {
+    const newError = { ...error };
+    newError.open = false;
+    setError(newError);
+  }
+
+  async function handleErrorMsg(err) {
+    const newError = { ...error };
+    newError.open = true;
+    if (err.error === "File too large") {
+      newError.msg = "File has to be less than 5 MB";
+    } else if (err.errors) {
+      newError.msg = err.errors[0].msg;
+    } else {
+      newError.msg = err.error;
     }
+    setError(newError);
+  }
+
+  async function handlePostSubmit(e) {
     const formData = new FormData();
-    setIsLoading(true);
 
     if (image) {
-      const fileName = uuidv4() + image.name;
-      formData.append("imageName", fileName);
+      formData.append("imageName", uuidv4());
       formData.append("image", image);
     }
 
@@ -58,38 +78,45 @@ export default function PostInput({ user, posts, setPosts }) {
         body: formData,
       });
 
+      const resData = await res.json();
       if (!res.ok) {
         setIsLoading(false);
-        return console.log(await res.json());
+        throw resData;
       }
 
-      const resData = await res.json();
       await addPostAndSendEvent(resData.post);
       setIsLoading(false);
       e.target.reset();
       await handleRemoveImg();
     } catch (err) {
-      console.log(err);
+      handleErrorMsg(err);
     }
   }
 
   return (
     <div className="postInput">
-      <form className="postInputWrapper" onSubmit={handlePostSubmit}>
+      <ErrorComponent error={error} handleErrorClose={handleErrorClose} />
+      <form
+        className="postInputWrapper"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (!user) {
+            return alert("Log in to Like and Comment");
+          }
+          setIsLoading(true);
+          handlePostSubmit(e);
+        }}
+      >
         <div className="postInputTop">
-          {user && user.userInfo.profilePic ? (
-            <img
-              src={`${serverRoot}/images/${user.userInfo.profilePic}`}
-              alt=""
-              className="postInputProfileImg"
-            />
-          ) : (
-            <img
-              src={`${clientRoot}/assets/person/noAvatar.png`}
-              alt=""
-              className="postInputProfileImg"
-            />
-          )}
+          <img
+            src={
+              user && user.userInfo.profilePic
+                ? user.userInfo.profilePic
+                : `${clientRoot}/assets/person/noAvatar.png`
+            }
+            alt=""
+            className="postInputProfileImg"
+          />
           <textarea
             ref={content}
             placeholder="What's in your mind?"
@@ -128,6 +155,11 @@ export default function PostInput({ user, posts, setPosts }) {
               />
             </div>
           </div>
+          {isLoading && image && (
+            <div className="loadingText">
+              Please wait. Image upload will take some time.
+            </div>
+          )}
           <button className="postInputButton">
             {isLoading ? (
               <CircularProgress

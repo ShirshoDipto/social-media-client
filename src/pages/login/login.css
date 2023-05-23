@@ -72,7 +72,7 @@
   height: 50px;
   border-radius: 10px;
   border: none;
-  background-color: #1775ee;
+  background-color: var(--topbarBackground);
   margin-top: 20px;
   color: white;
   font-size: 20px;
@@ -80,9 +80,13 @@
   cursor: pointer;
 }
 
+.loginButton:active {
+  background-color: var(--topbarBackgroundDarkish);
+}
+
 .loginForgot{
   text-align: center;
-  color: #1775ee;
+  color: var(--topbarBackground);
   margin-top: 5px;
   cursor: pointer;
 }
@@ -98,6 +102,10 @@
   font-size: 20px;
   font-weight: 500;
   cursor: pointer;
+}
+
+.loginRegisterButton:active {
+  background-color: #39a125;
 }
 
 .loginFormgroup{
@@ -141,4 +149,8 @@
   font-size: 20px;
   font-weight: 500;
   cursor: pointer;
+}
+
+.loginGoogleButton:active {
+  background-color: #946261;
 }

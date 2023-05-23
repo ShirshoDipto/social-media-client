@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
 import "./searchBar.css";
+import { useEffect, useRef, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Link } from "react-router-dom";

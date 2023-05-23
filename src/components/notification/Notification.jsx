@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
 import "./notification.css";
+import { Link } from "react-router-dom";
 
 export default function Notification({
   notif,
@@ -8,7 +8,6 @@ export default function Notification({
   handleDropdownClosure,
 }) {
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
-  const serverRoot = process.env.REACT_APP_SERVERROOT;
 
   const fullname = `${notif.sender.firstName} ${notif.sender.lastName}`;
 
@@ -17,7 +16,7 @@ export default function Notification({
       <img
         src={
           notif.sender.profilePic
-            ? `${serverRoot}/images/${notif.sender.profilePic}`
+            ? notif.sender.profilePic
             : `${clientRoot}/assets/person/noAvatar.png`
         }
         alt=""

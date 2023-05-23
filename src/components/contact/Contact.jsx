@@ -3,7 +3,6 @@ import "./contact.css";
 
 export default function Contact({ fnd, status }) {
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
-  const serverRoot = process.env.REACT_APP_SERVERROOT;
 
   const fullname = fnd.firstName + " " + fnd.lastName;
 
@@ -13,7 +12,7 @@ export default function Contact({ fnd, status }) {
         <img
           src={
             fnd.profilePic
-              ? `${serverRoot}/images/${fnd.profilePic}`
+              ? fnd.profilePic
               : `${clientRoot}/assets/person/noAvatar.png`
           }
           alt=""

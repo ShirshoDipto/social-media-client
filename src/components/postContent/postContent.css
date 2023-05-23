@@ -43,14 +43,14 @@
 }
 
 .postCenter{
-  margin: 20px 0;
+  margin: 30px 0;
 }
 
 .postText {
   color: var(--primaryText);
   font-size: 0.9rem;
-  padding: 10px;
   line-height: 1.3;
+  padding: 0 10px 0 10px;
 }
 
 .postUpdateTextarea {
@@ -88,6 +88,10 @@
   cursor: pointer;
   background-color: var(--topbarBackground);
   color: var(--primaryText);
+}
+
+.updateFormButton:active {
+  background-color: var(--topbarBackgroundDarkish);
 }
 
 .postImg{
@@ -147,8 +151,20 @@
   font-size: 0.8rem;
 }
 
+.postDeleteLoading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px;
+  flex: 1;
+}
+
 .postDropdownItem:hover {
   background-color: var(--searchBar);
+}
+
+.postDropdownItem:active {
+  background-color: var(--searchBarDarkish);
 }
 
 .postDropdownIcon {

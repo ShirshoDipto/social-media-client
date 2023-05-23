@@ -153,8 +153,8 @@ export default function GeneralNotifs({ user }) {
 
   return (
     <div className="notifContainer">
-      <NotificationsIcon
-        className="notificationIcon"
+      <div
+        className="topbarIconContainer"
         ref={dropdownTrigger}
         onClick={() => {
           if (dropdownStatus && notifications.length > 0) {
@@ -164,7 +164,9 @@ export default function GeneralNotifs({ user }) {
           setDropdownStatus(!dropdownStatus);
           markAllAsRead();
         }}
-      />
+      >
+        <NotificationsIcon className="notificationIcon" />
+      </div>
       {numNotif > 0 && <span className="topbarIconBadge">{numNotif}</span>}
       {dropdownStatus && (
         <div className="notifDropDown" ref={dropdown}>

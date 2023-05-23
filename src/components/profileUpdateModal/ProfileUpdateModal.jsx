@@ -1,5 +1,4 @@
 import "./profileUpdateModal.css";
-import { v4 as uuidv4 } from "uuid";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -10,9 +9,17 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { grey } from "@mui/material/colors";
 import { AuthContext } from "../../context/AuthContext";
 import { useContext, useRef, useState } from "react";
+import ErrorComponent from "../ErrorComponent";
+import {
+  addPic,
+  deletePic,
+  replacePic,
+  updateBio,
+} from "../../profileUpdateApiCalls";
 
 export default function ProfileUpdateModal({
   user,
+  currUser,
   token,
   setIsModalOpen,
   setProfileInfos,
@@ -33,10 +40,13 @@ export default function ProfileUpdateModal({
   const [profilePicImg, setProfilePicImg] = useState(null);
   const [coverPicImg, setCoverPicImg] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState({
+    msg: "",
+    open: false,
+  });
 
   const { dispatch } = useContext(AuthContext);
 
-  const serverRoot = process.env.REACT_APP_SERVERROOT;
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
 
   function removeProfilePic() {
@@ -77,155 +87,6 @@ export default function ProfileUpdateModal({
     }
   }
 
-  async function addProfilePic() {
-    try {
-      const formData = new FormData();
-      const fileName = uuidv4() + profilePicImg.name;
-      formData.append("imageName", fileName);
-      formData.append("image", profilePicImg);
-
-      const res = await fetch(
-        `${serverRoot}/api/users/${user._id}/profilePic`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        }
-      );
-
-      if (!res.ok) {
-        const resData = await res.json();
-        throw resData;
-      }
-
-      return fileName;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async function replaceProfilePic() {
-    try {
-      const formData = new FormData();
-      const fileName = uuidv4() + profilePicImg.name;
-      formData.append("imageName", fileName);
-      formData.append("image", profilePicImg);
-
-      const res = await fetch(
-        `${serverRoot}/api/users/${user._id}/profilePic`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        }
-      );
-
-      if (!res.ok) {
-        const resData = await res.json();
-        throw resData;
-      }
-
-      return fileName;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async function deleteProfilePic() {
-    try {
-      const res = await fetch(
-        `${serverRoot}/api/users/${user._id}/profilePic`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (!res.ok) {
-        const resData = await res.json();
-        throw resData;
-      }
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async function addCoverPic() {
-    try {
-      const formData = new FormData();
-      const fileName = uuidv4() + coverPicImg.name;
-      formData.append("imageName", fileName);
-      formData.append("image", coverPicImg);
-
-      const res = await fetch(`${serverRoot}/api/users/${user._id}/coverPic`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
-
-      if (!res.ok) {
-        const resData = await res.json();
-        throw resData;
-      }
-
-      return fileName;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async function replaceCoverPic() {
-    try {
-      const formData = new FormData();
-      const fileName = uuidv4() + coverPicImg.name;
-      formData.append("imageName", fileName);
-      formData.append("image", coverPicImg);
-
-      const res = await fetch(`${serverRoot}/api/users/${user._id}/coverPic`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
-
-      if (!res.ok) {
-        const resData = await res.json();
-        throw resData;
-      }
-
-      return fileName;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async function deleteCoverPic() {
-    try {
-      const res = await fetch(`${serverRoot}/api/users/${user._id}/coverPic`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!res.ok) {
-        const resData = await res.json();
-        throw resData;
-      }
-    } catch (error) {
-      throw error;
-    }
-  }
-
   async function updateProfilePic() {
     if (!isProfilePicChanged) {
       return user.profilePic;
@@ -236,18 +97,15 @@ export default function ProfileUpdateModal({
     }
 
     if (profilePicImg && !user.profilePic) {
-      const profilePicName = await addProfilePic();
-      return profilePicName;
+      return await addPic(profilePicImg, user._id, token);
     }
 
     if (!profilePicImg && user.profilePic) {
-      await deleteProfilePic();
-      return "";
+      return await deletePic(user.profilePic, user._id, token);
     }
 
     if (profilePicImg && user.profilePic) {
-      const profielPicName = await replaceProfilePic();
-      return profielPicName;
+      return await replacePic(user.profilePic, profilePicImg, user._id, token);
     }
   }
 
@@ -261,18 +119,15 @@ export default function ProfileUpdateModal({
     }
 
     if (coverPicImg && !user.coverPic) {
-      const coverPicName = await addCoverPic();
-      return coverPicName;
+      return await addPic(coverPicImg, user._id, token);
     }
 
     if (!coverPicImg && user.coverPic) {
-      await deleteCoverPic();
-      return "";
+      return await deletePic(user.coverPic, user._id, token);
     }
 
     if (coverPicImg && user.coverPic) {
-      const coverPicName = await replaceCoverPic();
-      return coverPicName;
+      return await replacePic(user.coverPic, coverPicImg, user._id, token);
     }
   }
 
@@ -291,24 +146,28 @@ export default function ProfileUpdateModal({
         relationship: relationship.current.value,
       };
 
-      const res = await fetch(`${serverRoot}/api/users/${user._id}/userBio`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      const resData = await res.json();
-      if (!res.ok) {
-        throw resData;
-      }
-
-      return resData.user;
+      return updateBio(user._id, data, token);
     } catch (error) {
       throw error;
     }
+  }
+
+  async function handleErrorClose() {
+    const newError = { ...error };
+    newError.open = false;
+    setError(newError);
+  }
+
+  async function handleErrorMsg(err) {
+    const newError = { ...error };
+    newError.open = true;
+    if (err.error === "File too large") {
+      newError.msg = "File has to be less than 5 MB";
+    } else {
+      console.log(err);
+      newError.msg = err.error;
+    }
+    setError(newError);
   }
 
   async function updateProfile(e) {
@@ -316,17 +175,23 @@ export default function ProfileUpdateModal({
       e.preventDefault();
       setIsLoading(true);
 
-      const profilePicName = await updateProfilePic();
-      const coverPicName = await updateCoverPic();
-      const updatedUser = await updateUserBio(profilePicName, coverPicName);
+      const [profilePicUrl, coverPicUrl] = await Promise.all([
+        updateProfilePic(),
+        updateCoverPic(),
+      ]);
 
-      dispatch({ type: "userUpdate", payload: updatedUser });
+      const updatedUser = await updateUserBio(profilePicUrl, coverPicUrl);
+      const newUser = { ...updatedUser };
+      newUser.friends = currUser.friends;
+
+      dispatch({ type: "userUpdate", payload: newUser });
       updatedUser.friends = user.friends;
       setProfileInfos(updatedUser);
       setIsLoading(false);
       setIsModalOpen(false);
-    } catch (error) {
-      return console.log(error);
+    } catch (err) {
+      setIsLoading(false);
+      handleErrorMsg(err);
     }
   }
 
@@ -338,6 +203,7 @@ export default function ProfileUpdateModal({
         e.target === profileEditModalContainer.current && setIsModalOpen(false);
       }}
     >
+      <ErrorComponent error={error} handleErrorClose={handleErrorClose} />
       <div className="profileModalContent">
         <div className="profileModalHeader">
           <span className="profileModalHeaderText">Edit Profile</span>
@@ -370,25 +236,17 @@ export default function ProfileUpdateModal({
               </span>
             </div>
             <div className="modalPicContainer">
-              {profilePicImg ? (
-                <img
-                  src={URL.createObjectURL(profilePicImg)}
-                  alt=""
-                  className="modalProfilePic"
-                />
-              ) : user.profilePic && !isProfilePicChanged ? (
-                <img
-                  src={`${serverRoot}/images/${user.profilePic}`}
-                  alt=""
-                  className="modalProfilePic"
-                />
-              ) : (
-                <img
-                  src={`${clientRoot}/assets/person/noAvatar.png`}
-                  alt=""
-                  className="modalProfilePic"
-                />
-              )}
+              <img
+                src={
+                  profilePicImg
+                    ? URL.createObjectURL(profilePicImg)
+                    : user.profilePic && !isProfilePicChanged
+                    ? user.profilePic
+                    : `${clientRoot}/assets/person/noAvatar.png`
+                }
+                alt=""
+                className="modalProfilePic"
+              />
             </div>
           </div>
           <div className="infoListItem">
@@ -419,11 +277,7 @@ export default function ProfileUpdateModal({
                   className="modalCoverPic"
                 />
               ) : user.coverPic && !isCoverPicChanged ? (
-                <img
-                  src={`${serverRoot}/images/${user.coverPic}`}
-                  alt=""
-                  className="modalCoverPic"
-                />
+                <img src={user.coverPic} alt="" className="modalCoverPic" />
               ) : (
                 <div className="editCoverImgContainer">
                   <div className="modalNoProfileCover">
@@ -561,6 +415,13 @@ export default function ProfileUpdateModal({
             </div>
           </div>
           <div className="modalFormSubmitContainer">
+            {isLoading && (profilePicImg || coverPicImg) && (
+              <div className="loadingText">
+                Please wait. Image upload will take some time.{" "}
+                <b style={{ color: "tomato" }}>DO NOT</b> close the modal while
+                update in progress.
+              </div>
+            )}
             <button className="modalFormSubmitButton">
               {isLoading ? (
                 <CircularProgress

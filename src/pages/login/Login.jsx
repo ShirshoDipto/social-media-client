@@ -112,10 +112,7 @@ export default function Login() {
               type="button"
               className="loginGoogleButton"
               onClick={() => {
-                window.open(
-                  "http://localhost:5000/api/users/login/google",
-                  "_self"
-                );
+                window.open(`${serverRoot}/api/users/login/google`, "_self");
               }}
             >
               <GoogleIcon color="action" />

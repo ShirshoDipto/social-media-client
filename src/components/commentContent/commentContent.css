@@ -140,6 +140,10 @@
   font-size: 0.8rem;
 }
 
+.commentDropdownItem:active {
+  background-color: var(--searchBarDarkish) !important;
+}
+
 .commentDropdownItem:hover {
   background-color: var(--searchBar);
 }

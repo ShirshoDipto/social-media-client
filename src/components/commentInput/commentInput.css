@@ -44,3 +44,7 @@
   background-color: var(--topbarBackground);
   color: var(--primaryText);
 }
+
+.commentInputSubmit:active {
+  background-color: var(--topbarBackgroundDarkish);
+}

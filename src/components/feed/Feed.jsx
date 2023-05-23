@@ -5,11 +5,12 @@ import { useEffect, useState } from "react";
 import Post from "../post/Post";
 
 export default function Feed({ user }) {
-  const serverRoot = process.env.REACT_APP_SERVERROOT;
   const [posts, setPosts] = useState([]);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isMorePostsLoading, setIsMorePostsLoading] = useState(false);
   const [hasNoMorePosts, setHasNoMorePosts] = useState(false);
+
+  const serverRoot = process.env.REACT_APP_SERVERROOT;
 
   async function fetchPosts() {
     try {
@@ -41,7 +42,11 @@ export default function Feed({ user }) {
   }
 
   useEffect(() => {
-    fetchPosts();
+    const url = new URL(window.location.href);
+    const userId = url.searchParams.get("google");
+    if (!userId) {
+      fetchPosts();
+    }
 
     // eslint-disable-next-line
   }, [user]);
@@ -49,11 +54,10 @@ export default function Feed({ user }) {
   useEffect(() => {
     function onScroll() {
       const scrollTop = document.documentElement.scrollTop;
-      const offsetHeight = document.documentElement.offsetHeight;
-      const innerHeight = window.innerHeight;
-
-      if (scrollTop + innerHeight + 1 >= offsetHeight) {
-        if (!hasNoMorePosts) {
+      const scrollHeight = document.documentElement.scrollHeight;
+      const clientHeight = document.documentElement.clientHeight;
+      if (scrollTop + clientHeight + 1 >= scrollHeight) {
+        if (!hasNoMorePosts && !isMorePostsLoading) {
           setIsMorePostsLoading(true);
           fetchPosts();
         }

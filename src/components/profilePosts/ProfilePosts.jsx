@@ -41,12 +41,11 @@ export default function ProfilePosts({ user }) {
   }, []);
 
   useEffect(() => {
-    async function onScroll() {
+    function onScroll() {
       const scrollTop = document.documentElement.scrollTop;
-      const offsetHeight = document.documentElement.offsetHeight;
-      const innerHeight = window.innerHeight;
-
-      if (scrollTop + innerHeight + 1 >= offsetHeight) {
+      const scrollHeight = document.documentElement.scrollHeight;
+      const clientHeight = document.documentElement.clientHeight;
+      if (scrollTop + clientHeight + 1 >= scrollHeight) {
         if (!hasNoMorePosts) {
           setIsLoading(true);
           fetchUserPosts();

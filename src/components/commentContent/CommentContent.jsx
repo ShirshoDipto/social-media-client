@@ -167,10 +167,6 @@ export default function CommentContent({
   useEffect(() => {
     async function fetchUserLike() {
       try {
-        if (!user) {
-          return;
-        }
-
         const res = await fetch(
           `${serverRoot}/api/home/comments/${comment._id}/likes`,
           {
@@ -195,7 +191,10 @@ export default function CommentContent({
       }
     }
 
-    fetchUserLike();
+    if (user && !comment.isNew) {
+      fetchUserLike();
+    }
+    // eslint-disable-next-line
   }, [comment._id, serverRoot, user]);
 
   useEffect(() => {
@@ -218,19 +217,15 @@ export default function CommentContent({
 
   return (
     <div className="commentWrapper">
-      {comment.author.profilePic ? (
-        <img
-          src={`${serverRoot}/images/${comment.author.profilePic}`}
-          alt=""
-          className="commentUserImg"
-        />
-      ) : (
-        <img
-          src={`${clientRoot}/assets/person/noAvatar.png`}
-          alt=""
-          className="commentUserImg"
-        />
-      )}
+      <img
+        src={
+          comment.author.profilePic
+            ? comment.author.profilePic
+            : `${clientRoot}/assets/person/noAvatar.png`
+        }
+        alt=""
+        className="commentUserImg"
+      />
 
       <div className="commentRightContainer">
         <div className="commentUserNameAndComment">

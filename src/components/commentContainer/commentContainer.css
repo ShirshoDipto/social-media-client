@@ -1,24 +1,39 @@
+.allComments::-webkit-scrollbar {
+  width: 7px;
+}
+
 .commentContainer {
   margin: 0 10px 0 10px;
+  padding-bottom: 10px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.postCommentsLoading {
-  align-self: center;
-  margin-bottom: 10px;
+.commentLoadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
 }
 
 .allComments {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  padding-bottom: 20px;
+  min-height: 40px;
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 10px;
+  padding-top: 5px;
 }
 
 .noCommentsText {
   color: var(--primaryText);
-  align-self: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex: 1;
   font-size: 0.8rem;
 }

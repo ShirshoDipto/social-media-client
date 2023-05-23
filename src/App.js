@@ -27,20 +27,20 @@ function App() {
   useEffect(() => {
     async function getUserFromGoogleAuth() {
       try {
+        const url = new URL(window.location.href);
+        const userId = url.searchParams.get("google");
         const res = await fetch(
-          `${serverRoot}/api/users/login/google/success`,
-          {
-            credentials: "include",
-          }
+          `${serverRoot}/api/users/login/google/success?userId=${userId}`
         );
 
         const resData = await res.json();
 
         if (!res.ok) {
-          throw console.log(resData);
+          throw resData;
         }
 
         dispatch({ type: "login", payload: resData });
+        window.history.pushState({}, "", process.env.REACT_APP_CLIENTROOT);
       } catch (error) {
         console.log(error);
       }
@@ -49,7 +49,8 @@ function App() {
     if (!user && window.location.search) {
       getUserFromGoogleAuth();
     }
-  }, [serverRoot, user, dispatch]);
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     if (user) {

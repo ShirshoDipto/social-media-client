@@ -15,24 +15,6 @@ export default function FriendReqNotifs({ user }) {
 
   const serverRoot = process.env.REACT_APP_SERVERROOT;
 
-  const fndReqConfirmed = (
-    <div className="fndReqConfirmed">
-      <Snackbar
-        open={isConfirmed}
-        autoHideDuration={3000}
-        onClose={() => setIsConfirmed(false)}
-      >
-        <Alert
-          onClose={() => setIsConfirmed(false)}
-          severity="success"
-          sx={{ width: "100%" }}
-        >
-          Friend request accepted successfully
-        </Alert>
-      </Snackbar>
-    </div>
-  );
-
   async function rejectFriendRequest(notif) {
     try {
       const res = await fetch(
@@ -165,14 +147,32 @@ export default function FriendReqNotifs({ user }) {
 
   return (
     <div className="notifContainer">
-      {isConfirmed && fndReqConfirmed}
-      <PersonIcon
-        className="notificationIcon"
+      {isConfirmed && (
+        <div className="fndReqConfirmed">
+          <Snackbar
+            open={isConfirmed}
+            autoHideDuration={3000}
+            onClose={() => setIsConfirmed(false)}
+          >
+            <Alert
+              onClose={() => setIsConfirmed(false)}
+              severity="success"
+              sx={{ width: "100%" }}
+            >
+              Friend request accepted successfully
+            </Alert>
+          </Snackbar>
+        </div>
+      )}
+      <div
+        className="topbarIconContainer"
         ref={dropdownTrigger}
         onClick={() => {
           setDropdownStatus(!dropdownStatus);
         }}
-      />
+      >
+        <PersonIcon className="notificationIcon" />
+      </div>
       {notifications?.length > 0 && (
         <span className="topbarIconBadge">{notifications.length}</span>
       )}

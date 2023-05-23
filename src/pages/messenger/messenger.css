@@ -66,6 +66,19 @@
 
 .chatBoxWrapper {
   height: 100%;
+  position: relative;
+}
+
+.msgsLoadingContainer {
+  background-color: var(--profileBackground);
+  height: calc(100% - 90px);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .chatBoxCenter {
@@ -109,11 +122,15 @@
   border: none;
   padding: 8px;
   border-radius: 15px;
+  cursor: pointer;
 }
 
 .showMoreMsg button:hover {
-  cursor: pointer;
   background-color: var(--searchBar);
+}
+
+.showMoreMsg button:active {
+  background-color: var(--secondaryBorderBackground);
 }
 
 .showMoreMsg button:focus {

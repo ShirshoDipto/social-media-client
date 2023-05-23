@@ -4,6 +4,8 @@ import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ModeCommentOutlinedIcon from "@mui/icons-material/ModeCommentOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import CircularProgress from "@mui/material/CircularProgress";
+import { grey } from "@mui/material/colors";
 import { Link } from "react-router-dom";
 import ReactTimeAgo from "react-time-ago";
 import { useEffect, useRef, useState } from "react";
@@ -25,6 +27,7 @@ export default function PostContent({
   const [numLikes, setNumLikes] = useState(post.numLikes);
   const [isLiked, setIsliked] = useState({});
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const serverRoot = process.env.REACT_APP_SERVERROOT;
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
@@ -32,6 +35,7 @@ export default function PostContent({
   const fullname = `${post.author.firstName} ${post.author.lastName}`;
 
   async function handleDeletePost() {
+    setIsDeleting(true);
     try {
       const res = await fetch(`${serverRoot}/api/home/posts/${post._id}`, {
         method: "DELETE",
@@ -44,8 +48,8 @@ export default function PostContent({
       if (!res.ok) {
         throw resData;
       }
-
       const newPosts = posts.filter((p) => p._id !== post._id);
+      setIsDeleting(false);
       return setPosts(newPosts);
     } catch (error) {
       console.log(error);
@@ -180,10 +184,11 @@ export default function PostContent({
       }
     }
 
-    if (user) {
+    if (user && !post.isNew) {
       fetchUserLike();
     }
-  }, [post._id, serverRoot, user]);
+    // eslint-disable-next-line
+  }, [post._id]);
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -207,19 +212,15 @@ export default function PostContent({
     <div className="postWrapper">
       <div className="postTop">
         <div className="postTopLeft">
-          {post.author.profilePic ? (
-            <img
-              src={`${serverRoot}/images/${post.author.profilePic}`}
-              alt=""
-              className="postProfileImg"
-            />
-          ) : (
-            <img
-              src={`${clientRoot}/assets/person/noAvatar.png`}
-              alt=""
-              className="postProfileImg"
-            />
-          )}
+          <img
+            src={
+              post.author.profilePic
+                ? post.author.profilePic
+                : `${clientRoot}/assets/person/noAvatar.png`
+            }
+            alt=""
+            className="postProfileImg"
+          />
           <div className="postUserAndDate">
             <Link
               to={`${clientRoot}/users/${post.author._id}`}
@@ -255,8 +256,20 @@ export default function PostContent({
                     <span className="postDropdownItemText">Update</span>
                   </li>
                   <li className="postDropdownItem" onClick={handleDeletePost}>
-                    <DeleteIcon className="postDropdownIcon" />
-                    <span className="postDropdownItemText">Delete</span>
+                    {isDeleting ? (
+                      <div className="postDeleteLoading">
+                        <CircularProgress
+                          sx={{ color: grey[200] }}
+                          size={12}
+                          disableShrink
+                        />
+                      </div>
+                    ) : (
+                      <>
+                        <DeleteIcon className="postDropdownIcon" />
+                        <span className="postDropdownItemText">Delete</span>
+                      </>
+                    )}
                   </li>
                 </ul>
               )}
@@ -290,13 +303,7 @@ export default function PostContent({
             {parse(post.content.replace(/\n\r?/g, "<br />"))}
           </div>
         )}
-        {post.image && (
-          <img
-            src={`${serverRoot}/images/${post.image}`}
-            alt=""
-            className="postImg"
-          />
-        )}
+        {post.image && <img src={post.image} alt="" className="postImg" />}
       </div>
       <div className="postBottom">
         <div className="postBottomLeft">

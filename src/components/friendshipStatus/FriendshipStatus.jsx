@@ -125,7 +125,7 @@ export default function FriendshipStatus({ user, profileInfos }) {
     try {
       setIsLoading(true);
       const res = await fetch(
-        `${serverRoot}/api/users/${params.userId}/friends/`,
+        `${serverRoot}/api/users/${params.userId}/friends/${friendship._id}`,
         {
           method: "PUT",
           headers: {

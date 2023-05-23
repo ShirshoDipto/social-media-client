@@ -87,6 +87,10 @@
   color: var(--primaryText);
 }
 
+.topbarRightSignup:active {
+  background-color: var(--topbarBackgroundDarkish);
+}
+
 .topbarLink {
   margin-right: 10px;
   font-size: 14px;
@@ -114,8 +118,8 @@
   border-radius: 50%;
   color: white;
   position: absolute;
-  top: -6px;
-  right: -6px;
+  top: 0px;
+  right: 0px;
   display: flex;
   align-items: center;
   justify-content: center;

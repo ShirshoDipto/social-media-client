@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 export default function Conversation({ user, conversation, currentChat }) {
   const [isActive, setIsActive] = useState(null);
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
-  const serverRoot = process.env.REACT_APP_SERVERROOT;
 
   const unseenMsgs = conversation.unseenMsgs.find(
     (msg) => msg.userId === user.userInfo._id
@@ -44,7 +43,7 @@ export default function Conversation({ user, conversation, currentChat }) {
         <img
           src={
             contact.profilePic
-              ? `${serverRoot}/images/${contact.profilePic}`
+              ? contact.profilePic
               : `${clientRoot}/assets/person/noAvatar.png`
           }
           alt=""

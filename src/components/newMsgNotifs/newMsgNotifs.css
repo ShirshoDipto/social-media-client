@@ -1,6 +1,6 @@
 /* Notification styles in general*/
 
-.notifContainer {
+.topbarIconContainer {
   padding: 7px;
   display: flex;
   justify-content: center;
@@ -9,11 +9,11 @@
   border-radius: 50%;
 }
 
-.notifContainer:hover {
+.topbarIconContainer:hover {
   background-color: var(--searchBarDarkish);
 }
 
-.notifContainer:active {
+.topbarIconContainer:active {
   background-color: var(--searchBar);
 }
 

@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import FriendshipStatus from "../friendshipStatus/FriendshipStatus";
 import ProfilePosts from "../profilePosts/ProfilePosts";
-import ProfileFriends from "../profileFriends/ProfileFriends";
+import ProfileFriends from "../profileFriends/ProfileFriend";
 
 export default function ProfileContent({ user }) {
   const [profileInfos, setProfileInfos] = useState({});
@@ -56,7 +56,7 @@ export default function ProfileContent({ user }) {
             {profileInfos.coverPic ? (
               <img
                 className="profileCoverImg"
-                src={`${serverRoot}/images/${profileInfos.coverPic}`}
+                src={profileInfos.coverPic}
                 alt=""
               />
             ) : (
@@ -68,7 +68,7 @@ export default function ProfileContent({ user }) {
               className="profileUserImg"
               src={
                 profileInfos.profilePic
-                  ? `${serverRoot}/images/${profileInfos.profilePic}`
+                  ? profileInfos.profilePic
                   : `${clientRoot}/assets/person/noAvatar.png`
               }
               alt=""
@@ -209,6 +209,7 @@ export default function ProfileContent({ user }) {
       {isModalOpen && (
         <ProfileUpdateModal
           user={profileInfos}
+          currUser={user.userInfo}
           token={user.token}
           setIsModalOpen={setIsModalOpen}
           setProfileInfos={setProfileInfos}
