@@ -183,7 +183,7 @@ export default function NewMsg({ user }) {
               })}
             </div>
           ) : (
-            <div className="noNotifications">No new notifications</div>
+            <div className="noNotifications">No new messages</div>
           )}
           {isFetchingMore && (
             <div className="markLoadingContainer">

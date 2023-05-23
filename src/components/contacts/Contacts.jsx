@@ -19,6 +19,8 @@ export default function Contacts({ user }) {
           throw resData;
         }
 
+        setOfflineFnds(resData.user.friends);
+        setIsLoading(false);
         socket.emit("getFndsStatus", resData.user);
       } catch (error) {
         console.log(error);

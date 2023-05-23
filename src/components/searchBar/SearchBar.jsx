@@ -97,7 +97,7 @@ export default function SearchBar() {
                       <img
                         src={
                           result.profilePic
-                            ? `${serverRoot}/images/${result.profilePic}`
+                            ? result.profilePic
                             : `${clientRoot}/assets/person/noAvatar.png`
                         }
                         alt="asdsad"

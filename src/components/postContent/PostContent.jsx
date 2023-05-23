@@ -25,7 +25,8 @@ export default function PostContent({
 
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const [numLikes, setNumLikes] = useState(post.numLikes);
-  const [isLiked, setIsliked] = useState({});
+  const [isLiked, setIsLiked] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -73,8 +74,7 @@ export default function PostContent({
         throw resData;
       }
 
-      setNumLikes(numLikes + 1);
-      setIsliked(resData.postLike);
+      return resData.postLike;
     } catch (error) {
       console.log(error);
     }
@@ -96,9 +96,6 @@ export default function PostContent({
       if (!res.ok) {
         throw resData;
       }
-
-      setNumLikes(numLikes - 1);
-      setIsliked({});
     } catch (error) {
       console.log(error);
     }
@@ -110,9 +107,23 @@ export default function PostContent({
     }
 
     if (Object.keys(isLiked).length !== 0) {
+      if (isLoading) {
+        return alert("You have already unliked the post");
+      }
+      setIsLoading(true);
       await deleteLike();
+      setNumLikes(numLikes - 1);
+      setIsLiked({});
+      setIsLoading(false);
     } else {
-      await addLike();
+      if (isLoading) {
+        return alert("You have already liked the post");
+      }
+      setIsLoading(true);
+      const postLike = await addLike();
+      setNumLikes(numLikes + 1);
+      setIsLiked(postLike);
+      setIsLoading(false);
     }
   }
 
@@ -178,7 +189,7 @@ export default function PostContent({
           return;
         }
 
-        setIsliked(resData.postLike);
+        setIsLiked(resData.postLike);
       } catch (error) {
         console.log(error);
       }

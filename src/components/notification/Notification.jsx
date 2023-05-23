@@ -1,4 +1,5 @@
 import "./notification.css";
+import ReactTimeAgo from "react-time-ago";
 import { Link } from "react-router-dom";
 
 export default function Notification({
@@ -39,6 +40,9 @@ export default function Notification({
           {notif.notificationType === 1 && "has accepted your friend request"}
           {notif.notificationType === 2 && "sent a message"}
           {notif.notificationType === 3 && "has uploaded a new post"}
+        </div>
+        <div className="notificationDate">
+          <ReactTimeAgo date={new Date(notif.createdAt)} locale="en-US" />
         </div>
         {notif.notificationType === 0 && (
           <div className="notifMsgOption">

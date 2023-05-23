@@ -23,6 +23,7 @@ export default function CommentContent({
   const [numLikes, setNumLikes] = useState(comment.numLikes);
   const [isLiked, setIsLiked] = useState({});
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const serverRoot = process.env.REACT_APP_SERVERROOT;
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
@@ -46,8 +47,7 @@ export default function CommentContent({
         throw resData;
       }
 
-      setNumLikes(numLikes + 1);
-      setIsLiked(resData.commentLike);
+      return resData.commentLike;
     } catch (error) {
       console.log(error);
     }
@@ -69,27 +69,34 @@ export default function CommentContent({
       if (!res.ok) {
         throw resData;
       }
-
-      setNumLikes(numLikes - 1);
-      setIsLiked({});
     } catch (error) {
       console.log(error);
     }
   }
 
   async function handleToggleLike() {
-    try {
-      if (!user) {
-        return alert("Log in to Like and Comment");
-      }
+    if (!user) {
+      return alert("Log in to Like and Comment");
+    }
 
-      if (Object.keys(isLiked).length !== 0) {
-        return await deleteLike();
-      } else {
-        await addLike();
+    if (Object.keys(isLiked).length !== 0) {
+      if (isLoading) {
+        return alert("You have already unliked the comment");
       }
-    } catch (error) {
-      console.log(error);
+      setIsLoading(true);
+      await deleteLike();
+      setNumLikes(numLikes - 1);
+      setIsLiked({});
+      setIsLoading(false);
+    } else {
+      if (isLoading) {
+        return alert("You have already liked the comment");
+      }
+      setIsLoading(true);
+      const commentLike = await addLike();
+      setNumLikes(numLikes + 1);
+      setIsLiked(commentLike);
+      setIsLoading(false);
     }
   }
 

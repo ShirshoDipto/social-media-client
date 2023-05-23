@@ -157,6 +157,7 @@
   padding: 10px;
   display: flex;
   flex-direction: column;
+  gap: 5px;
   min-width: 200px;
 }
 
@@ -164,7 +165,6 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 5px;
   padding: 10px;
   border-radius: 5px;
 }
@@ -186,7 +186,6 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 10px;
   padding: 10px;
   border-radius: 10px;
   cursor: pointer;

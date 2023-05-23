@@ -119,7 +119,7 @@ export default function PostInput({ user, posts, setPosts }) {
           />
           <textarea
             ref={content}
-            placeholder="What's in your mind?"
+            placeholder={`What's in your mind, ${user.userInfo.firstName}?`}
             className="postInputWriteArea"
           ></textarea>
         </div>

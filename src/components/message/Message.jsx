@@ -3,7 +3,6 @@ import ReactTimeAgo from "react-time-ago";
 
 export default function Message({ own, msg }) {
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
-  const serverRoot = process.env.REACT_APP_SERVERROOT;
 
   return (
     <div className={own ? "message own" : "message"}>
@@ -12,7 +11,7 @@ export default function Message({ own, msg }) {
           className="messageImg"
           src={
             msg.sender.profilePic
-              ? `${serverRoot}/images/${msg.sender.profilePic}`
+              ? msg.sender.profilePic
               : `${clientRoot}/assets/person/noAvatar.png`
           }
           alt=""

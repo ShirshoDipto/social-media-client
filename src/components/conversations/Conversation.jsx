@@ -1,4 +1,5 @@
 import "./conversation.css";
+import ReactTimeAgo from "react-time-ago";
 import { socket } from "../../socket";
 import { useEffect, useState } from "react";
 
@@ -55,7 +56,17 @@ export default function Conversation({ user, conversation, currentChat }) {
         ></span>
       </div>
       <div className="conversationTexts">
-        <div className="conversationName">{fullname}</div>
+        <div className="convNameDateContainer">
+          <div className="conversationName">{fullname}</div>
+          {!conversation.isTemp && (
+            <div className="convLatestDate">
+              <ReactTimeAgo
+                date={new Date(conversation.updatedAt)}
+                locale="en-US"
+              />
+            </div>
+          )}
+        </div>
         <div className="convLatestContainer">
           <div className="conversationLatest">{conversation.lastMsg}</div>
           {unseenMsgs.numUnseen > 0 && (
