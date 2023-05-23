@@ -101,7 +101,7 @@ export default function PostInput({ user, posts, setPosts }) {
         onSubmit={(e) => {
           e.preventDefault();
           if (!user) {
-            return alert("Log in to Like and Comment");
+            return alert("Log in to post");
           }
           setIsLoading(true);
           handlePostSubmit(e);
@@ -119,7 +119,7 @@ export default function PostInput({ user, posts, setPosts }) {
           />
           <textarea
             ref={content}
-            placeholder={`What's in your mind, ${user.userInfo.firstName}?`}
+            placeholder="What's in your mind?"
             className="postInputWriteArea"
           ></textarea>
         </div>
