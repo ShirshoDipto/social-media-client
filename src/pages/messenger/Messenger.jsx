@@ -194,10 +194,10 @@ export default function Messenger({ user }) {
 
     async function setUpMessenger() {
       try {
-        const conversations = await apiCalls.fetchConversations(user.token);
+        const convs = await apiCalls.fetchConversations(user.token);
 
-        setConversations(conversations);
-        await handleCurrentChat(conversations);
+        setConversations(convs);
+        await handleCurrentChat(convs);
         setIsLoading(false);
       } catch (error) {
         console.log(error);
