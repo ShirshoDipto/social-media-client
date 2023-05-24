@@ -69,7 +69,7 @@ export default function Conversation({ user, conversation, currentChat }) {
         </div>
         <div className="convLatestContainer">
           <div className="conversationLatest">{conversation.lastMsg}</div>
-          {unseenMsgs.numUnseen > 0 && (
+          {unseenMsgs?.numUnseen > 0 && (
             <div className="unseenMsgsNum">
               <span>{unseenMsgs.numUnseen}</span>
             </div>
