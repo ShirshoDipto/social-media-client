@@ -26,6 +26,7 @@
   border-radius: 5px;
   max-height: 400px;
   overflow-y: auto;
+  padding-bottom: 15px;
 }
 
 .msgNotifDropDown { 
@@ -63,8 +64,6 @@
   color: var(--topbarBackground);
   padding: 5px;
   font-size: 0.8rem;
-  position: sticky;
-  bottom: 0;
   width: 100%;
   background-color: inherit;
   text-align: center;
