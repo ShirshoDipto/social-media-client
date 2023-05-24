@@ -1,3 +1,4 @@
+import "./App.css";
 import Homepage from "./pages/hompage/Homepage";
 import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
