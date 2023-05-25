@@ -60,7 +60,9 @@ export default function Topbar({ user }) {
   }, []);
 
   if (
-    (location.pathname === "/login" || location.pathname === "/signup") &&
+    (location.pathname === "/login" ||
+      location.pathname === "/signup" ||
+      location.pathname === "/messenger") &&
     !user
   ) {
     return null;
