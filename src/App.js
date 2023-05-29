@@ -31,16 +31,7 @@ function App() {
         const url = new URL(window.location.href);
         const userId = url.searchParams.get("google");
         const res = await fetch(
-          `${serverRoot}/api/users/login/google/success?userId=${userId}`,
-          {
-            method: "GET",
-            credentials: "include",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Credentials": true,
-            },
-          }
+          `${serverRoot}/api/users/login/google/success?userId=${userId}`
         );
 
         const resData = await res.json();
