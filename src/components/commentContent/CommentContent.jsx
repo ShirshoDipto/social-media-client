@@ -258,11 +258,17 @@ export default function CommentContent({
                         setIsUpdating(true);
                       }}
                     >
-                      <EditIcon className="commentDropdownIcon" />
+                      <EditIcon
+                        className="commentDropdownIcon"
+                        sx={{ fontSize: 20 }}
+                      />
                       <span className="commentDropdownItemText">Update</span>
                     </li>
                     <li className="commentDropdownItem" onClick={deleteComment}>
-                      <DeleteIcon className="commentDropdownIcon" />
+                      <DeleteIcon
+                        className="commentDropdownIcon"
+                        sx={{ fontSize: 20 }}
+                      />
                       <span className="commentDropdownItemText">Delete</span>
                     </li>
                   </ul>
