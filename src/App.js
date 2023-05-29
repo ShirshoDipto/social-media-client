@@ -34,6 +34,9 @@ function App() {
           `${serverRoot}/api/users/login/google/success?userId=${userId}`,
           {
             credentials: "include",
+            headers: {
+              "Access-Control-Allow-Credentials": true,
+            },
           }
         );
 
