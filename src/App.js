@@ -31,7 +31,10 @@ function App() {
         const url = new URL(window.location.href);
         const userId = url.searchParams.get("google");
         const res = await fetch(
-          `${serverRoot}/api/users/login/google/success?userId=${userId}`
+          `${serverRoot}/api/users/login/google/success?userId=${userId}`,
+          {
+            credentials: "include",
+          }
         );
 
         const resData = await res.json();
