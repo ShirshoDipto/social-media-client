@@ -33,6 +33,7 @@ function App() {
         const res = await fetch(
           `${serverRoot}/api/users/login/google/success?userId=${userId}`,
           {
+            method: "GET",
             credentials: "include",
             headers: {
               Accept: "application/json",
