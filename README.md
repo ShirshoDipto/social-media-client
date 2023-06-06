@@ -32,17 +32,17 @@ To run the api and socket server locally, follow the instructions on the [API Re
 
 ### Clone Repository
 
-```Javascript
+```
 git clone git@github.com:ShirshoDipto/social-media-client.git
 ```
 
-```javascript
+```
 cd social-media-client
 ```
 
 ### Set up environment variables
 
-```javascript
+```
 REACT_APP_SERVERROOT = <Address of the api server. https://nosebook-api.fly.dev or something like http://localhost:5000 if it is running locally>
 
 REACT_APP_SOCKETROOT = <Address of the socket server. https://nosebook-socket.onrender.com or something like http://localhost:4000 if it is running locally>
@@ -52,19 +52,19 @@ REACT_APP_CLIENTROOT = <Address of the client. http://localhost:3000 by default>
 
 ### Install Packages and start
 
-```javascript
+```
 npm install
 ```
 
-```javascript
+```
 npm run build
 ```
 
-```javascript
+```
 npm install -g serve
 ```
 
-```javascript
+```
 serve -s build
 ```
 
