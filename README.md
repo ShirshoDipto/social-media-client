@@ -20,9 +20,11 @@ NoseBook is a Facebook clone that I have made as a final project for my full sta
 8. Cloudinary
 9. Multer
 10. Bcrypt js
-11. Express Validator.
+11. Express Validator
 12. HTML React Parser
 13. Material Icon
+
+and more
 
 ## Features & Highlights
 
@@ -40,11 +42,11 @@ NoseBook is a Facebook clone that I have made as a final project for my full sta
 - Update/remove profile picture
 - Update/remove cover picture.
 - Update user biodata.
-- Search users (See additional info section no.1)
+- Search users (See additional info no.1)
 
 ### 3. Friendships
 
-- Send, accept, and reject friend requests from other users. (See additional info section no.2)
+- Send, accept, and reject friend requests from other users. (See additional info no.2)
 - Remove users from the friend list.
 - Show friendship status upon entering a user’s profile.
 
@@ -58,7 +60,7 @@ NoseBook is a Facebook clone that I have made as a final project for my full sta
 - Delete own posts
 - Include images with posts
 - Include emojis with posts by right clicking on post input.
-- Include line breaks in posts. (See additional info section no.3)
+- Include line breaks in posts. (See additional info no.3)
 
 ### 5. Comments
 
@@ -84,7 +86,7 @@ NoseBook is a Facebook clone that I have made as a final project for my full sta
 
 ### 8. Messenger
 
-- Create a chat conversation with a user. _Similar to opening a new chat conversation with another user on Skype_. (See additional info section no.4)
+- Create a chat conversation with a user. _Similar to opening a new chat conversation with another user on Skype_. (See additional info no.4)
 - Sorting of chat conversations based on the date of the most recent message.
 - Unseen messages indicator on chat conversations.
 - Send and receive messages real time.
@@ -92,12 +94,12 @@ NoseBook is a Facebook clone that I have made as a final project for my full sta
 ### 9. Socket
 
 - Real time messaging.
-- Continuous typing indicator. **It is better than that of Skype and Telegram** (See additional info section no.5)
-- Real time notification for new post. (See additional info section no.6)
+- Continuous typing indicator. **It is better than that of Skype and Telegram** (See additional info no.5)
+- Real time notification for new post. (See additional info no.6)
 - Real time notification for new friend request
 - Real time notification when a friend request is accepted
-- Real time notification for new unseen messages. **It is the most complex feature of this app, and it depends on the user’s location within the app. It doesn't make sense to send a real time notification if the user who is receiving the message is already on the messenger page.** (See additional info section no.7)
-- Online and offline friends on homepage. Sorted based on a friend's activity status. (See additional info section no.8)
+- Real time notification for new unseen messages. **It is the most complex feature of this app, and it depends on the user’s location within the app. It doesn't make sense to send a real time notification if the user who is receiving the message is already on the messenger page.** (See additional info no.7)
+- Online and offline friends on homepage. Sorted based on a friend's activity status. (See additional info no.8)
 - Online and offline users on messenger page
 
 ## Additional Information
@@ -134,7 +136,7 @@ A gif.
 
 If user A starts typing for user B, the typing indicator “user A is typing …” appears on user B’s screen, and it will be removed if user A does not type for 2 seconds. It takes Skype 20 seconds to recognize that user A has stopped typing. So if user A gives a single keystroke to the input and does nothing else, user B will see “user A is typing …” text for 20 seconds before the indicator disappears, creating an impression that user A was indeed typing for 20 seconds. For Telegram, it is 6 seconds.
 
-The app does not send one event per keystroke to the socket server. Rather, it sends only two events: one is when the user starts typing, and another one is when the user stops typing. Therefore, the feature is not heavy on the backend.
+The app does not send one event per keystroke to the socket server. Rather, it sends only two events during the entire typing session: one is when the user starts typing, and another one is when the user stops typing. Therefore, the feature is not heavy on the backend.
 
     A gif.
 
@@ -146,17 +148,18 @@ A gif
 
 #### 7. Real time Notifications for unseen messages:
 
-If user A sends a messages, or couple of messages, to user B, the way user B will receive those messages depends on the following scenarios:
-User B is not active.
-User B is active but not on the messenger page.
-User B is on the messenger page, but the active chat is not user A.
-User B is on the messenger page and the active chat is also user A. Meaning, user B is chatting with user A.
+If user A sends message(s) to user B, the way user B will receive those messages depends on the following scenarios:
+
+- User B is not active.
+- User B is active but not on the messenger page.
+- User B is on the messenger page, but the active chat is not user A.
+- User B is on the messenger page and the active chat is also user A. Meaning, user B is chatting with user A.
 
 If user B is not active, then the socket server simply creates a notification for user B which can be viewed after coming online.
 
 A gif.
 
-If user B is active but he is not on the messenger page, then the socket server creates a notification which user B will be getting real time.
+If user B is active but not on the messenger page, then the socket server creates a notification which user B will be getting real time.
 
 A gif
 
