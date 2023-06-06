@@ -34,6 +34,9 @@ To run the api and socket server locally, follow the instructions on the [API Re
 
 ```Javascript
 git clone git@github.com:ShirshoDipto/social-media-client.git
+```
+
+```javascript
 cd social-media-client
 ```
 
