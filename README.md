@@ -51,8 +51,17 @@ REACT_APP_CLIENTROOT = <Address of the client. http://localhost:3000 by default>
 
 ```javascript
 npm install
+```
+
+```javascript
 npm run build
+```
+
+```javascript
 npm install -g serve
+```
+
+```javascript
 serve -s build
 ```
 
