@@ -299,22 +299,24 @@ export default function Messenger({ user }) {
             <div className="chatBoxCenter">
               {oldMsgs.length > 0 && (
                 <div className="oldMsgs">
-                  <div className="showMoreMsg">
-                    <div></div>
-                    <button
-                      onClick={async () => {
-                        const msgs = await apiCalls.getOldMsgs(
-                          currentChat._id,
-                          oldMsgs.length + unseenMsgs.length + newMsgs.length,
-                          user.token
-                        );
-                        setOldMsgs([...msgs, ...oldMsgs]);
-                      }}
-                    >
-                      Show More
-                    </button>
-                    <div></div>
-                  </div>
+                  {oldMsgs.length > 19 && (
+                    <div className="showMoreMsg">
+                      <div></div>
+                      <button
+                        onClick={async () => {
+                          const msgs = await apiCalls.getOldMsgs(
+                            currentChat._id,
+                            oldMsgs.length + unseenMsgs.length + newMsgs.length,
+                            user.token
+                          );
+                          setOldMsgs([...msgs, ...oldMsgs]);
+                        }}
+                      >
+                        Show More
+                      </button>
+                      <div></div>
+                    </div>
+                  )}
                   {oldMsgs.map((msg) => {
                     return (
                       <div key={msg._id} ref={oldMsgRef}>
