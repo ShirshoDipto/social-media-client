@@ -142,7 +142,7 @@ export default function PostInput({ user, posts, setPosts }) {
           <div className="postInputOptions">
             <div className="postInputOption">
               <label htmlFor="fileInput" className="postInputOptionText">
-                <PermMediaIcon htmlColor="tomato" className="postInputIcon" />
+                <PermMediaIcon htmlColor="green" className="postInputIcon" />
                 <span className="postInputLabelText">Photo</span>
               </label>
               <input

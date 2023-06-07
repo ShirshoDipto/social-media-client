@@ -103,9 +103,13 @@
   border: none;
   padding: 7px;
   border-radius: 5px;
-  background-color: green;
+  background-color: var(--topbarBackground);
   font-weight: 500;
   margin-right: 20px;
   cursor: pointer;
   color: white;
+}
+
+.postInputButton:active {
+  background-color: var(--topbarBackgroundDarkish);
 }
