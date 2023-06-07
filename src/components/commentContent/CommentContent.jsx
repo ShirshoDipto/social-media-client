@@ -81,7 +81,7 @@ export default function CommentContent({
 
     if (Object.keys(isLiked).length !== 0) {
       if (isLoading) {
-        return alert("You have already unliked the comment");
+        return;
       }
       setIsLoading(true);
       await deleteLike();
@@ -90,7 +90,7 @@ export default function CommentContent({
       setIsLoading(false);
     } else {
       if (isLoading) {
-        return alert("You have already liked the comment");
+        return;
       }
       setIsLoading(true);
       const commentLike = await addLike();
