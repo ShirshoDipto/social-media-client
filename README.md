@@ -48,8 +48,6 @@ REACT_APP_SERVERROOT = <Address of the api server. https://nosebook-api.fly.dev 
 REACT_APP_SOCKETROOT = <Address of the socket server. https://nosebook-socket.onrender.com or local address, e.g http://localhost:4000>
 
 REACT_APP_CLIENTROOT = <Address of the client. http://localhost:3000 by default>
-
-GOOGLE_CLIENT_ID = <>
 ```
 
 ### Install packages and start
