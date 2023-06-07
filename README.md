@@ -77,15 +77,15 @@ serve -s build
 - Basic Login and Signup with username and password.
 - Login/Signup with a google account.
 - Login and Signup form validation from the backend.
-- Logout
+- Logout.
 
 ### 2. Users
 
-- Update/remove profile picture
+- Update/remove profile picture.
 - Update/remove cover picture.
 - Update user biodata.
-- Error handling in profile update
-- Search users (See additional info no.1)
+- Error handling in profile update.
+- Search users. (See additional info no.1)
 
 ### 3. Friendships
 
@@ -95,23 +95,23 @@ serve -s build
 
 ### 4. Posts
 
-- Timeline posts on homepage
-- Users posts on specific profile page
-- Infinite scrolling on both homepage and profile page
-- Error handling in uploading new post
-- Create posts
-- Update own posts
-- Delete own posts
-- Include images with posts
+- Timeline posts on homepage.
+- Users posts on specific profile page.
+- Infinite scrolling on both homepage and profile page.
+- Error handling in uploading new post.
+- Create posts.
+- Update own posts.
+- Delete own posts.
+- Include images with posts.
 - Include emojis with posts by right clicking on post input.
 - Include line breaks in posts. (See additional info no.3)
 
 ### 5. Comments
 
-- Comment on posts
-- Update own comments
-- Delete own comments
-- Infinite scrolling
+- Comment on posts.
+- Update own comments.
+- Delete own comments.
+- Infinite scrolling.
 - Include emojis with comments by right clicking on comment input.
 - Include line breaks in comments.
 
@@ -122,10 +122,10 @@ serve -s build
 
 ### 7. Notifications (See additional info section no.3)
 
-- Notifications for new posts
-- Notifications for new messages
-- Notifications for new friend requests
-- Notification when a friend request is accepted
+- Notifications for new posts.
+- Notifications for new messages.
+- Notifications for new friend requests.
+- Notification when a friend request is accepted.
 - Pagination for notifications.
 
 ### 8. Messenger
@@ -140,11 +140,11 @@ serve -s build
 - Real time messaging.
 - Continuous typing indicator. **It is better than that of Skype and Telegram** (See additional info no.5)
 - Real time notification for new post. (See additional info no.6)
-- Real time notification for new friend request
-- Real time notification when a friend request is accepted
+- Real time notification for new friend request.
+- Real time notification when a friend request is accepted.
 - Real time notification for new unseen messages. **It is the most complex feature of this app, and it depends on the user’s location within the app. It doesn't make sense to send a real time notification if the user who is receiving the message is already on the messenger page.** (See additional info no.7)
 - Online and offline friends on homepage. Sorted based on a friend's activity status. (See additional info no.8)
-- Online and offline users on messenger page
+- Online and offline users on messenger page.
 
 ## Additional Informations
 
