@@ -1,6 +1,6 @@
 # NoseBook
 
-NoseBook is a Facebook clone that I have made as a final project for my full stack web development course. It has the core functionalities that Facebook has, which includes uploading posts, commenting on posts, liking a post/comment, sending/accepting friends requests, real time messaging, and real time notification system for posts, messages, friend requests etc.
+NoseBook is a Facebook clone that I have made as a final project for my full stack web development course. It has the core functionalities that Facebook has, which includes uploading posts, commenting on posts, liking a post/comment, sending/accepting friend requests, real time messaging, and real time notification system for posts, messages, friend requests etc.
 
 [View Live](https://nosebook-social.netlify.app)
 
