@@ -108,7 +108,7 @@ export default function PostContent({
 
     if (Object.keys(isLiked).length !== 0) {
       if (isLoading) {
-        return alert("You have already unliked the post");
+        return;
       }
       setIsLoading(true);
       await deleteLike();
@@ -117,7 +117,7 @@ export default function PostContent({
       setIsLoading(false);
     } else {
       if (isLoading) {
-        return alert("You have already liked the post");
+        return;
       }
       setIsLoading(true);
       const postLike = await addLike();
