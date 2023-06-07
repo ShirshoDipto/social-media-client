@@ -43,14 +43,16 @@ cd social-media-client
 ### Set up environment variables
 
 ```
-REACT_APP_SERVERROOT = <Address of the api server. https://nosebook-api.fly.dev or something like http://localhost:5000 if it is running locally>
+REACT_APP_SERVERROOT = <Address of the api server. https://nosebook-api.fly.dev or local address, e.g http://localhost:5000>
 
-REACT_APP_SOCKETROOT = <Address of the socket server. https://nosebook-socket.onrender.com or something like http://localhost:4000 if it is running locally>
+REACT_APP_SOCKETROOT = <Address of the socket server. https://nosebook-socket.onrender.com or local address, e.g http://localhost:4000>
 
 REACT_APP_CLIENTROOT = <Address of the client. http://localhost:3000 by default>
+
+GOOGLE_CLIENT_ID = <>
 ```
 
-### Install Packages and start
+### Install packages and start
 
 ```
 npm install
@@ -84,6 +86,7 @@ serve -s build
 - Update/remove profile picture
 - Update/remove cover picture.
 - Update user biodata.
+- Error handling in profile update
 - Search users (See additional info no.1)
 
 ### 3. Friendships
@@ -97,6 +100,7 @@ serve -s build
 - Timeline posts on homepage
 - Users posts on specific profile page
 - Infinite scrolling on both homepage and profile page
+- Error handling in uploading new post
 - Create posts
 - Update own posts
 - Delete own posts
@@ -144,7 +148,7 @@ serve -s build
 - Online and offline friends on homepage. Sorted based on a friend's activity status. (See additional info no.8)
 - Online and offline users on messenger page
 
-## Additional Information
+## Additional Informations
 
 #### 1. Searching users:
 
