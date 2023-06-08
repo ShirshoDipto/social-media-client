@@ -8,6 +8,8 @@ NoseBook is a Facebook clone that I have made as a final project for my full sta
 
 [Socket repository](https://github.com/ShirshoDipto/nosebook-socket)
 
+![Demo Gif](/public/assets/gifs/Animation%202.gif)
+
 ## Technologies used
 
 1. MongoDb (with Mongoose)
