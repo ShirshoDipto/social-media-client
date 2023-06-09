@@ -86,7 +86,7 @@
   flex-direction: column;
   gap: 20px;
   padding: 20px 10% 10px 6.5%;
-  overflow: hidden;
+  overflow: overlay;
   flex: 1;
 }
 
@@ -96,10 +96,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.chatBoxCenter:hover {
-  overflow: overlay;
 }
 
 .oldMsgs, .newMsgs, .unseenMsgs {
