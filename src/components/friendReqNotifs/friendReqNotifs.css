@@ -11,7 +11,7 @@
   overflow-y: auto;
 }
 
-.notifDropDown { 
+.fndNotifDropDown { 
   position: absolute;
   top: 50px;
   right: 0;
@@ -19,7 +19,7 @@
   border-radius: 5px;
 }
 
-.noNotifications {
+.noFndNotifications {
   width: 250px;
   gap: 10px;
   padding: 10px;

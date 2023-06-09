@@ -87,7 +87,7 @@ serve -s build
 - Update/remove cover picture.
 - Update user biodata.
 - Error handling in profile update.
-- Search users. (See additional info no.1)
+- Search users by first name, last name, and email address . (See additional info no.1)
 
 ### 3. Friendships
 
@@ -152,7 +152,7 @@ serve -s build
 
 #### 1. Searching users:
 
-The search functionality is implemented by using mongoDB full text search index. A user can search for other users by their first name, last name, or email address. Regular expression is used at the backend to process email search queries.
+The search functionality is implemented by using mongoDB full text search index. Regular expression is used at the backend to process email search queries.
 
     A gif.
 

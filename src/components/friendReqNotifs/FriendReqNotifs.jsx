@@ -177,7 +177,7 @@ export default function FriendReqNotifs({ user }) {
         <span className="topbarIconBadge">{notifications.length}</span>
       )}
       {dropdownStatus && (
-        <div className="notifDropDown" ref={dropdown}>
+        <div className="fndNotifDropDown" ref={dropdown}>
           {notifications?.length > 0 ? (
             <div className="notificationList">
               {notifications.map((notif) => {
@@ -193,7 +193,7 @@ export default function FriendReqNotifs({ user }) {
               })}
             </div>
           ) : (
-            <div className="noNotifications">No friend requests</div>
+            <div className="noFndNotifications">No friend requests</div>
           )}
         </div>
       )}

@@ -162,53 +162,64 @@ export default function NewMsg({ user }) {
       {numNotif > 0 && <span className="topbarIconBadge">{numNotif}</span>}
       {dropdownStatus && (
         <div className="msgNotifDropDown" ref={dropdown}>
-          {isMarkingAsSeen ? (
-            <div className="markLoadingContainer">
-              <CircularProgress
-                size={15}
-                className="searchLoading"
-                disableShrink
-              />
+          <Link className="routerLink" to={`${clientRoot}/messenger`}>
+            <div
+              className="openMessenger"
+              onClick={() => {
+                if (notifications.length > 0) {
+                  setNotifications([]);
+                  setNumNotif(0);
+                }
+                setDropdownStatus(false);
+              }}
+            >
+              <span>Open Messenger</span>
             </div>
-          ) : notifications.length > 0 ? (
-            <div className="msgNotificationList">
-              {notifications.map((notif) => {
-                return (
-                  <Notification
-                    key={notif._id}
-                    notif={notif}
-                    handleDropdownClosure={handleDropdownClosure}
-                  />
-                );
-              })}
-            </div>
-          ) : (
-            <div className="noNotifications">No new messages</div>
-          )}
-          {isFetchingMore && (
-            <div className="markLoadingContainer">
-              <CircularProgress
-                size={15}
-                className="searchLoading"
-                disableShrink
-              />
-            </div>
-          )}
-          <div className="notifOptions">
-            <Link className="routerLink" to={`${clientRoot}/messenger`}>
-              <span
-                onClick={() => {
-                  if (notifications.length > 0) {
-                    setNotifications([]);
-                    setNumNotif(0);
-                  }
-                  setDropdownStatus(false);
+          </Link>
+
+          <div className="msgNotifDropdownWrapper">
+            {isMarkingAsSeen ? (
+              <div className="markLoadingContainer">
+                <CircularProgress
+                  size={15}
+                  className="searchLoading"
+                  disableShrink
+                />
+              </div>
+            ) : notifications.length > 0 ? (
+              <div className="msgNotificationList">
+                {notifications.map((notif) => {
+                  return (
+                    <Notification
+                      key={notif._id}
+                      notif={notif}
+                      handleDropdownClosure={handleDropdownClosure}
+                    />
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="noMsgNotifications">No new messages</div>
+            )}
+            {isFetchingMore ? (
+              <div className="markLoadingContainer">
+                <CircularProgress
+                  size={15}
+                  className="searchLoading"
+                  disableShrink
+                />
+              </div>
+            ) : (
+              <div
+                className="msgShowOldNotif"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  fetchOldNotifications();
                 }}
               >
-                Open Messenger
-              </span>
-            </Link>
-            <span onClick={fetchOldNotifications}>Show old notifications</span>
+                <span>Show old notifications</span>
+              </div>
+            )}
           </div>
         </div>
       )}

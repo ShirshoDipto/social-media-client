@@ -169,7 +169,7 @@ export default function GeneralNotifs({ user }) {
       </div>
       {numNotif > 0 && <span className="topbarIconBadge">{numNotif}</span>}
       {dropdownStatus && (
-        <div className="notifDropDown" ref={dropdown}>
+        <div className="genNotifDropDown" ref={dropdown}>
           {isMarkingAsSeen ? (
             <div className="markLoadingContainer">
               <CircularProgress
@@ -193,7 +193,7 @@ export default function GeneralNotifs({ user }) {
           ) : (
             <div className="noNotifications">No new notifications</div>
           )}
-          {isFetchingMore && (
+          {isFetchingMore ? (
             <div className="markLoadingContainer">
               <CircularProgress
                 size={15}
@@ -201,10 +201,17 @@ export default function GeneralNotifs({ user }) {
                 disableShrink
               />
             </div>
+          ) : (
+            <div
+              className="genShowOldNotif"
+              onClick={(e) => {
+                e.stopPropagation();
+                fetchOldNotifications();
+              }}
+            >
+              <span>Show old notifications</span>
+            </div>
           )}
-          <div className="showOldNotif">
-            <span onClick={fetchOldNotifications}>Show old notifications</span>
-          </div>
         </div>
       )}
     </div>

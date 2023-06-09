@@ -17,36 +17,59 @@
   background-color: var(--searchBar);
 }
 
-.msgNotificationList {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  padding: 5px 5px 0 5px;
-  background-color: var(--searchBarDarkish);
-  border-radius: 5px;
-  max-height: 400px;
-  overflow-y: auto;
-  padding-bottom: 15px;
-}
-
 .msgNotifDropDown { 
   position: absolute;
   top: 50px;
   right: 0;
   background-color: var(--searchBarDarkish);
   border-radius: 5px;
+  width: 265px;
+}
+
+.openMessenger {
+  color: var(--topbarBackground);
+  padding: 5px;
+  font-size: 0.9rem;
+  width: 100%;
+  background-color: inherit;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  border-bottom: thin solid var(--secondaryBorderBackground);
+}
+
+.openMessenger:hover {
+  color: var(--topbarBackgroundDarkish);
+  cursor: pointer;
+}
+
+.msgNotificationList {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 5px;
+  background-color: var(--searchBarDarkish);
+  border-radius: 5px;
+  padding-bottom: 2px;
+}
+
+.msgNotifDropdownWrapper {
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .markLoadingContainer {
   display: flex;
   justify-content: center;
-  padding: 10px;
+  align-items: center;
+  padding: 5px;
   border-radius: 5px;
-  width: 250px;
+  width: 100%;
+  height: 30px;
 }
 
-.noNotifications {
-  width: 250px;
+.noMsgNotifications {
+  width: 100%;
   gap: 10px;
   padding: 10px;
   background-color: var(--searchBarDarkish);
@@ -60,18 +83,20 @@
   color: var(--secondaryText);
 }
 
-.notifOptions {
+.msgShowOldNotif {
   color: var(--topbarBackground);
   padding: 5px;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   width: 100%;
   background-color: inherit;
   text-align: center;
+  height: 30px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
 }
 
-.notifOptions span:hover {
+.msgShowOldNotif:hover {
   color: var(--topbarBackgroundDarkish);
   cursor: pointer;
 }
