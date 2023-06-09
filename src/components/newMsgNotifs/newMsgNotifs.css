@@ -35,7 +35,7 @@
   text-align: center;
   display: flex;
   justify-content: center;
-  border-bottom: thin solid var(--secondaryBorderBackground);
+  border-top: thin solid var(--secondaryBorderBackground);
 }
 
 .openMessenger:hover {

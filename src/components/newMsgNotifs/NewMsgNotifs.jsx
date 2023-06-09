@@ -162,21 +162,6 @@ export default function NewMsg({ user }) {
       {numNotif > 0 && <span className="topbarIconBadge">{numNotif}</span>}
       {dropdownStatus && (
         <div className="msgNotifDropDown" ref={dropdown}>
-          <Link className="routerLink" to={`${clientRoot}/messenger`}>
-            <div
-              className="openMessenger"
-              onClick={() => {
-                if (notifications.length > 0) {
-                  setNotifications([]);
-                  setNumNotif(0);
-                }
-                setDropdownStatus(false);
-              }}
-            >
-              <span>Open Messenger</span>
-            </div>
-          </Link>
-
           <div className="msgNotifDropdownWrapper">
             {isMarkingAsSeen ? (
               <div className="markLoadingContainer">
@@ -221,6 +206,21 @@ export default function NewMsg({ user }) {
               </div>
             )}
           </div>
+
+          <Link className="routerLink" to={`${clientRoot}/messenger`}>
+            <div
+              className="openMessenger"
+              onClick={() => {
+                if (notifications.length > 0) {
+                  setNotifications([]);
+                  setNumNotif(0);
+                }
+                setDropdownStatus(false);
+              }}
+            >
+              <span>Open Messenger</span>
+            </div>
+          </Link>
         </div>
       )}
     </div>

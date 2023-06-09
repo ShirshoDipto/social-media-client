@@ -1,10 +1,11 @@
 import { v4 as uuidv4 } from "uuid";
 const serverRoot = process.env.REACT_APP_SERVERROOT;
 
-export async function addPic(pic, userId, token) {
+export async function addPic(pic, type, userId, token) {
   try {
     const formData = new FormData();
     formData.append("imageName", uuidv4());
+    formData.append("type", type);
     formData.append("image", pic);
 
     const res = await fetch(`${serverRoot}/api/users/${userId}/pic`, {
@@ -50,10 +51,11 @@ export async function deletePic(imageUrl, userId, token) {
   }
 }
 
-export async function replacePic(existingUrl, pic, userId, token) {
+export async function replacePic(existingUrl, pic, type, userId, token) {
   try {
     const formData = new FormData();
     formData.append("imageName", uuidv4());
+    formData.append("type", type);
     formData.append("image", pic);
     formData.append("existingImageUrl", existingUrl);
 

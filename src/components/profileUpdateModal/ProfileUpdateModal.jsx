@@ -97,7 +97,7 @@ export default function ProfileUpdateModal({
     }
 
     if (profilePicImg && !user.profilePic) {
-      return await addPic(profilePicImg, user._id, token);
+      return await addPic(profilePicImg, "p", user._id, token);
     }
 
     if (!profilePicImg && user.profilePic) {
@@ -105,7 +105,13 @@ export default function ProfileUpdateModal({
     }
 
     if (profilePicImg && user.profilePic) {
-      return await replacePic(user.profilePic, profilePicImg, user._id, token);
+      return await replacePic(
+        user.profilePic,
+        profilePicImg,
+        "p",
+        user._id,
+        token
+      );
     }
   }
 
@@ -119,7 +125,7 @@ export default function ProfileUpdateModal({
     }
 
     if (coverPicImg && !user.coverPic) {
-      return await addPic(coverPicImg, user._id, token);
+      return await addPic(coverPicImg, "c", user._id, token);
     }
 
     if (!coverPicImg && user.coverPic) {
@@ -127,7 +133,7 @@ export default function ProfileUpdateModal({
     }
 
     if (coverPicImg && user.coverPic) {
-      return await replacePic(user.coverPic, coverPicImg, user._id, token);
+      return await replacePic(user.coverPic, coverPicImg, "c", user._id, token);
     }
   }
 
