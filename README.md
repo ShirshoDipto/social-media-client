@@ -105,7 +105,7 @@ serve -s build
 - Update own posts.
 - Delete own posts.
 - Include images with posts.
-- Include emojis with posts by right clicking on post input.
+- Include emojis with posts.
 - Include line breaks in posts. (See additional info no.3)
 
 ### 5. Comments
@@ -114,7 +114,7 @@ serve -s build
 - Update own comments.
 - Delete own comments.
 - Infinite scrolling.
-- Include emojis with comments by right clicking on comment input.
+- Include emojis with comments.
 - Include line breaks in comments.
 
 ### 6. Likes

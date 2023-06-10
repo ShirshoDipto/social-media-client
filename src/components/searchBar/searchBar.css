@@ -3,13 +3,11 @@
 .searchbar {
   width: 60%;
   height: 30px;
-  background-color: white;
   border-radius: 30px;
   display: flex;
   align-items: center;
   gap: 5px;
   color: var(--secondaryText);
-  background-color: var(--searchBar);
   position: relative;
 }
 
@@ -23,6 +21,8 @@
   width: 100%;
   background: none;
   color: var(--secondaryText);
+  border-bottom: thin solid var(--secondaryBorderBackground);
+  padding: 5px;
 }
 
 .searchInput:focus {
