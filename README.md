@@ -188,7 +188,7 @@ The app does not send an event to the socket server every single time the user g
 
 When a user uploads a new post, the socket server does not broadcast an event to all the connected users of this app. Instead, it only sends an event to all the friends of that user who are online, keeping the runtime complexity of the operation within O(n) where n is the number of friends of the user.
 
-A gif
+![Demo Gif](/public/assets/gifs/postUpload.gif)
 
 #### 7. Real time Notifications for unseen messages:
 
