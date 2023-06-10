@@ -8,8 +8,6 @@ NoseBook is a Facebook clone that I have made as a final project for my full sta
 
 [Socket repository](https://github.com/ShirshoDipto/nosebook-socket)
 
-![Demo Gif](/public/assets/gifs/Animation%202.gif)
-
 ## Technologies used
 
 1. MongoDb (with Mongoose)
@@ -154,29 +152,29 @@ serve -s build
 
 The search functionality is implemented by using mongoDB full text search index. Regular expression is used at the backend to process email search queries.
 
-    A gif.
+![Search Users](/public/assets/gifs/searchUsers.gif)
 
 #### 2. Friend requests:
 
 A user can send another user friend request by going to his/her profile page. The friendship status on the user’s profile page is shown based on whether there is a pending friend request between the two users. If a user receives a friend request from another user, that friend request can be viewed from the notification panel as well as from the profile page of the user who sent the request. The request can be accepted or rejected from both places.
 
-    A gif.
+![Demo Gif](/public/assets/gifs/friendRequests2.gif)
 
 #### 3. Notifications:
 
 Notification feature is very much like the YouTube notification system. Notifications never get deleted, except the friend requests. Therefore, a user can see all the old notifications.
 
-    A gif.
+![Demo Gif](</public/assets/gifs/notifications(general).gif>)
 
 #### 4. Creating a chat conversation:
 
 The only way to start a new chat with a user is to go to that user’s profile page and click the message button. If user A goes to user B’s profile page and clicks the message button, it will create a temporary chat conversation on the messenger page of user A but user B cannot yet see the conversation. If user A sends a message to user B, then that temporary chat conversation will be made permanent and user B can see the new chat conversations appear on his/her own messenger page.
 
-A gif.
+![Demo Gif](/public/assets/gifs/createPermChat.gif)
 
 But if user A decides to leave the messenger page without sending any message to user B, then the temporary chat will be removed from user A’s chat conversation list. User B will not receive anything. See the gif below.
 
-A gif.
+![Demo Gif](/public/assets/gifs/createTempChat.gif)
 
 #### 5. Continuous typing Indicator:
 
@@ -184,7 +182,7 @@ If user A starts typing for user B, the typing indicator “user A is typing …
 
 The app does not send an event to the socket server every single time the user gives a keystroke. Rather, it sends only two events during the entire typing session: one is when the user starts typing, and another one is when the user stops typing. Therefore, the feature is not heavy on the backend.
 
-A gif.
+![Demo Gif](/public/assets/gifs/typingIndicator.gif)
 
 #### 6. Real time notification for new post:
 
@@ -217,7 +215,7 @@ If user B is chatting with user A, or if user B’s active chat is user A, then 
 
 A gif.
 
-The feat is achieved by utilizing React components’ lifecycle method.
+This feat is achieved by utilizing React components’ lifecycle method.
 
 #### 8. Online and offline friends on the homepage:
 
