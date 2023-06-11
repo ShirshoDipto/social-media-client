@@ -237,7 +237,10 @@ export default function CommentContent({
       <div className="commentRightContainer">
         <div className="commentUserNameAndComment">
           <div className="commentUserAndOptions">
-            <Link to={`${clientRoot}/users/${comment.author._id}`}>
+            <Link
+              className="routerLink"
+              to={`${clientRoot}/users/${comment.author._id}`}
+            >
               <div className="commentUsername">{fullname}</div>
             </Link>
             {user && user.userInfo._id === comment.author._id && (
