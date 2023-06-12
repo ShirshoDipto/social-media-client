@@ -2,11 +2,13 @@
 
 NoseBook is a Facebook clone that I have made as a final project for my full stack web development course. It has the core functionalities that Facebook has, which includes uploading posts, commenting on posts, liking a post/comment, sending/accepting friend requests, real time messaging, and real time notification system for posts, messages, friend requests etc.
 
-[View Live](https://nosebook-social.netlify.app)
+[View Live](https://nosebook-social.netlify.app/login)
 
 [API repository](https://github.com/ShirshoDipto/social-media-api)
 
 [Socket repository](https://github.com/ShirshoDipto/nosebook-socket)
+
+![Initial Demo](/public/assets/gifs/initialDemo.gif)
 
 ## Technologies used
 
@@ -70,7 +72,7 @@ serve -s build
 
 ## Features & Highlights
 
-(For more info, checkout the Additional Info section below)
+**(For more info and GIFs, checkout the Additional Information section below)**
 
 ### 1. Authentication
 
@@ -104,7 +106,7 @@ serve -s build
 - Delete own posts.
 - Include images with posts.
 - Include emojis with posts.
-- Include line breaks in posts. (See additional info no.3)
+- Include line breaks in posts.
 
 ### 5. Comments
 
@@ -180,7 +182,7 @@ But if user A decides to leave the messenger page without sending any message to
 
 If user A starts typing for user B, the typing indicator “user A is typing …” appears on user B’s screen, and it will be removed if user A does not type for 2 seconds. It takes Skype 20 seconds to recognize that user A has stopped typing. So if user A gives a single keystroke to the input and does nothing else, user B will see “user A is typing …” text for 20 seconds before the indicator disappears, creating an impression that user A was indeed typing for 20 seconds. For Telegram, it is 6 seconds.
 
-The app does not send an event to the socket server every single time the user gives a keystroke. Rather, it sends only two events during the entire typing session: one is when the user starts typing, and another one is when the user stops typing. Therefore, the feature is not heavy on the backend.
+This app does not send an event to the socket server every single time the user gives a keystroke. Rather, it sends only two events during the entire typing session: one is when the user starts typing, and another one is when the user stops typing. Therefore, the feature is not heavy on the backend.
 
 ![Typing Indicator](/public/assets/gifs/typingIndicator2.gif)
 
