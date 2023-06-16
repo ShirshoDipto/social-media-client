@@ -13,15 +13,15 @@ NoseBook is a Facebook clone that I have made as a final project for my full sta
 ## Technologies used
 
 1. MongoDb (with Mongoose)
-2. Express js
-3. React js
-4. Node js
-5. Passport js
+2. Express
+3. React
+4. Node.js
+5. Passport.js
 6. JWT
 7. Socket.io
 8. Cloudinary
 9. Multer
-10. Bcrypt js
+10. Bcrypt.js
 11. Express Validator
 12. HTML React Parser
 13. Material Icon
