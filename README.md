@@ -72,8 +72,6 @@ serve -s build
 
 ## Features & Highlights
 
-**(For more info and GIFs, checkout the Additional Information section below)**
-
 ### 1. Authentication
 
 - Basic Login and Signup with username and password.
@@ -152,22 +150,25 @@ serve -s build
 ## Additional Gifs
 
 1. Search for users:
-   ![](public/assets/gifs/searchUsers.gif)
-   ...
-1. Update Profile Information:
-   ![](public/assets/gifs/profileUpdate.gif)
-   ...
-1. Create post and real time notification for new posts:
-   ![](public/assets/gifs/postUpload.gif)
-   ...
-1. Send and accept friend requests:
-   ![](public/assets/gifs/friendRequests2.gif)
-   ...
-1. Online/offline friends:
-   ![](public/assets/gifs/onlineFriends.gif)
-   ...
-1. Real time messaging:
-   ![](public/assets/gifs/msgNotOnline.gif)
-   ...
 
-1.
+![](public/assets/gifs/searchUsers.gif)
+
+2. Update Profile Information:
+
+![](public/assets/gifs/profileUpdate.gif)
+
+3. Create post and real time notification for new posts:
+
+![](public/assets/gifs/postUpload.gif)
+
+4. Send and accept friend requests:
+
+![](public/assets/gifs/friendRequests2.gif)
+
+5. Online/offline friends:
+
+![](public/assets/gifs/onlineFriends.gif)
+
+6. Real time messaging:
+
+![](public/assets/gifs/msgNotOnline.gif)
