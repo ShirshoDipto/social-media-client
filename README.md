@@ -171,4 +171,4 @@ serve -s build
 
 6. Real time messaging:
 
-![](public/assets/gifs/msgNotOnline.gif)
+![](public/assets/gifs/msgOnHomepage.gif)
