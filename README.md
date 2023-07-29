@@ -149,26 +149,26 @@ serve -s build
 
 ## Additional Gifs
 
-1. Search for users:
+### 1. Search for users:
 
 ![](public/assets/gifs/searchUsers.gif)
 
-2. Update Profile Information:
+### 2. Update Profile Information:
 
 ![](public/assets/gifs/profileUpdate.gif)
 
-3. Create post and real time notification for new posts:
+### 3. Create post and real time notification for new posts:
 
 ![](public/assets/gifs/postUpload.gif)
 
-4. Send and accept friend requests:
+### 4. Send and accept friend requests:
 
 ![](public/assets/gifs/friendRequests2.gif)
 
-5. Online/offline friends:
+### 5. Online/offline friends:
 
 ![](public/assets/gifs/onlineFriends.gif)
 
-6. Real time messaging:
+### 6. Real time messaging:
 
 ![](public/assets/gifs/msgOnHomepage.gif)
