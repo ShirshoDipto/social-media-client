@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: 5px;
   width: 70px;
+  flex-shrink: 0;
 }
 
 .profileFriendImg {

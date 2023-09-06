@@ -88,3 +88,9 @@
   top: 30px;
   left: -40px;
 }
+
+@media (max-width: 800px) {
+  .friendshipStatusText {
+    text-align: initial;
+  }
+}

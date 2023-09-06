@@ -19,6 +19,9 @@
 }
 
 .profileBottom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
   padding-left: 50px;
   padding-right: 50px;
   padding-top: 50px;
@@ -26,10 +29,6 @@
 
 .profileRight{
   flex: 9;
-}
-
-.profileCover{
-  position: relative;
 }
 
 .profileCoverImg{
@@ -49,24 +48,24 @@
   color: var(--secondaryText);
 }
 
-.profileUserImg{
+.profileUserImg {
   width: 150px;
   height: 150px;
   border-radius: 50%;
   object-fit: cover;
   position: absolute;
   left: 30px;
-  right: 0;
-  bottom: -35px;
+  top: -35px;
   border: 3px solid white;
 }
 
-.profileSummary{
+.profileSummary {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px 15px 200px;
   height: 90px;
+  position: relative;
 }
 
 .profileNameDescContainer {
@@ -100,11 +99,6 @@
 .profileInfoDesc{
   font-weight: 300;
   font-size: 0.9rem;
-}
-
-.profileBottom{
-  display: flex;
-  gap: 20px;
 }
 
 .profileSidebar {
@@ -176,4 +170,46 @@
 
 .profileLoading {
   margin: 50px;
+}
+
+@media (max-width: 800px) {
+  .profileCoverImg{
+    height: 10%;
+  }
+
+  .profileUserImg {
+    width: 130px;
+    height: 130px;
+    left: 20px;
+    top: -20px;
+  }
+
+  .profileSummary {
+    height: initial;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: initial;
+    gap: 25px;
+    padding-left: 20px;
+    padding-top: 120px;
+  }
+
+  .profileBottom {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .profileSidebarWrapper {
+    min-width: 200px;
+  }
+  
+  .profileFriendlist {
+    flex-wrap: initial;
+    overflow-x: auto;
+    width: calc(100vw - 40px);
+  }
+
+  .profileFriendlist::-webkit-scrollbar {
+    height: 5px;
+  }
 }

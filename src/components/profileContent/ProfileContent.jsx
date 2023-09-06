@@ -64,17 +64,17 @@ export default function ProfileContent({ user }) {
                 <span className="noProfileCoverText">No Cover Available</span>
               </div>
             )}
-            <img
-              className="profileUserImg"
-              src={
-                profileInfos.profilePic
-                  ? profileInfos.profilePic
-                  : `${clientRoot}/assets/person/noAvatar.png`
-              }
-              alt=""
-            />
 
             <div className="profileSummary">
+              <img
+                className="profileUserImg"
+                src={
+                  profileInfos.profilePic
+                    ? profileInfos.profilePic
+                    : `${clientRoot}/assets/person/noAvatar.png`
+                }
+                alt=""
+              />
               <div className="profileNameDescContainer">
                 <h4 className="profileInfoName">
                   {`${profileInfos.firstName} ${profileInfos.lastName}`}
