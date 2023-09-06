@@ -16,6 +16,7 @@
 
 .loginLeft,
 .loginRight {
+  min-width: 400px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -60,8 +61,10 @@
   border: none;
   font-size: 18px;
   padding-left: 20px;
+  padding-right: 20px;
   background: var(--searchBar);
   color: var(--secondaryText);
+  caret-color: var(--primaryText);
 }
 
 .loginInput:focus{
@@ -153,4 +156,23 @@
 
 .loginGoogleButton:active {
   background-color: #946261;
+}
+
+@media (max-width: 600px) {
+  .loginWrapper {
+    width: 90%;
+  }
+  
+  .loginLeft,
+  .loginRight {
+    min-width: 280px;
+  }
+  
+  .loginLogo {
+    font-size: 40px;
+  }
+  
+  .loginDesc {
+    font-size: 20px;
+  }
 }

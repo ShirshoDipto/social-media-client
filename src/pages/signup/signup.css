@@ -20,6 +20,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-width: 400px;
 }
 
 .signupLogo {
@@ -58,6 +59,7 @@
   display: flex;
   justify-content: space-between;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .signupNameGroup div {
@@ -72,6 +74,8 @@
   color: var(--secondaryText);
   font-size: 18px;
   padding-left: 20px;
+  padding-right: 20px;
+  caret-color: var(--primaryText);
 }
 
 .signupInput:focus{
@@ -162,4 +166,28 @@
 
 .signupGoogleButton:active {
   background-color: #946261;
+}
+
+@media (max-width: 600px) {
+  .signupWrapper {
+    width: 90%;
+    gap: 10px;
+  }
+
+  .signupLeft,
+  .signupRight {
+    min-width: 280px;
+  }
+
+  .signupLeft {
+    margin-top: 40px;
+  }
+
+  .signupLogo {
+    font-size: 40px;
+  }
+
+  .signupDesc {
+    font-size: 20px;
+  }
 }
