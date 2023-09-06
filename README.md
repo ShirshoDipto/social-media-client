@@ -130,8 +130,8 @@ serve -s build
 
 ### 8. Messenger
 
-- Create a chat conversation with a user. _Similar to opening a new chat conversation with another user on Skype_. (See additional info no.4)
-- Sorting of chat conversations based on the date of the most recent message.
+- Create a chat conversation with a user. _Similar to opening a new chat conversation with another user on Skype_.
+- Sorting of chat conversations based on the date of the most recent message. **The algorithm used here employes the fundamantal component of mergesort algorithm.**
 - Unseen messages indicator on chat conversations.
 - Send and receive messages real time.
 
