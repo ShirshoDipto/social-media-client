@@ -8,10 +8,10 @@
 }
 
 .signupWrapper {
-  width: 70%;
+  width: 80%;
   display: flex;
   flex-wrap: wrap;
-  gap: 40px;
+  gap: 20px;
 }
 
 .signupLeft,
