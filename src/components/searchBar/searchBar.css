@@ -91,4 +91,8 @@
   .searchDropdownContainer {
     width: calc(100vw - 55px);
   }
+
+  .searchInput {
+    font-size: 0.8rem;
+  }
 }
