@@ -173,7 +173,7 @@
 }
 
 @media (max-width: 800px) {
-  .profileCoverImg{
+  .profileCoverImg {
     height: 10%;
   }
 
@@ -211,5 +211,11 @@
 
   .profileFriendlist::-webkit-scrollbar {
     height: 5px;
+  }
+}
+
+@media (max-width: 500px) {
+  .noProfileCover {
+    height: 200px;
   }
 }
