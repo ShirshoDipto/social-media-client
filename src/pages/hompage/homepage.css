@@ -4,3 +4,9 @@
   width: 100%;
   background-color: var(--profileBackground);
 }
+
+@media (max-width: 800px) {
+  .homepageContainer {
+    justify-content: center;
+  }
+}

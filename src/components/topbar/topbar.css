@@ -203,3 +203,29 @@
   font-size: 0.9rem;
 }
 
+@media (max-width: 800px) {
+  .topbarContainer {
+    gap: 20px;
+  }
+
+  .topbarLeft {
+    gap: 5px;
+  }
+
+  .topbarLogo {
+    margin-left: 10px;
+  }
+
+  .topbarRight{
+    flex: initial;
+    padding-right: 10px;
+  }
+  /* .topbarContainer {
+    flex-wrap: wrap;
+  }
+
+  .topbarLeft, 
+  .topbarRight {
+    flex-wrap: wrap;
+  } */
+}

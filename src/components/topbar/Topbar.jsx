@@ -10,6 +10,7 @@ import { AuthContext } from "../../context/AuthContext";
 
 export default function Topbar({ user }) {
   const [dropdownStatus, setDropdownStatus] = useState(false);
+  const [appName, setAppName] = useState("NoseBook");
   const { dispatch } = useContext(AuthContext);
   const dropdown = useRef();
   const dropdownTrigger = useRef();
@@ -54,9 +55,23 @@ export default function Topbar({ user }) {
 
     document.addEventListener("click", handleClickOutside);
 
+    function handleAppName(entries) {
+      if (entries[0].contentRect.width < 800) {
+        setAppName("NB");
+      } else {
+        setAppName("NoseBook");
+      }
+    }
+
+    const observer = new ResizeObserver(handleAppName);
+    observer.observe(document.querySelector(".topbarContainer"));
+
     return () => {
       document.removeEventListener("click", handleClickOutside);
+      observer.disconnect();
     };
+
+    // eslint-disable-next-line
   }, []);
 
   if (
@@ -72,7 +87,7 @@ export default function Topbar({ user }) {
     <div className="topbarContainer">
       <div className="topbarLeft">
         <Link to="/" className="routerLink">
-          <span className="topbarLogo">NoseBook</span>
+          <span className="topbarLogo">{appName}</span>
         </Link>
         <SearchBar />
       </div>

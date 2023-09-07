@@ -57,3 +57,10 @@
 .postLoadMore:active {
   background-color: var(--secondaryBorderBackground);
 }
+
+@media (max-width: 800px) {
+  .feedWrapper {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}

@@ -82,3 +82,13 @@
   padding: 10px;
   border-radius: 5px;
 }
+
+@media (max-width: 800px) {
+  .searchbar {
+    width: 100%;
+  }
+
+  .searchDropdownContainer {
+    width: calc(100vw - 55px);
+  }
+}
