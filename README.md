@@ -24,7 +24,7 @@ NoseBook is a Facebook clone that I have made as a final project for my full sta
 10. Bcrypt.js
 11. Express Validator
 12. HTML React Parser
-13. Material Icon
+13. Material UI
 
 and more
 
