@@ -195,3 +195,45 @@
   background-color: var(--topbarBackground);
   color: var(--primaryText);
 }
+
+@media (max-width: 800px) {
+  .profileModalContent {
+    width: 90%;
+    min-width: 300px;
+  }
+
+  .modalProfilePic {
+    width: 100px;
+    height: 100px;
+  }
+
+  .modalCoverPic {
+    height: 40%;
+    width: 90%;
+  }
+
+  .profileModalNameContainer {
+    flex-wrap: wrap;
+  }
+
+  .profileModalNameAndDesc {
+    padding: 10px;
+  }
+
+  .modalBioContainer {
+    padding: 0 10px 10px 10px;
+  }
+
+  /* .modalFormGroup {
+    flex-wrap: wrap;
+  } */
+
+  .modalEditInput {
+    width: 100%;
+  }
+
+  #modalEditRel {
+    width: 100%;
+  }
+
+}
