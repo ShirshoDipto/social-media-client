@@ -92,7 +92,8 @@
   background-color: var(--topbarBackgroundDarkish);
 }
 
-.menuIconContainer {
+.menuIconContainer, 
+.groupIconContainer {
   display: none;
   justify-content: center;
   align-items: center;
@@ -101,15 +102,42 @@
   border-radius: 50%;
 }
 
-.menuIconContainer:hover {
+.groupIconContainer {
+  position: relative;
+}
+
+.menuIconContainer:hover, 
+.groupIconContainer:hover {
   background-color: var(--searchBarDarkish);
 }
 
-.menuIconContainer:active {
+.menuIconContainer:active, 
+.groupIconContainer:active {
   background-color: var(--searchBar);
 }
 
-.menuIcon {
+.groupIconMarker {
+  position: absolute;
+  bottom: 7px;
+  right: 5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: limegreen;
+}
+
+.unseenNotifMarker {
+  position: absolute;
+  top: 7px;
+  right: 5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: red;
+}
+
+.menuIcon, 
+.groupIcon {
   cursor: pointer;
   color: var(--secondaryText);
 }
@@ -247,13 +275,15 @@
     margin-left: 10px;
   }
 
-  .topbarRight{
+  .topbarRight {
     flex: initial;
     padding-right: 10px;
   }
 
-  .menuIconContainer {
+  .menuIconContainer, 
+  .groupIconContainer {
     display: flex;
+    position: relative
   }
 
   .topbarRightContainer {
@@ -263,9 +293,9 @@
     height: calc(100vh - 50px);
     width: 100vw;
     background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
     transition-property: opacity;
     transition-duration: 0.3s;
-    opacity: 0;
   }
 
   .topbarRightWrapper {

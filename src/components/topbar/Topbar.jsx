@@ -1,5 +1,7 @@
 import "./topbar.css";
 import LogoutIcon from "@mui/icons-material/Logout";
+import MenuIcon from "@mui/icons-material/Menu";
+import GroupsIcon from "@mui/icons-material/Groups";
 import { Link, useLocation } from "react-router-dom";
 import { useContext, useEffect, useRef, useState } from "react";
 import SearchBar from "../searchBar/SearchBar";
@@ -7,17 +9,22 @@ import NewMsgNotifs from "../newMsgNotifs/NewMsgNotifs";
 import GeneralNotifs from "../generalNotifs/GeneralNotifs";
 import FriendReqNotifs from "../friendReqNotifs/FriendReqNotifs";
 import { AuthContext } from "../../context/AuthContext";
-import MenuIcon from "@mui/icons-material/Menu";
 
 export default function Topbar({ user }) {
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const [appName, setAppName] = useState("NoseBook");
   const [topbarMenuStatus, setTopbarMenuStatus] = useState(false);
+  const [unseenNotifs, setUnseenNotifs] = useState({
+    fndReq: 0,
+    msg: 0,
+    gen: 0,
+  });
+
   const { dispatch } = useContext(AuthContext);
   const dropdown = useRef();
   const dropdownTrigger = useRef();
-  const location = useLocation();
 
+  const location = useLocation();
   const serverRoot = process.env.REACT_APP_SERVERROOT;
   const clientRoot = process.env.REACT_APP_CLIENTROOT;
 
@@ -29,6 +36,17 @@ export default function Topbar({ user }) {
   function toggleTopbarMenuStatus() {
     if (appName !== "NB") return;
     setTopbarMenuStatus(!topbarMenuStatus);
+  }
+
+  function updateUnseenNotifs(category, updateType) {
+    const newUnseenNotif = { ...unseenNotifs };
+    if (updateType === "add") {
+      newUnseenNotif[category] = 1;
+    } else {
+      newUnseenNotif[category] = 0;
+    }
+
+    setUnseenNotifs(newUnseenNotif);
   }
 
   async function handleLogout() {
@@ -106,6 +124,9 @@ export default function Topbar({ user }) {
           <>
             <div className="menuIconContainer" onClick={toggleTopbarMenuStatus}>
               <MenuIcon className="menuIcon" />
+              {Object.values(unseenNotifs).some((n) => n !== 0) && (
+                <div className="unseenNotifMarker"></div>
+              )}
             </div>
             <div
               className={`topbarRightContainer ${
@@ -113,8 +134,8 @@ export default function Topbar({ user }) {
               }`}
               onClick={(e) => {
                 if (
-                  topbarMenuStatus &&
-                  e.target.classList.contains("topbarRightContainer")
+                  e.target.classList.contains("topbarRightContainer") &&
+                  topbarMenuStatus
                 )
                   toggleTopbarMenuStatus();
               }}
@@ -126,14 +147,31 @@ export default function Topbar({ user }) {
               >
                 <div className="topbarIcons">
                   <div className="topbarIconItem">
-                    <FriendReqNotifs user={user} />
+                    <FriendReqNotifs
+                      user={user}
+                      updateUnseenNotifs={updateUnseenNotifs}
+                    />
                   </div>
                   <div className="topbarIconItem">
-                    <NewMsgNotifs user={user} />
+                    <NewMsgNotifs
+                      user={user}
+                      updateUnseenNotifs={updateUnseenNotifs}
+                    />
                   </div>
                   <div className="topbarIconItem">
-                    <GeneralNotifs user={user} />
+                    <GeneralNotifs
+                      user={user}
+                      updateUnseenNotifs={updateUnseenNotifs}
+                    />
                   </div>
+                  {topbarMenuStatus && (
+                    <div className="topbarIconItem">
+                      <div className="groupIconContainer">
+                        <GroupsIcon className="groupIcon" />
+                        <div className="groupIconMarker"></div>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div className="topbarDropdownContainer">
                   <img

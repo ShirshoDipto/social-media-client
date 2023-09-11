@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { socket } from "../../socket";
 import Notification from "../notification/Notification";
 
-export default function GeneralNotifs({ user }) {
+export default function GeneralNotifs({ user, updateUnseenNotifs }) {
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const dropdown = useRef();
   const dropdownTrigger = useRef();
@@ -145,10 +145,17 @@ export default function GeneralNotifs({ user }) {
     socket.on("getPost", onNewPost);
     socket.on("getFndReq", onFndReq);
 
+    if (notifications.length > 0 && !notifications[0].isSeen) {
+      updateUnseenNotifs("gen", "add");
+    } else {
+      updateUnseenNotifs("gen", "delete");
+    }
+
     return () => {
       socket.off("getPost", onNewPost);
       socket.off("getFndReq", onFndReq);
     };
+    // eslint-disable-next-line
   }, [notifications]);
 
   return (

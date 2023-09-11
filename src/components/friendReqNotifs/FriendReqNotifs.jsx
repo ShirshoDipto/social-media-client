@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import Notification from "../notification/Notification";
 import { socket } from "../../socket";
 
-export default function FriendReqNotifs({ user }) {
+export default function FriendReqNotifs({ user, updateUnseenNotifs }) {
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const dropdown = useRef();
   const dropdownTrigger = useRef();
@@ -34,12 +34,10 @@ export default function FriendReqNotifs({ user }) {
 
       const newNotifications = notifications.filter((n) => n._id !== notif._id);
       setNotifications(newNotifications);
-      setDropdownStatus(false);
     } catch (error) {
       console.log(error);
       const newNotifications = notifications.filter((n) => n._id !== notif._id);
       setNotifications(newNotifications);
-      setDropdownStatus(false);
     }
   }
 
@@ -63,13 +61,11 @@ export default function FriendReqNotifs({ user }) {
       const newNotifications = notifications.filter((n) => n._id !== notif._id);
       setNotifications(newNotifications);
       setIsConfirmed(true);
-      setDropdownStatus(false);
       socket.emit("sendFndReq", resData.notification);
     } catch (error) {
       console.log(error);
       const newNotifications = notifications.filter((n) => n._id !== notif._id);
       setNotifications(newNotifications);
-      setDropdownStatus(false);
     }
   }
 
@@ -138,11 +134,15 @@ export default function FriendReqNotifs({ user }) {
 
     socket.on("getFndReq", onFndReq);
     socket.on("deleteNotif", onDeleteNotif);
+    notifications.length > 0
+      ? updateUnseenNotifs("fndReq", "add")
+      : updateUnseenNotifs("fndReq", "delete");
 
     return () => {
       socket.off("getFndReq", onFndReq);
       socket.off("deleteNotif", onDeleteNotif);
     };
+    // eslint-disable-next-line
   }, [notifications]);
 
   return (
