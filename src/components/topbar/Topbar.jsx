@@ -164,7 +164,7 @@ export default function Topbar({ user }) {
                       updateUnseenNotifs={updateUnseenNotifs}
                     />
                   </div>
-                  {topbarMenuStatus && (
+                  {appName === "NB" && (
                     <div className="topbarIconItem">
                       <div className="groupIconContainer">
                         <GroupsIcon className="groupIcon" />
