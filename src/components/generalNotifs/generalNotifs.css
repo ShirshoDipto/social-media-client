@@ -63,3 +63,11 @@
   color: var(--topbarBackgroundDarkish);
   cursor: pointer;
 }
+
+@media (max-width: 800px) {
+  .genNotifDropDown {
+    top: 10px;
+    left: -240px;
+    width: 230px;
+  }
+}

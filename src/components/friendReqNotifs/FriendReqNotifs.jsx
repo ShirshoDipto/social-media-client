@@ -171,7 +171,7 @@ export default function FriendReqNotifs({ user }) {
           setDropdownStatus(!dropdownStatus);
         }}
       >
-        <PersonIcon className="notificationIcon" />
+        <PersonIcon className="fndReqNotificationIcon" />
       </div>
       {notifications?.length > 0 && (
         <span className="topbarIconBadge">{notifications.length}</span>

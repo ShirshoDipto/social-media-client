@@ -7,10 +7,12 @@ import NewMsgNotifs from "../newMsgNotifs/NewMsgNotifs";
 import GeneralNotifs from "../generalNotifs/GeneralNotifs";
 import FriendReqNotifs from "../friendReqNotifs/FriendReqNotifs";
 import { AuthContext } from "../../context/AuthContext";
+import MenuIcon from "@mui/icons-material/Menu";
 
 export default function Topbar({ user }) {
   const [dropdownStatus, setDropdownStatus] = useState(false);
   const [appName, setAppName] = useState("NoseBook");
+  const [topbarMenuStatus, setTopbarMenuStatus] = useState(false);
   const { dispatch } = useContext(AuthContext);
   const dropdown = useRef();
   const dropdownTrigger = useRef();
@@ -23,6 +25,11 @@ export default function Topbar({ user }) {
   const userId = url.searchParams.get("google");
 
   const fullname = user?.userInfo.firstName + " " + user?.userInfo.lastName;
+
+  function toggleTopbarMenuStatus() {
+    if (appName !== "NB") return;
+    setTopbarMenuStatus(!topbarMenuStatus);
+  }
 
   async function handleLogout() {
     try {
@@ -70,9 +77,12 @@ export default function Topbar({ user }) {
       document.removeEventListener("click", handleClickOutside);
       observer.disconnect();
     };
-
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    setTopbarMenuStatus(false);
+  }, [location.pathname]);
 
   if (
     (location.pathname === "/login" ||
@@ -93,70 +103,94 @@ export default function Topbar({ user }) {
       </div>
       <div className="topbarRight">
         {user ? (
-          <div className="topbarRightWrapper">
-            <div className="topbarIcons">
-              <div className="topbarIconItem">
-                <FriendReqNotifs user={user} />
-              </div>
-              <div className="topbarIconItem">
-                <NewMsgNotifs user={user} />
-              </div>
-              <div className="topbarIconItem">
-                <GeneralNotifs user={user} />
-              </div>
+          <>
+            <div className="menuIconContainer" onClick={toggleTopbarMenuStatus}>
+              <MenuIcon className="menuIcon" />
             </div>
-            <div className="topbarDropdownContainer">
-              <img
-                src={
-                  user.userInfo.profilePic
-                    ? user.userInfo.profilePic
-                    : `${clientRoot}/assets/person/noAvatar.png`
-                }
-                alt=""
-                className="topbarImg"
-                onClick={() => {
-                  setDropdownStatus(!dropdownStatus);
-                }}
-                ref={dropdownTrigger}
-              />
-
-              {dropdownStatus && (
-                <ul className="topbarDropdown" ref={dropdown}>
-                  <Link
-                    to={`${clientRoot}/users/${user.userInfo._id}`}
-                    className="routerLink"
-                  >
-                    <li
-                      className="topbarDropdownProfile"
-                      onClick={() => setDropdownStatus(!dropdownStatus)}
-                    >
-                      <img
-                        src={
-                          user.userInfo.profilePic
-                            ? user.userInfo.profilePic
-                            : `${clientRoot}/assets/person/noAvatar.png`
-                        }
-                        alt=""
-                        className="topbarImg"
-                      />
-                      <span className="dropdownProfileName">{fullname}</span>
-                    </li>
-                  </Link>
-                  <hr className="dropdownHr" />
-                  <li
-                    className="topbarDropdownLogout"
+            <div
+              className={`topbarRightContainer ${
+                topbarMenuStatus ? "showTopbarMenuContainer" : ""
+              }`}
+              onClick={(e) => {
+                if (
+                  topbarMenuStatus &&
+                  e.target.classList.contains("topbarRightContainer")
+                )
+                  toggleTopbarMenuStatus();
+              }}
+            >
+              <div
+                className={`topbarRightWrapper ${
+                  topbarMenuStatus ? "showTopbarMenu" : "hideTopbarMenu"
+                }`}
+              >
+                <div className="topbarIcons">
+                  <div className="topbarIconItem">
+                    <FriendReqNotifs user={user} />
+                  </div>
+                  <div className="topbarIconItem">
+                    <NewMsgNotifs user={user} />
+                  </div>
+                  <div className="topbarIconItem">
+                    <GeneralNotifs user={user} />
+                  </div>
+                </div>
+                <div className="topbarDropdownContainer">
+                  <img
+                    src={
+                      user.userInfo.profilePic
+                        ? user.userInfo.profilePic
+                        : `${clientRoot}/assets/person/noAvatar.png`
+                    }
+                    alt=""
+                    className="topbarImg"
                     onClick={() => {
-                      handleLogout();
-                      setDropdownStatus(false);
+                      setDropdownStatus(!dropdownStatus);
                     }}
-                  >
-                    <LogoutIcon className="logoutIcon" />
-                    <span className="logoutText">Logout</span>
-                  </li>
-                </ul>
-              )}
+                    ref={dropdownTrigger}
+                  />
+
+                  {dropdownStatus && (
+                    <ul className="topbarDropdown" ref={dropdown}>
+                      <Link
+                        to={`${clientRoot}/users/${user.userInfo._id}`}
+                        className="routerLink"
+                      >
+                        <li
+                          className="topbarDropdownProfile"
+                          onClick={() => setDropdownStatus(!dropdownStatus)}
+                        >
+                          <img
+                            src={
+                              user.userInfo.profilePic
+                                ? user.userInfo.profilePic
+                                : `${clientRoot}/assets/person/noAvatar.png`
+                            }
+                            alt=""
+                            className="topbarImg"
+                          />
+                          <span className="dropdownProfileName">
+                            {fullname}
+                          </span>
+                        </li>
+                      </Link>
+                      <hr className="dropdownHr" />
+                      <li
+                        className="topbarDropdownLogout"
+                        onClick={() => {
+                          handleLogout();
+                          setDropdownStatus(false);
+                        }}
+                      >
+                        <LogoutIcon className="logoutIcon" />
+                        <span className="logoutText">Logout</span>
+                      </li>
+                    </ul>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
+          </>
         ) : (
           !userId && (
             <ul className="topbarRightList">

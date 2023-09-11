@@ -29,7 +29,7 @@
   text-align: center;
 }
 
-.notificationIcon{
+.fndReqNotificationIcon{
   cursor: pointer;
   color: var(--secondaryText);
 }
@@ -78,5 +78,17 @@
   height: 25px;
   width: 100%;
   padding-left: 57px;
+}
+
+@media (max-width: 800px) {
+  .fndNotifDropDown {
+    top: 10px;
+    left: -240px;
+    width: 230px;
+  }
+
+  .noFndNotifications {
+    width: 230px;
+  }
 }
 

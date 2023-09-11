@@ -52,6 +52,7 @@
   justify-content: space-around;
   gap: 30px;
   color: white;
+  transition: 0.3s;
 }
 
 .topbarRight{
@@ -89,6 +90,36 @@
 
 .topbarRightSignup:active {
   background-color: var(--topbarBackgroundDarkish);
+}
+
+.menuIconContainer {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 7px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.menuIconContainer:hover {
+  background-color: var(--searchBarDarkish);
+}
+
+.menuIconContainer:active {
+  background-color: var(--searchBar);
+}
+
+.menuIcon {
+  cursor: pointer;
+  color: var(--secondaryText);
+}
+
+.showTopbarMenu {
+  right: 0;
+}
+
+.hideTopbarMenu {
+  right: -50px;
 }
 
 .topbarLink {
@@ -220,12 +251,71 @@
     flex: initial;
     padding-right: 10px;
   }
-  /* .topbarContainer {
-    flex-wrap: wrap;
+
+  .menuIconContainer {
+    display: flex;
   }
 
-  .topbarLeft, 
-  .topbarRight {
-    flex-wrap: wrap;
-  } */
+  .topbarRightContainer {
+    position: fixed;
+    top: 50px;
+    right: -800px;
+    height: calc(100vh - 50px);
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition-property: opacity;
+    transition-duration: 0.3s;
+    opacity: 0;
+  }
+
+  .topbarRightWrapper {
+    position: fixed;
+    top: 50px;
+    background-color: var(--profileTop);
+    flex-direction: column;
+    justify-content: flex-start;
+    height: calc(100vh - 50px);
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 10px;
+
+  }
+
+  .topbarDropdownContainer {
+    height: initial;
+  }
+
+  .topbarIcons {
+    flex-direction: column;
+  }
+
+  .showTopbarMenuContainer {
+    right: 0;
+    opacity: 1;
+  }
+
+  .topbarDropdown {
+    top: 10px;
+    left: -240px;
+    width: 230px;
+  }
+}
+
+@media (max-width: 400px) {
+  .topbarContainer {
+    gap: 10px;
+  }
+
+  .topbarLeft {
+    gap: 0px;
+  }
+
+  .topbarRightList {
+    gap: 10px;
+  }
+
+  .topbarRightSignup {
+    padding: 5px;
+    width: 60px;
+  }
 }

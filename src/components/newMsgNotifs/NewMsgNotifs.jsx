@@ -156,7 +156,7 @@ export default function NewMsg({ user }) {
           markAllAsRead();
         }}
       >
-        <ChatIcon className="notificationIcon" />
+        <ChatIcon className="msgNotificationIcon" />
       </div>
 
       {numNotif > 0 && <span className="topbarIconBadge">{numNotif}</span>}
