@@ -14,6 +14,26 @@
 .contactsTitle {
   margin-bottom: 20px;
   color: var(--primaryText);
+  position: relative;
+}
+
+.hideContactsIconContainer {
+  position: absolute;
+  top: -7px;
+  right: 0;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  background-color: var(--searchBar);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transform: scale(0.7);
+}
+
+.hideContactsIconContainer:hover {
+  background-color: var(--profileInfoIcon);
 }
 
 .contactsList {
@@ -94,6 +114,10 @@
     left: 15px;
   }
 
+  .hideContactsIconContainer {
+    display: flex;
+  }
+
   .showContacts {
     left: 0;
     background-color: rgba(0, 0, 0, 0.5);
@@ -104,4 +128,3 @@
     left: 0;
   }
 }
-

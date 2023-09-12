@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { socket } from "../../socket";
 import Contact from "../contact/Contact";
 import GroupsIcon from "@mui/icons-material/Groups";
+import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 
 export default function Contacts({ user }) {
   const [onlineFnds, setOnlineFnds] = useState([]);
@@ -112,7 +113,15 @@ export default function Contacts({ user }) {
             }`}
             ref={contactsWrapper}
           >
-            <h4 className="contactsTitle">Contacts</h4>
+            <h4 className="contactsTitle">
+              Contacts
+              <div
+                className="hideContactsIconContainer"
+                onClick={handleContactsVisibility}
+              >
+                <ClearOutlinedIcon className="hideContactsIcon" />
+              </div>
+            </h4>
             <div className="contactsList">
               {!user ? (
                 <span className="noFndsText">Log in to make friends</span>
