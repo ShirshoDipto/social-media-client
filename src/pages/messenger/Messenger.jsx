@@ -238,6 +238,18 @@ export default function Messenger({ user }) {
 
     setUpMessenger();
 
+    function handleWindowResize() {
+      const messenger = document.querySelector(".messengerContainer");
+      let vh = window.innerHeight - 50;
+      messenger.style.height = `${vh}px`;
+    }
+
+    window.addEventListener("resize", handleWindowResize);
+
+    return () => {
+      window.removeEventListener("resize", handleWindowResize);
+    };
+
     // eslint-disable-next-line
   }, []);
 
