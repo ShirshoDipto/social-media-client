@@ -1,18 +1,16 @@
 import "./commentContainer.css";
 import CommentInput from "../commentInput/CommentInput";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import CommentContent from "../commentContent/CommentContent";
-import { useInView } from "react-intersection-observer";
 
 export default function CommentContainer({ user, post, setNumComments }) {
   const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hasNoMoreComments, setHasNoMoreComments] = useState(false);
   const [isMoreCommentsLoading, setIsMoreCommentsLoading] = useState(false);
-  const { ref, inView } = useInView({
-    threshold: 0,
-  });
+  const moreCommentsTrigger = useRef();
+  const parent = useRef();
 
   const serverRoot = process.env.REACT_APP_SERVERROOT;
 
@@ -57,12 +55,31 @@ export default function CommentContainer({ user, post, setNumComments }) {
   }, [serverRoot, post._id]);
 
   useEffect(() => {
-    if (!isLoading && !hasNoMoreComments && !isMoreCommentsLoading && inView) {
-      setIsMoreCommentsLoading(true);
-      fetchComments();
+    const content = moreCommentsTrigger.current;
+    const viewPort = parent.current;
+
+    function handleMoreCommentsLoading(entries) {
+      if (
+        entries[0].isIntersecting &&
+        !isMoreCommentsLoading &&
+        !hasNoMoreComments
+      ) {
+        setIsMoreCommentsLoading(true);
+        fetchComments();
+      }
     }
+
+    const observer = new IntersectionObserver(handleMoreCommentsLoading, {
+      root: viewPort,
+    });
+
+    if (content) observer.observe(content);
+
+    return () => {
+      if (content) observer.unobserve(content);
+    };
     // eslint-disable-next-line
-  }, [inView]);
+  }, [isMoreCommentsLoading, hasNoMoreComments, isLoading]);
 
   return (
     <div className="commentContainer">
@@ -81,7 +98,7 @@ export default function CommentContainer({ user, post, setNumComments }) {
           />
         </div>
       ) : (
-        <div className="allComments">
+        <div className="allComments" ref={parent}>
           {comments.length > 0 ? (
             comments.map((comment) => {
               return (
@@ -111,7 +128,7 @@ export default function CommentContainer({ user, post, setNumComments }) {
           {hasNoMoreComments && comments.length > 10 && (
             <span className="noCommentsText">No more comments available.</span>
           )}
-          <div style={{ paddingTop: "1px" }} ref={ref}></div>
+          <div style={{ paddingTop: "1px" }} ref={moreCommentsTrigger}></div>
         </div>
       )}
     </div>
