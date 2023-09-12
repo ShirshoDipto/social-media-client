@@ -53,16 +53,10 @@ export default function Feed({ user }) {
     // eslint-disable-next-line
   }, [user]);
 
-  // useEffect(() => {
-  //   if (!isInitialLoading && !hasNoMorePosts && !isMorePostsLoading && inView) {
-  //     setIsMorePostsLoading(true);
-  //     fetchPosts();
-  //   }
-  //   // eslint-disable-next-line
-  // }, [inView]);
-
   useEffect(() => {
     const content = morePostsTrigger.current;
+    console.log(content);
+
     function handleMorePostsLoading(entries) {
       if (entries[0].isIntersecting && !isMorePostsLoading && !hasNoMorePosts) {
         setIsMorePostsLoading(true);

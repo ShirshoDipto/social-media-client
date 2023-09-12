@@ -46,6 +46,7 @@ export default function ProfilePosts({ user }) {
 
   useEffect(() => {
     const content = morePostsTrigger.current;
+
     function handleMorePostsLoading(entries) {
       //
       if (entries[0].isIntersecting && !isLoading && !hasNoMorePosts) {
