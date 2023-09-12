@@ -97,7 +97,7 @@ serve -s build
 
 - Timeline posts on homepage.
 - Users posts on specific profile page.
-- Infinite scrolling on both homepage and profile page.
+- Infinite scrolling using Intersection Observer.
 - Error handling in uploading new post.
 - Create posts.
 - Update own posts.
@@ -111,7 +111,7 @@ serve -s build
 - Comment on posts.
 - Update own comments.
 - Delete own comments.
-- Infinite scrolling.
+- Infinite scrolling using Intersection Oberver.
 - Include emojis with comments.
 - Include line breaks in comments.
 
