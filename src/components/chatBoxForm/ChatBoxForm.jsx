@@ -60,7 +60,8 @@ export default function ChatBoxForm({ user, currentChat, handleSubmit }) {
       className="chatBoxForm"
       onSubmit={(e) => {
         e.preventDefault();
-        if (msgContent.current.value.length === 0) {
+        msgContent.current.focus();
+        if (msgContent.current.value.trim().length === 0) {
           return;
         }
         handleSubmit(e, msgContent.current);
