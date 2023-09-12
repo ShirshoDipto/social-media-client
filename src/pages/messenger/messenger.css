@@ -1,10 +1,9 @@
 .messengerContainer {
   background-color: var(--profileBackground);
   color: var(--primaryText);
-  height: calc(100vh - 50px);
-  height: var(--vh);
   display: flex;
   justify-content: center;
+  height: calc(100vh - 50px);
 }
 
 .messengerLoading {
@@ -208,19 +207,9 @@
 }
 
 @media (max-width: 800px) {
-  .conversations {
-    position: fixed;
-    top: 50px;
-    width: 100vw;
-    height: calc(100vh - 50px);
-  }
-
+  .conversations,
   .chatBox {
-    flex: initial;
-    position: fixed;
-    top: 50px;
     width: 100vw;
-    height: calc(100vh - 50px);
   }
 
   .chatboxTop {

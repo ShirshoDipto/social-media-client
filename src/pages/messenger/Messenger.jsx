@@ -238,16 +238,16 @@ export default function Messenger({ user }) {
 
     setUpMessenger();
 
+    const messenger = document.querySelector(".messengerContainer");
+    let vh = window.innerHeight - 50;
+    messenger.style.height = `${vh}px`;
+
     function handleWindowResize() {
-      // const messenger = document.querySelector(".messengerContainer");
       let vh = window.innerHeight - 50;
-      // messenger.style.height = `${vh}px`;
-      document.documentElement.style.setProperty("--vh", `${vh}px`);
+      messenger.style.height = `${vh}px`;
     }
 
     window.addEventListener("resize", handleWindowResize);
-    let vh = window.innerHeight - 50;
-    document.documentElement.style.setProperty("--vh", `${vh}px`);
 
     return () => {
       window.removeEventListener("resize", handleWindowResize);
