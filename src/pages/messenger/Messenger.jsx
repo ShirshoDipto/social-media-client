@@ -329,17 +329,19 @@ export default function Messenger({ user }) {
                 </div>
               )
             )}
-            <div className="chatboxTop">
-              <div className="backIconContainer" onClick={handleBackButton}>
-                <ArrowBackIosNewIcon className="backIcon" />
-                {totalUnseens > 0 && (
-                  <div className="unseenMsgsBadge">{totalUnseens}</div>
-                )}
+            {!isFetchingMsgs && (
+              <div className="chatboxTop">
+                <div className="backIconContainer" onClick={handleBackButton}>
+                  <ArrowBackIosNewIcon className="backIcon" />
+                  {totalUnseens > 0 && (
+                    <div className="unseenMsgsBadge">{totalUnseens}</div>
+                  )}
+                </div>
+                <div className="headerNameContainer">
+                  <span className="headerName">{fullname}</span>
+                </div>
               </div>
-              <div className="headerNameContainer">
-                <span className="headerName">{fullname}</span>
-              </div>
-            </div>
+            )}
             <div className="chatBoxCenter">
               {oldMsgs.length > 0 && (
                 <div className="oldMsgs">
