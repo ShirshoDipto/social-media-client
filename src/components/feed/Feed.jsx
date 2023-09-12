@@ -12,6 +12,7 @@ export default function Feed({ user }) {
   const [hasNoMorePosts, setHasNoMorePosts] = useState(false);
   const { ref, inView } = useInView({
     threshold: 0,
+    rootMargin: "50px",
   });
 
   const serverRoot = process.env.REACT_APP_SERVERROOT;
