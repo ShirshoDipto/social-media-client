@@ -2,6 +2,7 @@
   background-color: var(--profileBackground);
   color: var(--primaryText);
   height: calc(100vh - 50px);
+  height: var(--vh);
   display: flex;
   justify-content: center;
 }
