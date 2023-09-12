@@ -10,7 +10,6 @@ export default function CommentContainer({ user, post, setNumComments }) {
   const [hasNoMoreComments, setHasNoMoreComments] = useState(false);
   const [isMoreCommentsLoading, setIsMoreCommentsLoading] = useState(false);
   const moreCommentsTrigger = useRef();
-  const parent = useRef();
 
   const serverRoot = process.env.REACT_APP_SERVERROOT;
 
@@ -56,7 +55,6 @@ export default function CommentContainer({ user, post, setNumComments }) {
 
   useEffect(() => {
     const content = moreCommentsTrigger.current;
-    const viewPort = parent.current;
 
     function handleMoreCommentsLoading(entries) {
       if (
@@ -69,9 +67,7 @@ export default function CommentContainer({ user, post, setNumComments }) {
       }
     }
 
-    const observer = new IntersectionObserver(handleMoreCommentsLoading, {
-      root: viewPort,
-    });
+    const observer = new IntersectionObserver(handleMoreCommentsLoading);
 
     if (content) observer.observe(content);
 
@@ -98,7 +94,7 @@ export default function CommentContainer({ user, post, setNumComments }) {
           />
         </div>
       ) : (
-        <div className="allComments" ref={parent}>
+        <div className="allComments">
           {comments.length > 0 ? (
             comments.map((comment) => {
               return (
