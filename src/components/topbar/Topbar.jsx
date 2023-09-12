@@ -30,6 +30,8 @@ export default function Topbar({ user }) {
   const url = new URL(window.location.href);
   const userId = url.searchParams.get("google");
 
+  let totalUnseenNotifs = 0;
+  Object.values(unseenNotifs).forEach((n) => (totalUnseenNotifs += n));
   const fullname = user?.userInfo.firstName + " " + user?.userInfo.lastName;
 
   function toggleTopbarMenuStatus() {
@@ -37,14 +39,9 @@ export default function Topbar({ user }) {
     setTopbarMenuStatus(!topbarMenuStatus);
   }
 
-  function updateUnseenNotifs(category, updateType) {
+  function updateUnseenNotifs(category, total) {
     const newUnseenNotif = { ...unseenNotifs };
-    if (updateType === "add") {
-      newUnseenNotif[category] = 1;
-    } else {
-      newUnseenNotif[category] = 0;
-    }
-
+    newUnseenNotif[category] = total;
     setUnseenNotifs(newUnseenNotif);
   }
 
@@ -87,12 +84,13 @@ export default function Topbar({ user }) {
       }
     }
 
+    const elem = document.querySelector(".topbarContainer");
     const observer = new ResizeObserver(handleAppName);
-    observer.observe(document.querySelector(".topbarContainer"));
+    observer.observe(elem);
 
     return () => {
       document.removeEventListener("click", handleClickOutside);
-      observer.disconnect();
+      observer.unobserve(elem);
     };
     // eslint-disable-next-line
   }, []);
@@ -123,8 +121,8 @@ export default function Topbar({ user }) {
           <>
             <div className="menuIconContainer" onClick={toggleTopbarMenuStatus}>
               <MenuIcon className="menuIcon" />
-              {Object.values(unseenNotifs).some((n) => n !== 0) && (
-                <div className="unseenNotifMarker"></div>
+              {totalUnseenNotifs > 0 && (
+                <div className="unseenNotifMarker">{totalUnseenNotifs}</div>
               )}
             </div>
             <div

@@ -139,9 +139,7 @@ export default function NewMsg({ user, updateUnseenNotifs }) {
     socket.on("newMsg", onNewMsgNotif);
 
     if (notifications.length > 0 && !notifications[0].isSeen) {
-      updateUnseenNotifs("msg", "add");
-    } else {
-      updateUnseenNotifs("msg", "delete");
+      updateUnseenNotifs("msg", notifications.length);
     }
 
     return () => {

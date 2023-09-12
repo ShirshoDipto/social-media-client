@@ -109,14 +109,27 @@
   background-color: var(--searchBar);
 }
 
-.unseenNotifMarker {
+.topbarIconBadge {
+  background-color: red;
+  border-radius: 50%;
   position: absolute;
-  top: 7px;
-  right: 5px;
-  width: 10px;
-  height: 10px;
+  top: 0px;
+  right: 0px;
+}
+
+.unseenNotifMarker {
+  width: 18px;
+  height: 18px;
+  color: white;
+  position: absolute;
+  top: 0;
+  right: 0;
   border-radius: 50%;
   background-color: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
 }
 
 .menuIcon {

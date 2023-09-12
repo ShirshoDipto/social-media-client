@@ -13,8 +13,6 @@ export default function ProfilePosts({ user }) {
   const params = useParams();
   const serverRoot = process.env.REACT_APP_SERVERROOT;
 
-  console.log("rendered");
-
   async function fetchUserPosts() {
     try {
       const res = await fetch(

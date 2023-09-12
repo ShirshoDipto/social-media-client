@@ -129,6 +129,7 @@ export default function GeneralNotifs({ user, updateUnseenNotifs }) {
 
   useEffect(() => {
     function onNewPost(notif) {
+      console.log(notif);
       setNotifications((n) => [notif, ...n]);
       setNumNotif((n) => n + 1);
       setIsMarked(false);
@@ -146,9 +147,7 @@ export default function GeneralNotifs({ user, updateUnseenNotifs }) {
     socket.on("getFndReq", onFndReq);
 
     if (notifications.length > 0 && !notifications[0].isSeen) {
-      updateUnseenNotifs("gen", "add");
-    } else {
-      updateUnseenNotifs("gen", "delete");
+      updateUnseenNotifs("gen", notifications.length);
     }
 
     return () => {
