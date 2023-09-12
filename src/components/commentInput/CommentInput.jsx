@@ -58,10 +58,9 @@ export default function CommentInput({
         />
         <form className="commentInputForm" onSubmit={handleCommentSubmit}>
           <textarea
-            autoFocus={true}
             ref={content}
             className="commentInputTextarea"
-            name="commentCoontent"
+            name="commentContent"
             placeholder="Write a comment"
           ></textarea>
           <div className="commentInputButtonContainer">
