@@ -64,8 +64,8 @@ export default function Feed({ user }) {
       }
     }
 
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    document.addEventListener("scroll", onScroll);
+    return () => document.removeEventListener("scroll", onScroll);
     // eslint-disable-next-line
   }, [posts]);
 
