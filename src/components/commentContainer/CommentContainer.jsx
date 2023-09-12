@@ -57,7 +57,6 @@ export default function CommentContainer({ user, post, setNumComments }) {
   }, [serverRoot, post._id]);
 
   useEffect(() => {
-    console.log(inView);
     if (!isLoading && !hasNoMoreComments && !isMoreCommentsLoading && inView) {
       setIsMoreCommentsLoading(true);
       fetchComments();
