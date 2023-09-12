@@ -288,6 +288,7 @@
     padding-top: 5px;
     padding-left: 5px;
     padding-right: 10px;
+    gap: 40px;
   }
 
   .topbarDropdownContainer {
@@ -296,6 +297,7 @@
 
   .topbarIcons {
     flex-direction: column;
+    gap: 10px;
   }
 
   .showTopbarMenuContainer {
