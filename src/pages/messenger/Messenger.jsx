@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { socket } from "../../socket";
 import * as apiCalls from "../../messengerApiCalls";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
 export default function Messenger({ user }) {
   const [conversations, setConversations] = useState([]);
@@ -16,16 +17,27 @@ export default function Messenger({ user }) {
   const [unseenMsgs, setUnseenMsgs] = useState([]);
   const [newMsgs, setNewMsgs] = useState([]);
   const [oldMsgs, setOldMsgs] = useState([]);
+  const [hasUnseenMsgs, setHasUnseenMsgs] = useState(false);
+  const [totalUnseens, setTotalUnseens] = useState(0);
+
   const oldMsgRef = useRef();
   const newMsgRef = useRef();
-  const [hasUnseenMsgs, setHasUnseenMsgs] = useState(false);
+  const elemToObserve = useRef();
+
+  const contact = currentChat?.members.find(
+    (member) => member._id !== user.userInfo._id
+  );
+
+  const fullname = `${contact?.firstName} ${contact?.lastName}`;
 
   async function updateNumUnseenToZero(convId) {
+    let unseenMsgs = 0;
     const newConvs = conversations.map((conv) => {
       if (conv._id === convId) {
         const newConv = JSON.parse(JSON.stringify(conv));
         newConv.unseenMsgs.forEach((msg) => {
           if (msg.userId === user.userInfo._id) {
+            unseenMsgs = msg.numUnseen;
             msg.numUnseen = 0;
           }
         });
@@ -35,6 +47,7 @@ export default function Messenger({ user }) {
     });
 
     setConversations(newConvs);
+    setTotalUnseens(totalUnseens - unseenMsgs);
   }
 
   async function getMessages(conv) {
@@ -61,6 +74,7 @@ export default function Messenger({ user }) {
   // eslint-disable-next-line
   async function updateConvsForNewMsg(newMessage) {
     let hasUpdated = false;
+    let unseenMsgs = 0;
     let newConversations = conversations.map((conv) => {
       if (newMessage.conversationId === conv._id) {
         const newConv = JSON.parse(JSON.stringify(conv));
@@ -71,6 +85,7 @@ export default function Messenger({ user }) {
           for (let msg of newConv.unseenMsgs) {
             if (msg.userId === user.userInfo._id) {
               msg.numUnseen += 1;
+              unseenMsgs += 1;
             }
           }
         }
@@ -96,6 +111,7 @@ export default function Messenger({ user }) {
     });
 
     setConversations(sortedConv);
+    setTotalUnseens(totalUnseens + unseenMsgs);
   }
 
   async function sendSocketEvent(msgContent) {
@@ -150,6 +166,14 @@ export default function Messenger({ user }) {
     setIsFetchingMsgs(false);
   }
 
+  function handleBackButton() {
+    setCurrentChat(null);
+    socket.emit("currentChatActive", {
+      userId: user.userInfo._id,
+      activeChat: null,
+    });
+  }
+
   useEffect(() => {
     function onGetMsg(msg) {
       updateConvsForNewMsg(msg);
@@ -187,17 +211,25 @@ export default function Messenger({ user }) {
           activeChat: chatToActive,
         });
 
-        setCurrentChat(chatToActive);
         await getMessages(chatToActive);
+        setCurrentChat(chatToActive);
       }
     }
 
     async function setUpMessenger() {
       try {
         const convs = await apiCalls.fetchConversations(user.token);
+        let numUnseens = 0;
+        convs.forEach((conv) => {
+          const currUser = conv.unseenMsgs.find(
+            (m) => m.userId === user.userInfo._id
+          );
+          numUnseens += currUser.numUnseen;
+        });
 
-        setConversations(convs);
         await handleCurrentChat(convs);
+        setConversations(convs);
+        setTotalUnseens(numUnseens);
         setIsLoading(false);
       } catch (error) {
         console.log(error);
@@ -205,6 +237,7 @@ export default function Messenger({ user }) {
     }
 
     setUpMessenger();
+
     // eslint-disable-next-line
   }, []);
 
@@ -230,15 +263,15 @@ export default function Messenger({ user }) {
 
   if (isLoading) {
     return (
-      <div className="messengerContainer">
+      <div className="messengerContainer" ref={elemToObserve}>
         <CircularProgress className="messengerLoading" disableShrink />
       </div>
     );
   }
 
   return (
-    <div className="messengerContainer">
-      <div className="conversations">
+    <div className="messengerContainer" ref={elemToObserve}>
+      <div className={`conversations ${currentChat ? "hideConv" : ""}`}>
         <div className="conversationsWrapper">
           <div className="conversationContainer">
             {conversations.length === 0 && (
@@ -266,7 +299,7 @@ export default function Messenger({ user }) {
         </div>
       </div>
       <div
-        className="chatBox"
+        className={`chatBox ${!currentChat ? "hideChatbox" : ""}`}
         onClick={() => {
           if (hasUnseenMsgs) {
             setHasUnseenMsgs(false);
@@ -296,6 +329,17 @@ export default function Messenger({ user }) {
                 </div>
               )
             )}
+            <div className="chatboxTop">
+              <div className="backIconContainer" onClick={handleBackButton}>
+                <ArrowBackIosNewIcon className="backIcon" />
+                {totalUnseens > 0 && (
+                  <div className="unseenMsgsBadge">{totalUnseens}</div>
+                )}
+              </div>
+              <div className="headerNameContainer">
+                <span className="headerName">{fullname}</span>
+              </div>
+            </div>
             <div className="chatBoxCenter">
               {oldMsgs.length > 0 && (
                 <div className="oldMsgs">
@@ -365,11 +409,13 @@ export default function Messenger({ user }) {
                 </div>
               )}
             </div>
-            <ChatBoxForm
-              user={user}
-              currentChat={currentChat}
-              handleSubmit={handleSubmit}
-            />
+            <div className="chatboxBottom">
+              <ChatBoxForm
+                user={user}
+                currentChat={currentChat}
+                handleSubmit={handleSubmit}
+              />
+            </div>
           </div>
         )}
       </div>

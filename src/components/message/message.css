@@ -45,3 +45,9 @@
   border-radius: 10px 0 10px 10px;
   background-color: var(--topbarBackgroundDarkish);
 }
+
+@media (max-width: 800px) {
+  .messageDetails {
+    max-width: 85%;
+  }
+}

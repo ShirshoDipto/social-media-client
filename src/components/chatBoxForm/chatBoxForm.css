@@ -28,7 +28,7 @@
   flex: 1;
   border: none;
   border-radius: 25px 0 0 25px;
-  padding: 10px 20px 10px 20px;
+  padding: 10px 0px 10px 20px;
   background: none;
   color: var(--secondaryText);
 }
@@ -107,9 +107,8 @@
   }
 }
 
-
-
-
-
-
-
+@media (max-width: 800px) {
+  .chatBoxForm {
+    padding: 5px 5% 20px 5%;
+  }
+}

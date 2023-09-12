@@ -49,6 +49,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 .selectChatText {
@@ -69,6 +70,60 @@
   position: relative;
 }
 
+.chatboxTop {
+  display: none;
+  padding: 10px;
+  border-bottom: thin solid var(--secondaryBorderBackground);
+}
+
+.backIconContainer {
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 10%;
+  padding-right: 7px;
+  background-color: var(--searchBarDarkish);
+  position: relative;
+}
+
+.backIcon {
+  cursor: pointer;
+  color: var(--secondaryText);
+}
+
+.headerNameContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  padding-right: 20px;
+}
+
+.headerName {
+  font-size: 1.1rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.unseenMsgsBadge {
+  width: 18px;
+  height: 18px;
+  background-color: var(--topbarBackground);
+  border-radius: 50%;
+  color: white;
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
 .msgsLoadingContainer {
   background-color: var(--profileBackground);
   height: calc(100% - 90px);
@@ -85,8 +140,8 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 20px 10% 10px 6.5%;
-  overflow: overlay;
+  padding: 20px 6.5% 10px 6.5%;
+  overflow: auto;
   flex: 1;
 }
 
@@ -151,7 +206,40 @@
   border-bottom: thin solid var(--topbarBackground);
 }
 
+@media (max-width: 800px) {
+  .conversations {
+    position: fixed;
+    top: 50px;
+    width: 100vw;
+    height: calc(100vh - 50px);
+  }
 
+  .chatBox {
+    flex: initial;
+    position: fixed;
+    top: 50px;
+    width: 100vw;
+    height: calc(100vh - 50px);
+  }
 
+  .chatboxTop {
+    display: flex;
+  }
 
+  .chatBoxCenter {
+    padding-top: 0px;
+    margin-top: 10px;
+  }
 
+  .oldMsgs, .newMsgs, .unseenMsgs {
+    gap: 15px;
+  }
+
+  .hideConv {
+    display: none;
+  }
+
+  .hideChatbox {
+    display: none;
+  }
+}
