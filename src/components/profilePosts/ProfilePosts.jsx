@@ -1,20 +1,19 @@
 import "./profilePosts.css";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import Post from "../post/Post";
-import { useInView } from "react-intersection-observer";
 
 export default function ProfilePosts({ user }) {
   const [posts, setPosts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [hasNoMorePosts, setHasNoMorePosts] = useState(false);
-  const { ref, inView } = useInView({
-    threshold: 0,
-  });
+  const morePostsTrigger = useRef();
 
   const params = useParams();
   const serverRoot = process.env.REACT_APP_SERVERROOT;
+
+  console.log("rendered");
 
   async function fetchUserPosts() {
     try {
@@ -35,6 +34,7 @@ export default function ProfilePosts({ user }) {
       setPosts([...posts, ...resData.posts]);
       setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
     }
   }
@@ -45,12 +45,23 @@ export default function ProfilePosts({ user }) {
   }, []);
 
   useEffect(() => {
-    if (!isLoading && !hasNoMorePosts && inView) {
-      setIsLoading(true);
-      fetchUserPosts();
+    const content = morePostsTrigger.current;
+    function handleMorePostsLoading(entries) {
+      //
+      if (entries[0].isIntersecting && !isLoading && !hasNoMorePosts) {
+        setIsLoading(true);
+        fetchUserPosts();
+      }
     }
+
+    const observer = new IntersectionObserver(handleMorePostsLoading);
+    if (content) observer.observe(content);
+
+    return () => {
+      if (content) observer.unobserve(content);
+    };
     // eslint-disable-next-line
-  }, [inView]);
+  }, [isLoading, hasNoMorePosts]);
 
   return (
     <div className="profilePosts">
@@ -82,7 +93,7 @@ export default function ProfilePosts({ user }) {
           ))
         )}
       </div>
-      <div style={{ height: "1px" }} ref={ref}></div>
+      <div style={{ height: "1px" }} ref={morePostsTrigger}></div>
     </div>
   );
 }
