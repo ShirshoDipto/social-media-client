@@ -56,6 +56,8 @@ export default function Feed({ user }) {
       const scrollTop = document.documentElement.scrollTop;
       const scrollHeight = document.documentElement.scrollHeight;
       const clientHeight = document.documentElement.clientHeight;
+
+      console.log(scrollTop, clientHeight, scrollHeight);
       if (scrollTop + clientHeight + 1 >= scrollHeight) {
         if (!hasNoMorePosts && !isMorePostsLoading) {
           setIsMorePostsLoading(true);
