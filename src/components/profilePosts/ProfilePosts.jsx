@@ -3,11 +3,15 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Post from "../post/Post";
+import { useInView } from "react-intersection-observer";
 
 export default function ProfilePosts({ user }) {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasNoMorePosts, setHasNoMorePosts] = useState(false);
+  const { ref, inView } = useInView({
+    threshold: 0,
+  });
 
   const params = useParams();
   const serverRoot = process.env.REACT_APP_SERVERROOT;
@@ -41,22 +45,12 @@ export default function ProfilePosts({ user }) {
   }, []);
 
   useEffect(() => {
-    function onScroll() {
-      const scrollTop = document.documentElement.scrollTop;
-      const scrollHeight = document.documentElement.scrollHeight;
-      const clientHeight = document.documentElement.clientHeight;
-      if (scrollTop + clientHeight + 1 >= scrollHeight) {
-        if (!hasNoMorePosts) {
-          setIsLoading(true);
-          fetchUserPosts();
-        }
-      }
+    if (!isLoading && !hasNoMorePosts && inView) {
+      setIsLoading(true);
+      fetchUserPosts();
     }
-
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
     // eslint-disable-next-line
-  }, [posts]);
+  }, [inView]);
 
   return (
     <div className="profilePosts">
@@ -88,6 +82,7 @@ export default function ProfilePosts({ user }) {
           ))
         )}
       </div>
+      <div style={{ height: "1px" }} ref={ref}></div>
     </div>
   );
 }

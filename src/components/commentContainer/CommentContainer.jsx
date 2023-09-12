@@ -3,12 +3,16 @@ import CommentInput from "../commentInput/CommentInput";
 import { useEffect, useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import CommentContent from "../commentContent/CommentContent";
+import { useInView } from "react-intersection-observer";
 
 export default function CommentContainer({ user, post, setNumComments }) {
   const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hasNoMoreComments, setHasNoMoreComments] = useState(false);
   const [isMoreCommentsLoading, setIsMoreCommentsLoading] = useState(false);
+  const { ref, inView } = useInView({
+    threshold: 0,
+  });
 
   const serverRoot = process.env.REACT_APP_SERVERROOT;
 
@@ -47,23 +51,19 @@ export default function CommentContainer({ user, post, setNumComments }) {
     }
   }
 
-  async function handleScroll(e) {
-    const elem = e.target;
-    const scrollTop = elem.scrollTop;
-    const scrollHeight = elem.scrollHeight;
-    const clientHeight = elem.clientHeight;
-    if (scrollTop + clientHeight + 1 >= scrollHeight) {
-      if (!hasNoMoreComments && !isMoreCommentsLoading) {
-        setIsMoreCommentsLoading(true);
-        fetchComments();
-      }
-    }
-  }
-
   useEffect(() => {
     fetchComments();
     // eslint-disable-next-line
   }, [serverRoot, post._id]);
+
+  useEffect(() => {
+    console.log(inView);
+    if (!isLoading && !hasNoMoreComments && !isMoreCommentsLoading && inView) {
+      setIsMoreCommentsLoading(true);
+      fetchComments();
+    }
+    // eslint-disable-next-line
+  }, [inView]);
 
   return (
     <div className="commentContainer">
@@ -82,7 +82,7 @@ export default function CommentContainer({ user, post, setNumComments }) {
           />
         </div>
       ) : (
-        <div className="allComments" onScroll={handleScroll}>
+        <div className="allComments">
           {comments.length > 0 ? (
             comments.map((comment) => {
               return (
@@ -112,6 +112,7 @@ export default function CommentContainer({ user, post, setNumComments }) {
           {hasNoMoreComments && comments.length > 10 && (
             <span className="noCommentsText">No more comments available.</span>
           )}
+          <div style={{ paddingTop: "1px" }} ref={ref}></div>
         </div>
       )}
     </div>

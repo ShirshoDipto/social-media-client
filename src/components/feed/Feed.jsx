@@ -3,12 +3,16 @@ import CircularProgress from "@mui/material/CircularProgress";
 import "./feed.css";
 import { useEffect, useState } from "react";
 import Post from "../post/Post";
+import { useInView } from "react-intersection-observer";
 
 export default function Feed({ user }) {
   const [posts, setPosts] = useState([]);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isMorePostsLoading, setIsMorePostsLoading] = useState(false);
   const [hasNoMorePosts, setHasNoMorePosts] = useState(false);
+  const { ref, inView } = useInView({
+    threshold: 0,
+  });
 
   const serverRoot = process.env.REACT_APP_SERVERROOT;
 
@@ -47,29 +51,16 @@ export default function Feed({ user }) {
     if (!userId) {
       fetchPosts();
     }
-
     // eslint-disable-next-line
   }, [user]);
 
   useEffect(() => {
-    function onScroll() {
-      const scrollTop = document.documentElement.scrollTop;
-      const scrollHeight = document.documentElement.scrollHeight;
-      const clientHeight = document.documentElement.clientHeight;
-
-      console.log(scrollTop, clientHeight, scrollHeight);
-      if (scrollTop + clientHeight + 1 >= scrollHeight) {
-        if (!hasNoMorePosts && !isMorePostsLoading) {
-          setIsMorePostsLoading(true);
-          fetchPosts();
-        }
-      }
+    if (!isInitialLoading && !hasNoMorePosts && !isMorePostsLoading && inView) {
+      setIsMorePostsLoading(true);
+      fetchPosts();
     }
-
-    document.addEventListener("scroll", onScroll);
-    return () => document.removeEventListener("scroll", onScroll);
     // eslint-disable-next-line
-  }, [posts]);
+  }, [inView]);
 
   return (
     <div className="feed">
@@ -106,6 +97,7 @@ export default function Feed({ user }) {
           ))
         )}
       </div>
+      <div style={{ height: "1px" }} ref={ref}></div>
     </div>
   );
 }

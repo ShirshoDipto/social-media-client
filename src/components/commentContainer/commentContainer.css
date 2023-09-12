@@ -23,7 +23,7 @@
   gap: 15px;
   min-height: 40px;
   max-height: 500px;
-  overflow-y: overlay;
+  overflow-y: auto;
   padding-right: 10px;
   padding-top: 5px;
 }
