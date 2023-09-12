@@ -41,6 +41,8 @@ export default function Feed({ user }) {
         setHasNoMorePosts(true);
       }
     } catch (error) {
+      setIsInitialLoading(false);
+      setIsMorePostsLoading(false);
       console.log(error);
     }
   }
