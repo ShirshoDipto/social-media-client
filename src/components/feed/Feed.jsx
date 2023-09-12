@@ -55,7 +55,6 @@ export default function Feed({ user }) {
 
   useEffect(() => {
     const content = morePostsTrigger.current;
-    console.log(content);
 
     function handleMorePostsLoading(entries) {
       if (entries[0].isIntersecting && !isMorePostsLoading && !hasNoMorePosts) {

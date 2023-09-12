@@ -68,7 +68,6 @@ export default function CommentContainer({ user, post, setNumComments }) {
     }
 
     const observer = new IntersectionObserver(handleMoreCommentsLoading);
-
     if (content) observer.observe(content);
 
     return () => {
