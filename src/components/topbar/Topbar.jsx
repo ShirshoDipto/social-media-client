@@ -1,7 +1,6 @@
 import "./topbar.css";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
-import GroupsIcon from "@mui/icons-material/Groups";
 import { Link, useLocation } from "react-router-dom";
 import { useContext, useEffect, useRef, useState } from "react";
 import SearchBar from "../searchBar/SearchBar";
@@ -164,14 +163,6 @@ export default function Topbar({ user }) {
                       updateUnseenNotifs={updateUnseenNotifs}
                     />
                   </div>
-                  {appName === "NB" && (
-                    <div className="topbarIconItem">
-                      <div className="groupIconContainer">
-                        <GroupsIcon className="groupIcon" />
-                        <div className="groupIconMarker"></div>
-                      </div>
-                    </div>
-                  )}
                 </div>
                 <div className="topbarDropdownContainer">
                   <img
@@ -218,6 +209,7 @@ export default function Topbar({ user }) {
                         onClick={() => {
                           handleLogout();
                           setDropdownStatus(false);
+                          setTopbarMenuStatus(false);
                         }}
                       >
                         <LogoutIcon className="logoutIcon" />

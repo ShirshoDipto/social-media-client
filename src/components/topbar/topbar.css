@@ -92,8 +92,7 @@
   background-color: var(--topbarBackgroundDarkish);
 }
 
-.menuIconContainer, 
-.groupIconContainer {
+.menuIconContainer {
   display: none;
   justify-content: center;
   align-items: center;
@@ -102,28 +101,12 @@
   border-radius: 50%;
 }
 
-.groupIconContainer {
-  position: relative;
-}
-
-.menuIconContainer:hover, 
-.groupIconContainer:hover {
+.menuIconContainer:hover {
   background-color: var(--searchBarDarkish);
 }
 
-.menuIconContainer:active, 
-.groupIconContainer:active {
+.menuIconContainer:active {
   background-color: var(--searchBar);
-}
-
-.groupIconMarker {
-  position: absolute;
-  bottom: 7px;
-  right: 5px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: limegreen;
 }
 
 .unseenNotifMarker {
@@ -136,8 +119,7 @@
   background-color: red;
 }
 
-.menuIcon, 
-.groupIcon {
+.menuIcon {
   cursor: pointer;
   color: var(--secondaryText);
 }
@@ -280,8 +262,7 @@
     padding-right: 10px;
   }
 
-  .menuIconContainer, 
-  .groupIconContainer {
+  .menuIconContainer {
     display: flex;
     position: relative
   }

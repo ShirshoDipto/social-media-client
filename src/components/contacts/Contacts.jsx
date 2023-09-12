@@ -1,14 +1,35 @@
 import "./contacts.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { socket } from "../../socket";
 import Contact from "../contact/Contact";
+import GroupsIcon from "@mui/icons-material/Groups";
 
 export default function Contacts({ user }) {
   const [onlineFnds, setOnlineFnds] = useState([]);
   const [offlineFnds, setOfflineFnds] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isContactsVisible, setIsContactsVisible] = useState(false);
+
+  const contactsToggler = useRef();
+  const contacts = useRef();
+  const contactsWrapper = useRef();
 
   const serverRoot = process.env.REACT_APP_SERVERROOT;
+
+  function handleContactsVisibility() {
+    setIsContactsVisible(!isContactsVisible);
+  }
+
+  function hideContacts(e) {
+    if (
+      contacts.current &&
+      contactsWrapper.current &&
+      !contactsWrapper.current.contains(e.target) &&
+      !contactsToggler.current.contains(e.target)
+    ) {
+      setIsContactsVisible(false);
+    }
+  }
 
   useEffect(() => {
     async function fetchCurrUser() {
@@ -20,7 +41,6 @@ export default function Contacts({ user }) {
         }
 
         setOfflineFnds(resData.user.friends);
-        setIsLoading(false);
         socket.emit("getFndsStatus", resData.user);
       } catch (error) {
         console.log(error);
@@ -30,6 +50,8 @@ export default function Contacts({ user }) {
     if (user) {
       fetchCurrUser();
     }
+
+    setIsLoading(false);
   }, [user, serverRoot]);
 
   useEffect(() => {
@@ -76,47 +98,60 @@ export default function Contacts({ user }) {
     };
   }, [onlineFnds, offlineFnds, isLoading]);
 
-  if (!user) {
-    return (
-      <div className="contacts">
-        <div className="contactsWrapper">
-          <h4 className="contactsTitle">Contacts</h4>
-          <div className="contactsList">
-            <span className="noFndsText">Log in to make friends</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="contacts">
-      {isLoading ? null : (
-        <div className="contactsWrapper">
-          <h4 className="contactsTitle">Contacts</h4>
-          <div className="contactsList">
-            {onlineFnds.length === 0 && offlineFnds.length === 0 && (
-              <span className="noFndsText">No friends available</span>
-            )}
-            {onlineFnds.length > 0 &&
-              onlineFnds.map((fnd) => {
-                if (fnd) {
-                  return <Contact key={fnd._id} fnd={fnd} status={true} />;
-                } else {
-                  return null;
-                }
-              })}
-            {offlineFnds.length > 0 &&
-              offlineFnds.map((fnd) => {
-                if (fnd) {
-                  return <Contact key={fnd._id} fnd={fnd} status={false} />;
-                } else {
-                  return null;
-                }
-              })}
+    <>
+      <div
+        className={`contacts ${isContactsVisible ? "showContacts" : ""}`}
+        ref={contacts}
+        onClick={hideContacts}
+      >
+        {!isLoading && (
+          <div
+            className={`contactsWrapper ${
+              isContactsVisible ? "showContactsWrapper" : ""
+            }`}
+            ref={contactsWrapper}
+          >
+            <h4 className="contactsTitle">Contacts</h4>
+            <div className="contactsList">
+              {!user ? (
+                <span className="noFndsText">Log in to make friends</span>
+              ) : (
+                onlineFnds.length === 0 &&
+                offlineFnds.length === 0 && (
+                  <span className="noFndsText">No friends available</span>
+                )
+              )}
+              {onlineFnds.length > 0 &&
+                onlineFnds.map((fnd) => {
+                  if (fnd) {
+                    return <Contact key={fnd._id} fnd={fnd} status={true} />;
+                  } else {
+                    return null;
+                  }
+                })}
+              {offlineFnds.length > 0 &&
+                offlineFnds.map((fnd) => {
+                  if (fnd) {
+                    return <Contact key={fnd._id} fnd={fnd} status={false} />;
+                  } else {
+                    return null;
+                  }
+                })}
+            </div>
           </div>
+        )}
+      </div>
+      {!isLoading && (
+        <div
+          className="groupIconContainer"
+          ref={contactsToggler}
+          onClick={handleContactsVisibility}
+        >
+          <GroupsIcon className="groupIcon" />
+          <div className="groupIconMarker"></div>
         </div>
       )}
-    </div>
+    </>
   );
 }
