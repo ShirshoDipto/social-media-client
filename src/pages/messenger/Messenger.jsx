@@ -144,7 +144,8 @@ export default function Messenger({ user }) {
 
   async function handleSubmit(e, msgContent) {
     const msg = await sendSocketEvent(msgContent.value);
-    msgContent.value = "";
+    e.target.reset();
+    msgContent.focus();
     setNewMsgs([...newMsgs, msg]);
     await updateConvsForNewMsg(msg);
   }

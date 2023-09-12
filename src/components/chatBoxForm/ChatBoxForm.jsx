@@ -1,5 +1,5 @@
 import "./chatBoxForm.css";
-import SendIcon from "@mui/icons-material/Send";
+// import SendIcon from "@mui/icons-material/Send";
 import { useEffect, useRef, useState } from "react";
 import { socket } from "../../socket";
 
@@ -95,9 +95,9 @@ export default function ChatBoxForm({ user, currentChat, handleSubmit }) {
           name="content"
           onChange={(e) => sendTypingEvent(e)}
         />
-        <button type="submit" className="msgInputButton">
+        {/* <button type="submit" className="msgInputButton">
           <SendIcon className="sendIcon" />
-        </button>
+        </button> */}
       </div>
     </form>
   );
