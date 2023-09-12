@@ -63,7 +63,7 @@ export default function ChatBoxForm({ user, currentChat, handleSubmit }) {
         if (msgContent.current.value.length === 0) {
           return;
         }
-        handleSubmit(e, msgContent.current.value);
+        handleSubmit(e, msgContent.current);
       }}
       autoComplete="off"
     >
@@ -94,7 +94,7 @@ export default function ChatBoxForm({ user, currentChat, handleSubmit }) {
           name="content"
           onChange={(e) => sendTypingEvent(e)}
         />
-        <button className="msgInputButton">
+        <button type="submit" className="msgInputButton">
           <SendIcon className="sendIcon" />
         </button>
       </div>
