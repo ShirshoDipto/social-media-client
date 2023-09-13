@@ -138,15 +138,16 @@ export default function NewMsg({ user, updateUnseenNotifs }) {
 
     socket.on("newMsg", onNewMsgNotif);
 
-    if (notifications.length > 0 && !notifications[0].isSeen) {
-      updateUnseenNotifs("msg", notifications.length);
-    }
-
     return () => {
       socket.off("newMsg", onNewMsgNotif);
     };
-    // eslint-disable-next-line
   }, [notifications]);
+
+  useEffect(() => {
+    updateUnseenNotifs("msg", numNotif);
+
+    // eslint-disable-next-line
+  }, [numNotif]);
 
   return (
     <div className="notifContainer">

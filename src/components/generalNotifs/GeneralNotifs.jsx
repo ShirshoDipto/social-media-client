@@ -129,7 +129,6 @@ export default function GeneralNotifs({ user, updateUnseenNotifs }) {
 
   useEffect(() => {
     function onNewPost(notif) {
-      console.log(notif);
       setNotifications((n) => [notif, ...n]);
       setNumNotif((n) => n + 1);
       setIsMarked(false);
@@ -146,16 +145,17 @@ export default function GeneralNotifs({ user, updateUnseenNotifs }) {
     socket.on("getPost", onNewPost);
     socket.on("getFndReq", onFndReq);
 
-    if (notifications.length > 0 && !notifications[0].isSeen) {
-      updateUnseenNotifs("gen", notifications.length);
-    }
-
     return () => {
       socket.off("getPost", onNewPost);
       socket.off("getFndReq", onFndReq);
     };
-    // eslint-disable-next-line
   }, [notifications]);
+
+  useEffect(() => {
+    updateUnseenNotifs("gen", numNotif);
+
+    // eslint-disable-next-line
+  }, [numNotif]);
 
   return (
     <div className="notifContainer">

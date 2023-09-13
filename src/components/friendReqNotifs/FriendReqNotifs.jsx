@@ -135,9 +135,7 @@ export default function FriendReqNotifs({ user, updateUnseenNotifs }) {
     socket.on("getFndReq", onFndReq);
     socket.on("deleteNotif", onDeleteNotif);
 
-    if (notifications.length > 0) {
-      updateUnseenNotifs("fndReq", notifications.length);
-    }
+    updateUnseenNotifs("fndReq", notifications.length);
 
     return () => {
       socket.off("getFndReq", onFndReq);
