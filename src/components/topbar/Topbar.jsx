@@ -40,9 +40,11 @@ export default function Topbar({ user }) {
   }
 
   function updateUnseenNotifs(category, total) {
-    const newUnseenNotif = { ...unseenNotifs };
-    newUnseenNotif[category] = total;
-    setUnseenNotifs(newUnseenNotif);
+    setUnseenNotifs((prev) => {
+      const newUnseenNotif = { ...prev };
+      newUnseenNotif[category] = total;
+      return newUnseenNotif;
+    });
   }
 
   async function handleLogout() {
