@@ -30,9 +30,10 @@ export default function Topbar({ user }) {
   const url = new URL(window.location.href);
   const userId = url.searchParams.get("google");
 
-  let totalUnseenNotifs = 0;
-  Object.values(unseenNotifs).forEach((n) => (totalUnseenNotifs += n));
   const fullname = user?.userInfo.firstName + " " + user?.userInfo.lastName;
+  const totalUnseenNotifs = Object.values(unseenNotifs).reduce((prev, curr) => {
+    return prev + curr;
+  }, 0);
 
   function toggleTopbarMenuStatus() {
     if (appName !== "NB") return;
