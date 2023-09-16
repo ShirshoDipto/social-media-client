@@ -203,9 +203,9 @@
     min-width: 300px;
   }
 
-  /* .infoList {
-    height: 650px;
-  } */
+  .infoList {
+    height: 60vh;
+  }
 
   .modalProfilePic {
     width: 100px;
