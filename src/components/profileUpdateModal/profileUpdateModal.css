@@ -203,6 +203,10 @@
     min-width: 300px;
   }
 
+  .infoList {
+    height: 650px;
+  }
+
   .modalProfilePic {
     width: 100px;
     height: 100px;
@@ -224,10 +228,6 @@
   .modalBioContainer {
     padding: 0 10px 10px 10px;
   }
-
-  /* .modalFormGroup {
-    flex-wrap: wrap;
-  } */
 
   .modalEditInput {
     width: 100%;
